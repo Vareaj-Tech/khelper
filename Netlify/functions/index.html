@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>K'Helper — Cambodians in Korea</title>
+<meta name="description" content="K'Helper — AI assistant for Cambodians living in South Korea. Visa, work rights, healthcare, daily life support in Khmer, Korean, and English.">
+<link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500&family=Noto+Sans+KR:wght@300;400;500&family=Noto+Sans+Khmer:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f0eb;
+    --surface: #faf7f4;
+    --white: #ffffff;
+    --border: #e8e0d6;
+    --border-light: #f0ebe4;
+    --text-primary: #1a1612;
+    --text-secondary: #6b5f52;
+    --text-muted: #a0917f;
+    --accent: #c4622d;
+    --accent-light: #f5ede6;
+    --accent-hover: #b05528;
+    --user-bubble: #1a1612;
+    --crisis: #dc2626;
+    --crisis-light: #fef2f2;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+    --radius: 12px;
+    --radius-sm: 8px;
+    --nav-h: 60px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { height: 100%; overflow: hidden; }
+  body {
+    background: var(--bg);
+    color: var(--text-primary);
+    font-family: 'Noto Sans KR', sans-serif;
+    display: flex;
+    height: 100dvh;
+  }
+  body.lang-km, body.lang-km input, body.lang-km textarea,
+  body.lang-km .msg-bubble, body.lang-km .topic-item span,
+  body.lang-km .s-title, body.lang-km .s-sub,
+  body.lang-km .nav-label, body.lang-km .welcome-sub {
+    font-family: 'Noto Sans Khmer', sans-serif;
+    line-height: 2;
+  }
+  body.lang-km .msg-bubble { font-size: 15px; line-height: 2.1; }
+  body.lang-km .welcome-title { font-family: 'Noto Sans Khmer', sans-serif; font-size: 20px; }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    width: 240px; background: var(--surface);
+    border-right: 1px solid var(--border);
+    display: flex; flex-direction: column; flex-shrink: 0;
+  }
+  .sidebar-header { padding: 20px 18px 14px; border-bottom: 1px solid var(--border-light); }
+  .brand { display: flex; align-items: center; gap: 9px; margin-bottom: 14px; }
+  .brand-icon {
+    width: 28px; height: 28px; background: var(--accent);
+    border-radius: 7px; display: flex; align-items: center; justify-content: center;
+    font-size: 14px; flex-shrink: 0;
+  }
+  .brand-name { font-family: 'Lora', serif; font-size: 17px; font-weight: 500; }
+  .brand-name span { color: var(--accent); }
+  .new-chat-btn {
+    width: 100%; display: flex; align-items: center; gap: 8px;
+    padding: 8px 12px; background: var(--white);
+    border: 1px solid var(--border); border-radius: var(--radius-sm);
+    color: var(--text-secondary); font-family: inherit; font-size: 13px;
+    cursor: pointer; transition: all 0.15s; box-shadow: var(--shadow-sm);
+  }
+  .new-chat-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .sidebar-section { padding: 12px 18px 8px; overflow-y: auto; flex: 1; }
+  .sidebar-label { font-size: 10px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px; }
+  .topic-item {
+    display: flex; align-items: center; gap: 9px; padding: 7px 10px;
+    border-radius: var(--radius-sm); cursor: pointer; transition: background 0.12s;
+    color: var(--text-secondary); font-size: 13px; margin-bottom: 1px;
+  }
+  .topic-item:hover { background: var(--accent-light); color: var(--accent); }
+  .topic-icon { font-size: 14px; flex-shrink: 0; width: 18px; text-align: center; }
+  .topic-item span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .sidebar-footer { padding: 12px 18px; border-top: 1px solid var(--border-light); flex-shrink: 0; }
+  .lang-selector { display: flex; gap: 4px; }
+  .lang-btn {
+    flex: 1; padding: 5px 4px; background: none; border: 1px solid var(--border);
+    border-radius: 6px; font-size: 11px; color: var(--text-muted);
+    cursor: pointer; transition: all 0.12s; font-family: inherit;
+  }
+  .lang-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
+  .lang-btn.active { background: var(--accent); border-color: var(--accent); color: white; font-weight: 500; }
+
+  /* ── MAIN ── */
+  .main { flex: 1; display: flex; flex-direction: column; min-width: 0; background: var(--white); }
+  .chat-area {
+    flex: 1; overflow-y: auto;
+    scrollbar-width: thin; scrollbar-color: var(--border) transparent;
+    display: flex; flex-direction: column; padding-bottom: 8px;
+  }
+  .chat-area::-webkit-scrollbar { width: 4px; }
+  .chat-area::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+
+  /* Welcome */
+  .welcome-screen {
+    flex: 1; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 32px 20px 20px; text-align: center;
+    animation: fadeIn 0.4s ease;
+  }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  .welcome-logo {
+    width: 48px; height: 48px; background: var(--accent);
+    border-radius: 13px; display: flex; align-items: center; justify-content: center;
+    font-size: 24px; margin-bottom: 16px;
+    box-shadow: 0 4px 16px rgba(196,98,45,0.22);
+  }
+  .welcome-title {
+    font-family: 'Lora', serif; font-size: 22px; font-weight: 500;
+    color: var(--text-primary); margin-bottom: 8px; line-height: 1.3;
+  }
+  .welcome-sub {
+    font-size: 13px; color: var(--text-muted); line-height: 1.65;
+    max-width: 340px; margin-bottom: 28px;
+  }
+  .suggestions {
+    display: grid; grid-template-columns: repeat(2, 1fr);
+    gap: 10px; max-width: 480px; width: 100%;
+  }
+  .suggestion-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 16px 14px;
+    cursor: pointer; transition: all 0.15s; text-align: left;
+    min-height: 80px; display: flex; flex-direction: column; justify-content: center;
+  }
+  .suggestion-card:hover, .suggestion-card:active {
+    border-color: var(--accent); background: var(--accent-light);
+    transform: translateY(-1px);
+  }
+  .s-icon { font-size: 20px; margin-bottom: 8px; display: block; }
+  .s-title { font-size: 13px; font-weight: 500; color: var(--text-primary); margin-bottom: 3px; line-height: 1.4; }
+  .s-sub { font-size: 11px; color: var(--text-muted); line-height: 1.4; }
+
+  /* Messages */
+  .messages-container { padding: 16px 0 8px; display: flex; flex-direction: column; }
+  .message-row { padding: 4px 16px; display: flex; gap: 10px; animation: fadeIn 0.25s ease; }
+  .message-row.user { flex-direction: row-reverse; }
+  .msg-avatar {
+    width: 26px; height: 26px; border-radius: 7px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; flex-shrink: 0; margin-top: 3px;
+  }
+  .message-row.assistant .msg-avatar { background: var(--accent); }
+  .message-row.user .msg-avatar { background: var(--user-bubble); }
+  .msg-content { max-width: min(520px, 80vw); min-width: 0; }
+  .msg-bubble {
+    padding: 10px 14px; border-radius: 14px;
+    font-size: 14px; line-height: 1.75;
+    word-break: break-word;
+  }
+  .message-row.assistant .msg-bubble {
+    background: var(--surface); border: 1px solid var(--border-light);
+    color: var(--text-primary); border-top-left-radius: 4px;
+  }
+  .message-row.user .msg-bubble {
+    background: var(--user-bubble); color: #f5f0eb;
+    border-top-right-radius: 4px; white-space: pre-wrap;
+  }
+  /* Crisis message style */
+  .message-row.crisis .msg-bubble {
+    background: var(--crisis-light); border: 1px solid #fca5a5;
+    color: var(--text-primary);
+  }
+  /* Markdown rendered inside assistant bubbles */
+  .msg-bubble strong { font-weight: 600; }
+  .msg-bubble em { font-style: italic; }
+  .msg-bubble a { color: var(--accent); text-decoration: underline; }
+  .msg-bubble .msg-step { display: block; margin: 4px 0; }
+  .msg-bubble table { border-collapse: collapse; width: 100%; margin: 8px 0; font-size: 13px; }
+  .msg-bubble th, .msg-bubble td { border: 1px solid var(--border); padding: 6px 10px; text-align: left; }
+  .msg-bubble th { background: var(--accent-light); font-weight: 600; }
+  .msg-bubble .warning-block {
+    background: #fffbeb; border: 1px solid #fbbf24;
+    border-radius: 8px; padding: 10px 12px; margin: 8px 0;
+    font-size: 13px;
+  }
+
+  /* Rate limit banner */
+  .rate-banner {
+    background: var(--accent-light); border-top: 1px solid var(--border);
+    padding: 8px 16px; font-size: 12px; color: var(--accent);
+    text-align: center; display: none;
+  }
+
+  /* Typing dots */
+  .typing-dots { display: flex; gap: 4px; padding: 12px 14px; align-items: center; }
+  .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--text-muted); animation: pulse 1.3s ease-in-out infinite; }
+  .dot:nth-child(2) { animation-delay: 0.2s; }
+  .dot:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes pulse { 0%,60%,100% { transform: scale(0.8); opacity: 0.4; } 30% { transform: scale(1); opacity: 1; } }
+
+  /* ── INPUT ── */
+  .input-section {
+    padding: 10px 14px 14px; background: var(--white);
+    border-top: 1px solid var(--border-light); flex-shrink: 0;
+  }
+  .input-box {
+    display: flex; align-items: flex-end; gap: 8px;
+    background: var(--surface); border: 1.5px solid var(--border);
+    border-radius: 14px; padding: 8px 8px 8px 14px;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .input-box:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(196,98,45,0.08); }
+  #userInput {
+    flex: 1; background: none; border: none; outline: none;
+    color: var(--text-primary); font-family: inherit;
+    font-size: 14px; line-height: 1.55;
+    resize: none; max-height: 120px; min-height: 22px; scrollbar-width: none;
+  }
+  #userInput::-webkit-scrollbar { display: none; }
+  .send-btn {
+    width: 34px; height: 34px; border-radius: 9px;
+    background: var(--accent); border: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; transition: background 0.15s, transform 0.12s; color: white;
+  }
+  .send-btn:hover { background: var(--accent-hover); }
+  .send-btn:active { transform: scale(0.95); }
+  .send-btn:disabled { background: var(--border); cursor: not-allowed; }
+  .input-hint { font-size: 10px; color: var(--text-muted); text-align: center; margin-top: 6px; }
+  .msg-counter { font-size: 10px; color: var(--text-muted); text-align: right; margin-top: 4px; }
+  .msg-counter.warning { color: var(--accent); }
+
+  /* ── MOBILE NAV ── */
+  .mobile-nav {
+    display: none; position: fixed; bottom: 0; left: 0; right: 0;
+    height: var(--nav-h); background: var(--white);
+    border-top: 1px solid var(--border); z-index: 50;
+    padding: 0 4px; overflow-x: auto; scrollbar-width: none;
+    align-items: center; gap: 2px;
+  }
+  .mobile-nav::-webkit-scrollbar { display: none; }
+  .nav-item {
+    display: flex; flex-direction: column; align-items: center; gap: 3px;
+    padding: 6px 10px; border-radius: var(--radius-sm);
+    cursor: pointer; transition: background 0.12s; flex-shrink: 0; min-width: 60px;
+  }
+  .nav-item:hover, .nav-item:active { background: var(--accent-light); }
+  .nav-icon { font-size: 18px; }
+  .nav-label { font-size: 9px; color: var(--text-muted); white-space: nowrap; font-family: inherit; }
+  .nav-lang { display: flex; gap: 3px; padding: 6px 8px; border-left: 1px solid var(--border-light); flex-shrink: 0; margin-left: auto; }
+  .nav-lang-btn {
+    padding: 4px 7px; border-radius: 5px; font-size: 10px;
+    border: 1px solid var(--border); background: none; color: var(--text-muted);
+    cursor: pointer; font-family: inherit; transition: all 0.12s;
+  }
+  .nav-lang-btn.active { background: var(--accent); border-color: var(--accent); color: white; }
+
+  @media (max-width: 640px) {
+    .sidebar { display: none; }
+    .mobile-nav { display: flex; }
+    .chat-area { padding-bottom: calc(var(--nav-h) + 4px); }
+    .input-section { padding-bottom: calc(var(--nav-h) + 10px); }
+    .welcome-screen { padding: 24px 16px 20px; }
+    .suggestions { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .message-row { padding: 4px 12px; }
+    .msg-content { max-width: 85vw; }
+  }
+  @media (max-width: 380px) {
+    .suggestions { grid-template-columns: 1fr; }
+    .welcome-title { font-size: 20px; }
+  }
+</style>
+</head>
+<body class="lang-km">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-icon">🏮</div>
+      <div class="brand-name">K'<span>Helper</span></div>
+    </div>
+    <button class="new-chat-btn" onclick="newChat()">
+      <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+        <path d="M6.5 1v11M1 6.5h11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      <span id="newChatLabel">New conversation</span>
+    </button>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-label" id="topicsLabel">Quick topics</div>
+    <div id="topicsList"></div>
+  </div>
+  <div class="sidebar-footer">
+    <div class="sidebar-label" id="langLabel" style="margin-bottom:6px;">Language</div>
+    <div class="lang-selector">
+      <button class="lang-btn" id="btnEn" onclick="setLang('en')">🇺🇸 EN</button>
+      <button class="lang-btn" id="btnKo" onclick="setLang('ko')">🇰🇷 한국어</button>
+      <button class="lang-btn active" id="btnKm" onclick="setLang('km')">🇰🇭 ខ្មែរ</button>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+  <div class="rate-banner" id="rateBanner"></div>
+  <div class="chat-area" id="chatArea">
+    <div class="welcome-screen" id="welcomeScreen">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+        <span style="font-size:32px;">🇰🇭</span>
+        <span style="font-size:28px;">🇰🇷</span>
+      </div>
+      <h1 class="welcome-title" id="welcomeTitle">សួស្ដីបងប្អូន! 🙏</h1>
+      <p class="welcome-sub" id="welcomeSub">K'Helper ជួយបងប្អូនខ្មែររស់នៅកូរ៉េ។ សួរជាភាសាខ្មែរ ភាសាកូរ៉េ ឬភាសាអង់គ្លេស ខ្ញុំឆ្លើយបាន!</p>
+      <div class="suggestions" id="suggestionGrid"></div>
+      <div id="emergencyStrip" style="margin-top:16px;padding:10px 14px;background:var(--accent-light);border:1px solid var(--border);border-radius:10px;width:100%;max-width:480px;text-align:center;">
+        <p id="emergencyText" style="font-size:12px;color:var(--accent);line-height:1.8;">
+          🆘 បន្ទាន់: ប្រព័ន្ធចំណាកស្រុក <strong>1345</strong> · គ្រោះថ្នាក់ <strong>119</strong> · ស្ថានទូតខ្មែរ <strong>02-3785-1041</strong>
+        </p>
+      </div>
+    </div>
+    <div class="messages-container" id="messages" style="display:none;"></div>
+  </div>
+  <div class="input-section">
+    <div class="input-box">
+      <textarea id="userInput" rows="1" placeholder="សាកសួរ K'Helper..."></textarea>
+      <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+        <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
+          <path d="M13.5 7.5L1.5 1.5l2 6-2 6 12-6z" fill="white"/>
+        </svg>
+      </button>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px;">
+      <p class="input-hint" id="inputHint">បន្ទាន់: ចំណាកស្រុក 1345 · គ្រោះថ្នាក់ 119</p>
+      <p class="msg-counter" id="msgCounter"></p>
+    </div>
+  </div>
+</main>
+
+<!-- MOBILE BOTTOM NAV -->
+<nav class="mobile-nav" id="mobileNav">
+  <div class="nav-item" onclick="newChat()">
+    <span class="nav-icon">✏️</span>
+    <span class="nav-label" id="navNew">New chat</span>
+  </div>
+  <div id="mobileTopics" style="display:flex;gap:2px;"></div>
+  <div class="nav-lang">
+    <button class="nav-lang-btn" id="mBtnEn" onclick="setLang('en')">EN</button>
+    <button class="nav-lang-btn" id="mBtnKo" onclick="setLang('ko')">한국어</button>
+    <button class="nav-lang-btn active" id="mBtnKm" onclick="setLang('km')">ខ្មែរ</button>
+  </div>
+</nav>
+
+<script>
+// ============================================================
+// K'HELPER FRONTEND — AGENT 2 CLIENT LAYER
+// Security: All API calls go through /.netlify/functions/chat
+// No API keys in this file.
+// ============================================================
+
+// ── CLIENT-SIDE RATE LIMITER ──
+const HOURLY_LIMIT = 30;
+function getMessageCount() {
+  const data = JSON.parse(localStorage.getItem('kh_rate') || '{"count":0,"hour":0}');
+  const currentHour = Math.floor(Date.now() / 3600000);
+  if (data.hour !== currentHour) return { count: 0, hour: currentHour };
+  return data;
+}
+function incrementMessageCount() {
+  const data = getMessageCount();
+  data.count++;
+  data.hour = Math.floor(Date.now() / 3600000);
+  localStorage.setItem('kh_rate', JSON.stringify(data));
+  return data.count;
+}
+function isClientRateLimited() {
+  return getMessageCount().count >= HOURLY_LIMIT;
+}
+function updateCounter() {
+  const { count } = getMessageCount();
+  const remaining = HOURLY_LIMIT - count;
+  const counter = document.getElementById('msgCounter');
+  if (remaining <= 10) {
+    counter.textContent = `${remaining} messages left this hour`;
+    counter.className = 'msg-counter warning';
+  } else {
+    counter.textContent = '';
+  }
+}
+
+// ── MARKDOWN RENDERER ──
+// Converts AI markdown to safe HTML
+function renderMarkdown(text) {
+  if (!text) return '';
+  let html = text
+    // Escape raw HTML
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    // Warning blocks (⚠️ lines)
+    .replace(/(⚠️[^\n]+)/g, '<div class="warning-block">$1</div>')
+    // Bold
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    // Italic
+    .replace(/\*(.*?)\*/g, '<em>$1</em>')
+    // Numbered list items
+    .replace(/^(\d+)\.\s(.+)$/gm, '<span class="msg-step"><strong>$1.</strong> $2</span>')
+    // Headers
+    .replace(/^#{1,3}\s(.+)$/gm, '<strong>$1</strong>')
+    // Line breaks
+    .replace(/\n/g, '<br>');
+  return html;
+}
+
+// ── TRANSLATIONS ──
+const T = {
+  en: {
+    newChat: 'New chat', topicsLabel: 'Quick topics', langLabel: 'Language',
+    welcomeTitle: 'Hello! How can I help? 🙏',
+    welcomeSub: "K'Helper helps Cambodians living in Korea. Ask in Khmer, Korean, or English — I speak all three.",
+    placeholder: 'Type your question...',
+    hint: 'Emergency: Immigration 1345 · Ambulance 119',
+    rateLimited: "You've reached the hourly limit (30 messages). Please wait before continuing. For urgent help call 1345 or 112.",
+    topics: [
+      { icon: '🛂', label: 'Visa & Immigration',  prompt: 'I need help with my Korean visa or immigration documents. Please guide me step by step.' },
+      { icon: '💼', label: 'Jobs & Work Rights',  prompt: 'Help me understand my work rights and employment contract in Korea.' },
+      { icon: '🏥', label: 'Healthcare',           prompt: 'I need help with Korean healthcare and health insurance registration.' },
+      { icon: '🚇', label: 'Transport',            prompt: 'How do I use Korean public transport — subway, bus, and T-money card?' },
+      { icon: '🙏', label: 'Korean Culture',       prompt: 'Explain Korean culture, social customs, and daily etiquette I should know.' },
+      { icon: '💬', label: 'Language Help',        prompt: 'Help me learn useful everyday Korean phrases for daily life.' },
+      { icon: '💰', label: 'Send Money Home',      prompt: 'How do I send money back to Cambodia from Korea?' },
+      { icon: '🎓', label: 'School Enrollment',    prompt: 'How do I enroll my child in a Korean school? What documents do I need?' },
+      { icon: '🏠', label: 'Housing & Renting',    prompt: 'Help me understand renting and housing contracts in Korea.' },
+      { icon: '📞', label: 'Support Centers',       prompt: 'What support centers and hotlines can help Cambodians in Korea? Give real addresses and phone numbers.' },
+    ],
+    suggestions: [
+      { icon: '🛂', title: 'Visa & documents',  sub: 'Renewal, registration, permits', prompt: 'What documents do I need to renew my Korean visa?' },
+      { icon: '💼', title: 'Work rights',       sub: 'Contracts, wages, protections',  prompt: 'I just started a new job in Korea. What are my basic work rights?' },
+      { icon: '🏥', title: 'Health insurance',  sub: 'NHIS, hospitals, clinics',       prompt: 'How do I register for Korean health insurance as a foreigner?' },
+      { icon: '🙏', title: 'Korean culture',    sub: 'Customs, etiquette, daily life', prompt: 'What are important Korean customs I should know as a Cambodian?' },
+    ],
+    emergency: '🆘 Emergency: Immigration <strong>1345</strong> · Ambulance <strong>119</strong> · Cambodian Embassy <strong>02-3785-1041</strong>'
+  },
+  ko: {
+    newChat: '새 대화', topicsLabel: '주요 주제', langLabel: '언어 선택',
+    welcomeTitle: '안녕하세요! 무엇을 도와드릴까요? 🙏',
+    welcomeSub: "K'Helper는 한국에 사는 캄보디아 분들을 돕습니다. 크메르어, 한국어, 영어로 질문하세요.",
+    placeholder: '질문을 입력하세요...',
+    hint: '긴급: 이민국 1345 · 응급 119',
+    rateLimited: '시간당 메시지 한도에 도달했습니다. 잠시 후 다시 시도하세요. 긴급 상황이면 1345 또는 112로 전화하세요.',
+    topics: [
+      { icon: '🛂', label: '비자 & 이민',    prompt: '한국 비자 또는 이민 서류에 대해 단계별로 안내해 주세요.' },
+      { icon: '💼', label: '취업 & 근로권',  prompt: '한국에서 나의 근로권과 고용 계약에 대해 알려주세요.' },
+      { icon: '🏥', label: '의료',           prompt: '한국 의료 서비스 및 건강보험 가입 방법을 알려주세요.' },
+      { icon: '🚇', label: '대중교통',       prompt: '한국 지하철, 버스, T-money 카드 사용법을 알려주세요.' },
+      { icon: '🙏', label: '한국 문화',      prompt: '한국 문화, 사회 관습, 예절에 대해 설명해 주세요.' },
+      { icon: '💬', label: '언어 도움',      prompt: '일상생활에 유용한 한국어 표현을 알려주세요.' },
+      { icon: '💰', label: '캄보디아 송금',  prompt: '한국에서 캄보디아로 돈 보내는 방법을 알려주세요.' },
+      { icon: '🎓', label: '학교 등록',      prompt: '자녀를 한국 학교에 등록하려면 어떻게 해야 하나요?' },
+      { icon: '🏠', label: '주거 & 임대',    prompt: '한국의 임대 및 주거 계약에 대해 알려주세요.' },
+      { icon: '📞', label: '지원 센터',      prompt: '한국에서 캄보디아인을 도와주는 지원 센터 정보를 알려주세요.' },
+    ],
+    suggestions: [
+      { icon: '🛂', title: '비자 & 서류',  sub: '갱신, 등록, 허가', prompt: '한국 비자를 갱신하려면 어떤 서류가 필요한가요?' },
+      { icon: '💼', title: '근로권',       sub: '계약, 임금, 보호', prompt: '한국에서 새 직장을 시작했습니다. 기본 근로권을 알려주세요.' },
+      { icon: '🏥', title: '건강보험',     sub: '건강보험공단, 병원', prompt: '외국인으로서 한국 건강보험에 어떻게 가입하나요?' },
+      { icon: '🙏', title: '한국 문화',    sub: '관습, 예절, 일상생활', prompt: '캄보디아 사람으로서 알아야 할 한국 문화는 무엇인가요?' },
+    ],
+    emergency: '🆘 긴급: 이민 <strong>1345</strong> · 응급 <strong>119</strong> · 캄보디아 대사관 <strong>02-3785-1041</strong>'
+  },
+  km: {
+    newChat: 'ការសន្ទនាថ្មី', topicsLabel: 'ប្រធានបទរហ័ស', langLabel: 'ភាសា',
+    welcomeTitle: 'សួស្ដីបងប្អូន! 🙏',
+    welcomeSub: "K'Helper ជួយបងប្អូនខ្មែររស់នៅកូរ៉េ។ សួរជាភាសាខ្មែរ ភាសាកូរ៉េ ឬភាសាអង់គ្លេស ខ្ញុំឆ្លើយបាន!",
+    placeholder: 'វាយសំណួររបស់អ្នក...',
+    hint: 'បន្ទាន់: ចំណាកស្រុក 1345 · គ្រោះថ្នាក់ 119',
+    rateLimited: 'អ្នកបានផ្ញើសារច្រើនពេក។ សូមរង់ចាំមួយម៉ោង។ ករណីបន្ទាន់ ហៅ 1345 ឬ 112។',
+    topics: [
+      { icon: '🛂', label: 'វីសា & អន្តោប្រវេសន៍', prompt: 'ខ្ញុំត្រូវការជំនួយជាមួយឯកសារវីសា ឬអន្តោប្រវេសន៍កូរ៉េ។ សូមណែនាំខ្ញុំជាជំហានៗ។' },
+      { icon: '💼', label: 'ការងារ & សិទ្ធិ',       prompt: 'ជួយខ្ញុំយល់ពីសិទ្ធិការងារ និងកិច្ចសន្យារបស់ខ្ញុំនៅកូរ៉េ។' },
+      { icon: '🏥', label: 'សុខភាព',                prompt: 'ខ្ញុំត្រូវការជំនួយជាមួយការថែទាំសុខភាព និងការចុះឈ្មោះធានារ៉ាប់រង។' },
+      { icon: '🚇', label: 'ដឹកជញ្ជូន',             prompt: 'តើខ្ញុំប្រើប្រាស់ការដឹកជញ្ជូនសាធារណៈ — រថភ្លើង, ក្រុងហោះ, T-money យ៉ាងដូចម្ដេច?' },
+      { icon: '🙏', label: 'វប្បធម៌កូរ៉េ',          prompt: 'ពន្យល់វប្បធម៌ ទំនៀមទម្លាប់ និងសុជីវធម៌ប្រចាំថ្ងៃនៅកូរ៉េ។' },
+      { icon: '💬', label: 'ជំនួយភាសា',             prompt: 'ជួយខ្ញុំរៀនឃ្លាភាសាកូរ៉េដែលមានប្រយោជន៍សម្រាប់ជីវិតប្រចាំថ្ងៃ។' },
+      { icon: '💰', label: 'ផ្ញើប្រាក់ទៅកម្ពុជា',   prompt: 'តើខ្ញុំផ្ញើប្រាក់ពីកូរ៉េទៅកម្ពុជាដោយរបៀបណា?' },
+      { icon: '🎓', label: 'ការចុះឈ្មោះសាលា',      prompt: 'តើខ្ញុំចុះឈ្មោះកូនរបស់ខ្ញុំចូលសាលាកូរ៉េដោយរបៀបណា?' },
+      { icon: '🏠', label: 'លំនៅដ្ឋាន & ជួល',       prompt: 'ជួយខ្ញុំយល់ពីការជួល និងកិច្ចសន្យាលំនៅដ្ឋាននៅកូរ៉េ។' },
+      { icon: '📞', label: 'មជ្ឈមណ្ឌលជំនួយ',         prompt: 'តើមានមជ្ឈមណ្ឌលជំនួយ លេខទូរស័ព្ទ ដែលអាចជួយខ្មែរនៅកូរ៉េ? សូមផ្តល់អាសយដ្ឋាន និងលេខពិតប្រាកដ។' },
+    ],
+    suggestions: [
+      { icon: '🛂', title: 'វីសា & ឯកសារ',      sub: 'ការបន្ត ចុះឈ្មោះ',          prompt: 'ខ្ញុំត្រូវការឯកសារអ្វីខ្លះដើម្បីបន្តវីសាកូរ៉េ?' },
+      { icon: '💼', title: 'សិទ្ធិការងារ',        sub: 'កិច្ចសន្យា ប្រាក់ខែ',       prompt: 'ខ្ញុំទើបតែចាប់ផ្ដើមការងារថ្មី។ សិទ្ធិជាមូលដ្ឋានគឺអ្វី?' },
+      { icon: '🏥', title: 'ធានារ៉ាប់រងសុខភាព', sub: 'NHIS មន្ទីរពេទ្យ',          prompt: 'ជនបរទេសចុះឈ្មោះធានារ៉ាប់រងសុខភាពកូរ៉េដោយរបៀបណា?' },
+      { icon: '🙏', title: 'វប្បធម៌កូរ៉េ',        sub: 'ទំនៀមទម្លាប់ ជីវិត',       prompt: 'ទំនៀមទម្លាប់កូរ៉េសំខាន់ ជាខ្មែររស់នៅកូរ៉េ?' },
+    ],
+    emergency: '🆘 បន្ទាន់: ប្រព័ន្ធចំណាកស្រុក <strong>1345</strong> · គ្រោះថ្នាក់ <strong>119</strong> · ស្ថានទូតខ្មែរ <strong>02-3785-1041</strong>'
+  }
+};
+
+let conversationHistory = [];
+let currentLang = localStorage.getItem('khelper_lang') || 'km';
+
+function renderUI() {
+  const t = T[currentLang];
+  document.body.className = 'lang-' + currentLang;
+  document.getElementById('newChatLabel').textContent = t.newChat;
+  document.getElementById('topicsLabel').textContent = t.topicsLabel;
+  document.getElementById('langLabel').textContent = t.langLabel;
+  ['en','ko','km'].forEach(l => {
+    const cap = l.charAt(0).toUpperCase() + l.slice(1);
+    document.getElementById('btn' + cap).classList.toggle('active', l === currentLang);
+    document.getElementById('mBtn' + cap).classList.toggle('active', l === currentLang);
+  });
+  // Desktop topics
+  const list = document.getElementById('topicsList');
+  list.innerHTML = '';
+  t.topics.forEach(topic => {
+    const div = document.createElement('div');
+    div.className = 'topic-item';
+    div.onclick = () => sendTopic(topic.prompt);
+    div.innerHTML = `<span class="topic-icon">${topic.icon}</span><span>${topic.label}</span>`;
+    list.appendChild(div);
+  });
+  // Mobile topics
+  const mTopics = document.getElementById('mobileTopics');
+  mTopics.innerHTML = '';
+  t.topics.forEach(topic => {
+    const div = document.createElement('div');
+    div.className = 'nav-item';
+    div.onclick = () => sendTopic(topic.prompt);
+    div.innerHTML = `<span class="nav-icon">${topic.icon}</span><span class="nav-label">${topic.label}</span>`;
+    mTopics.appendChild(div);
+  });
+  // Welcome screen
+  document.getElementById('welcomeTitle').textContent = t.welcomeTitle;
+  document.getElementById('welcomeSub').textContent = t.welcomeSub;
+  document.getElementById('emergencyText').innerHTML = t.emergency;
+  document.getElementById('userInput').placeholder = t.placeholder;
+  document.getElementById('inputHint').textContent = t.hint;
+  document.getElementById('navNew').textContent = t.newChat;
+  // Suggestion cards
+  const grid = document.getElementById('suggestionGrid');
+  grid.innerHTML = '';
+  t.suggestions.forEach(s => {
+    const div = document.createElement('div');
+    div.className = 'suggestion-card';
+    div.onclick = () => sendTopic(s.prompt);
+    div.innerHTML = `<span class="s-icon">${s.icon}</span><div class="s-title">${s.title}</div><div class="s-sub">${s.sub}</div>`;
+    grid.appendChild(div);
+  });
+  updateCounter();
+}
+
+function setLang(lang) {
+  currentLang = lang;
+  localStorage.setItem('khelper_lang', lang);
+  conversationHistory = [];
+  renderUI();
+}
+
+function newChat() {
+  conversationHistory = [];
+  document.getElementById('messages').innerHTML = '';
+  document.getElementById('messages').style.display = 'none';
+  document.getElementById('welcomeScreen').style.display = 'flex';
+}
+
+function showMessages() {
+  document.getElementById('welcomeScreen').style.display = 'none';
+  document.getElementById('messages').style.display = 'flex';
+}
+
+function sendTopic(text) {
+  document.getElementById('userInput').value = text;
+  sendMessage();
+}
+
+function appendMessage(role, html, isCrisis = false) {
+  showMessages();
+  const container = document.getElementById('messages');
+  const row = document.createElement('div');
+  row.className = `message-row ${role}${isCrisis ? ' crisis' : ''}`;
+  const avatar = document.createElement('div');
+  avatar.className = 'msg-avatar';
+  avatar.textContent = role === 'assistant' ? '🏮' : '👤';
+  const content = document.createElement('div');
+  content.className = 'msg-content';
+  const bubble = document.createElement('div');
+  bubble.className = 'msg-bubble';
+  if (role === 'assistant') {
+    bubble.innerHTML = html; // Rendered markdown
+  } else {
+    bubble.textContent = html; // Plain text for user messages
+  }
+  content.appendChild(bubble);
+  row.appendChild(avatar);
+  row.appendChild(content);
+  container.appendChild(row);
+  document.getElementById('chatArea').scrollTop = 999999;
+}
+
+function addTyping() {
+  showMessages();
+  const container = document.getElementById('messages');
+  const row = document.createElement('div');
+  row.className = 'message-row assistant';
+  row.id = 'typingRow';
+  const avatar = document.createElement('div');
+  avatar.className = 'msg-avatar';
+  avatar.textContent = '🏮';
+  const content = document.createElement('div');
+  content.className = 'msg-content';
+  const bubble = document.createElement('div');
+  bubble.className = 'msg-bubble typing-dots';
+  bubble.innerHTML = '<div class="dot"></div><div class="dot"></div><div class="dot"></div>';
+  content.appendChild(bubble);
+  row.appendChild(avatar);
+  row.appendChild(content);
+  container.appendChild(row);
+  document.getElementById('chatArea').scrollTop = 999999;
+}
+
+function removeTyping() {
+  const el = document.getElementById('typingRow');
+  if (el) el.remove();
+}
+
+// ── AUTO-RESIZE TEXTAREA ──
+const ta = document.getElementById('userInput');
+ta.addEventListener('input', () => {
+  ta.style.height = 'auto';
+  ta.style.height = Math.min(ta.scrollHeight, 120) + 'px';
+});
+ta.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+});
+
+// ── SEND MESSAGE ──
+async function sendMessage() {
+  const text = ta.value.trim();
+  if (!text) return;
+
+  // Client-side rate limit check
+  if (isClientRateLimited()) {
+    const banner = document.getElementById('rateBanner');
+    banner.textContent = T[currentLang].rateLimited;
+    banner.style.display = 'block';
+    return;
+  }
+
+  ta.value = '';
+  ta.style.height = 'auto';
+  document.getElementById('sendBtn').disabled = true;
+
+  appendMessage('user', text);
+  conversationHistory.push({ role: 'user', content: text });
+  addTyping();
+
+  const count = incrementMessageCount();
+  updateCounter();
+
+  try {
+    // ── Secure API call — NO key in frontend ──
+    const res = await fetch('/.netlify/functions/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ messages: conversationHistory })
+    });
+
+    const data = await res.json();
+    removeTyping();
+
+    if (data.error) {
+      const isCrisis = data.error.includes('1345') || data.error.includes('112');
+      appendMessage('assistant', renderMarkdown(data.error), isCrisis);
+    } else {
+      const reply = data.choices?.[0]?.message?.content || 'Sorry, no response received.';
+      const isCrisis = reply.includes('1393') || reply.includes('EMERGENCY');
+      appendMessage('assistant', renderMarkdown(reply), isCrisis);
+      conversationHistory.push({ role: 'assistant', content: reply });
+    }
+  } catch (err) {
+    removeTyping();
+    appendMessage('assistant', renderMarkdown('⚠️ Connection error. Please check your internet and try again.\n\nFor urgent help: **Immigration 1345** · **Police 112**'));
+  }
+
+  document.getElementById('sendBtn').disabled = false;
+  ta.focus();
+}
+
+window.onload = renderUI;
+</script>
+</body>
+</html>
