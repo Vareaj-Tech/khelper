@@ -1,693 +1,1355 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="km">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>K'Helper — Cambodians in Korea</title>
-<meta name="description" content="K'Helper — AI assistant for Cambodians living in South Korea. Visa, work rights, healthcare, daily life support in Khmer, Korean, and English.">
-<link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500&family=Noto+Sans+KR:wght@300;400;500&family=Noto+Sans+Khmer:wght@300;400;500&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --bg: #f5f0eb;
-    --surface: #faf7f4;
-    --white: #ffffff;
-    --border: #e8e0d6;
-    --border-light: #f0ebe4;
-    --text-primary: #1a1612;
-    --text-secondary: #6b5f52;
-    --text-muted: #a0917f;
-    --accent: #c4622d;
-    --accent-light: #f5ede6;
-    --accent-hover: #b05528;
-    --user-bubble: #1a1612;
-    --crisis: #dc2626;
-    --crisis-light: #fef2f2;
-    --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
-    --radius: 12px;
-    --radius-sm: 8px;
-    --nav-h: 60px;
-  }
-  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-  html, body { height: 100%; overflow: hidden; }
-  body {
-    background: var(--bg);
-    color: var(--text-primary);
-    font-family: 'Noto Sans KR', sans-serif;
-    display: flex;
-    height: 100dvh;
-  }
-  body.lang-km, body.lang-km input, body.lang-km textarea,
-  body.lang-km .msg-bubble, body.lang-km .topic-item span,
-  body.lang-km .s-title, body.lang-km .s-sub,
-  body.lang-km .nav-label, body.lang-km .welcome-sub {
-    font-family: 'Noto Sans Khmer', sans-serif;
-    line-height: 2;
-  }
-  body.lang-km .msg-bubble { font-size: 15px; line-height: 2.1; }
-  body.lang-km .welcome-title { font-family: 'Noto Sans Khmer', sans-serif; font-size: 20px; }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>K'Helper â áááá½ááá¶áááááááááá¼ááá</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Khmer:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  /* ── SIDEBAR ── */
-  .sidebar {
-    width: 240px; background: var(--surface);
-    border-right: 1px solid var(--border);
-    display: flex; flex-direction: column; flex-shrink: 0;
-  }
-  .sidebar-header { padding: 20px 18px 14px; border-bottom: 1px solid var(--border-light); }
-  .brand { display: flex; align-items: center; gap: 9px; margin-bottom: 14px; }
-  .brand-icon {
-    width: 28px; height: 28px; background: var(--accent);
-    border-radius: 7px; display: flex; align-items: center; justify-content: center;
-    font-size: 14px; flex-shrink: 0;
-  }
-  .brand-name { font-family: 'Lora', serif; font-size: 17px; font-weight: 500; }
-  .brand-name span { color: var(--accent); }
-  .new-chat-btn {
-    width: 100%; display: flex; align-items: center; gap: 8px;
-    padding: 8px 12px; background: var(--white);
-    border: 1px solid var(--border); border-radius: var(--radius-sm);
-    color: var(--text-secondary); font-family: inherit; font-size: 13px;
-    cursor: pointer; transition: all 0.15s; box-shadow: var(--shadow-sm);
-  }
-  .new-chat-btn:hover { border-color: var(--accent); color: var(--accent); }
-  .sidebar-section { padding: 12px 18px 8px; overflow-y: auto; flex: 1; }
-  .sidebar-label { font-size: 10px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px; }
-  .topic-item {
-    display: flex; align-items: center; gap: 9px; padding: 7px 10px;
-    border-radius: var(--radius-sm); cursor: pointer; transition: background 0.12s;
-    color: var(--text-secondary); font-size: 13px; margin-bottom: 1px;
-  }
-  .topic-item:hover { background: var(--accent-light); color: var(--accent); }
-  .topic-icon { font-size: 14px; flex-shrink: 0; width: 18px; text-align: center; }
-  .topic-item span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .sidebar-footer { padding: 12px 18px; border-top: 1px solid var(--border-light); flex-shrink: 0; }
-  .lang-selector { display: flex; gap: 4px; }
-  .lang-btn {
-    flex: 1; padding: 5px 4px; background: none; border: 1px solid var(--border);
-    border-radius: 6px; font-size: 11px; color: var(--text-muted);
-    cursor: pointer; transition: all 0.12s; font-family: inherit;
-  }
-  .lang-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
-  .lang-btn.active { background: var(--accent); border-color: var(--accent); color: white; font-weight: 500; }
+    :root {
+      --bg: #fdf6f2;
+      --sidebar-bg: #f5ebe4;
+      --sidebar-hover: #ecddd5;
+      --border: #e8d5cb;
+      --accent: #d94e1f;
+      --accent-hover: #c44018;
+      --accent-light: #fce8df;
+      --text: #2d1f1a;
+      --text-muted: #8c6b5e;
+      --text-light: #b8907e;
+      --user-bubble: #1a1a2e;
+      --user-text: #ffffff;
+      --bot-bg: #ffffff;
+      --card-bg: #ffffff;
+      --card-border: #f0ddd5;
+      --card-hover: #fff3ee;
+      --input-bg: #ffffff;
+      --shadow: 0 1px 3px rgba(180,100,60,0.08);
+      --shadow-md: 0 4px 12px rgba(180,100,60,0.12);
+      --radius: 12px;
+      --radius-sm: 8px;
+      --font: 'Inter', 'Noto Sans Khmer', sans-serif;
+    }
 
-  /* ── MAIN ── */
-  .main { flex: 1; display: flex; flex-direction: column; min-width: 0; background: var(--white); }
-  .chat-area {
-    flex: 1; overflow-y: auto;
-    scrollbar-width: thin; scrollbar-color: var(--border) transparent;
-    display: flex; flex-direction: column; padding-bottom: 8px;
-  }
-  .chat-area::-webkit-scrollbar { width: 4px; }
-  .chat-area::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      height: 100dvh;
+      display: flex;
+      overflow: hidden;
+    }
 
-  /* Welcome */
-  .welcome-screen {
-    flex: 1; display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    padding: 32px 20px 20px; text-align: center;
-    animation: fadeIn 0.4s ease;
-  }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-  .welcome-logo {
-    width: 48px; height: 48px; background: var(--accent);
-    border-radius: 13px; display: flex; align-items: center; justify-content: center;
-    font-size: 24px; margin-bottom: 16px;
-    box-shadow: 0 4px 16px rgba(196,98,45,0.22);
-  }
-  .welcome-title {
-    font-family: 'Lora', serif; font-size: 22px; font-weight: 500;
-    color: var(--text-primary); margin-bottom: 8px; line-height: 1.3;
-  }
-  .welcome-sub {
-    font-size: 13px; color: var(--text-muted); line-height: 1.65;
-    max-width: 340px; margin-bottom: 28px;
-  }
-  .suggestions {
-    display: grid; grid-template-columns: repeat(2, 1fr);
-    gap: 10px; max-width: 480px; width: 100%;
-  }
-  .suggestion-card {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: var(--radius); padding: 16px 14px;
-    cursor: pointer; transition: all 0.15s; text-align: left;
-    min-height: 80px; display: flex; flex-direction: column; justify-content: center;
-  }
-  .suggestion-card:hover, .suggestion-card:active {
-    border-color: var(--accent); background: var(--accent-light);
-    transform: translateY(-1px);
-  }
-  .s-icon { font-size: 20px; margin-bottom: 8px; display: block; }
-  .s-title { font-size: 13px; font-weight: 500; color: var(--text-primary); margin-bottom: 3px; line-height: 1.4; }
-  .s-sub { font-size: 11px; color: var(--text-muted); line-height: 1.4; }
+    /* ââââââââââââââââââââââââââââââ
+       SIDEBAR
+    ââââââââââââââââââââââââââââââ */
+    #sidebar {
+      width: 260px;
+      min-width: 260px;
+      background: var(--sidebar-bg);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
 
-  /* Messages */
-  .messages-container { padding: 16px 0 8px; display: flex; flex-direction: column; }
-  .message-row { padding: 4px 16px; display: flex; gap: 10px; animation: fadeIn 0.25s ease; }
-  .message-row.user { flex-direction: row-reverse; }
-  .msg-avatar {
-    width: 26px; height: 26px; border-radius: 7px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 12px; flex-shrink: 0; margin-top: 3px;
-  }
-  .message-row.assistant .msg-avatar { background: var(--accent); }
-  .message-row.user .msg-avatar { background: var(--user-bubble); }
-  .msg-content { max-width: min(520px, 80vw); min-width: 0; }
-  .msg-bubble {
-    padding: 10px 14px; border-radius: 14px;
-    font-size: 14px; line-height: 1.75;
-    word-break: break-word;
-  }
-  .message-row.assistant .msg-bubble {
-    background: var(--surface); border: 1px solid var(--border-light);
-    color: var(--text-primary); border-top-left-radius: 4px;
-  }
-  .message-row.user .msg-bubble {
-    background: var(--user-bubble); color: #f5f0eb;
-    border-top-right-radius: 4px; white-space: pre-wrap;
-  }
-  /* Crisis message style */
-  .message-row.crisis .msg-bubble {
-    background: var(--crisis-light); border: 1px solid #fca5a5;
-    color: var(--text-primary);
-  }
-  /* Markdown rendered inside assistant bubbles */
-  .msg-bubble strong { font-weight: 600; }
-  .msg-bubble em { font-style: italic; }
-  .msg-bubble a { color: var(--accent); text-decoration: underline; }
-  .msg-bubble .msg-step { display: block; margin: 4px 0; }
-  .msg-bubble table { border-collapse: collapse; width: 100%; margin: 8px 0; font-size: 13px; }
-  .msg-bubble th, .msg-bubble td { border: 1px solid var(--border); padding: 6px 10px; text-align: left; }
-  .msg-bubble th { background: var(--accent-light); font-weight: 600; }
-  .msg-bubble .warning-block {
-    background: #fffbeb; border: 1px solid #fbbf24;
-    border-radius: 8px; padding: 10px 12px; margin: 8px 0;
-    font-size: 13px;
-  }
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 18px 16px 14px;
+    }
 
-  /* Rate limit banner */
-  .rate-banner {
-    background: var(--accent-light); border-top: 1px solid var(--border);
-    padding: 8px 16px; font-size: 12px; color: var(--accent);
-    text-align: center; display: none;
-  }
+    .logo-icon {
+      width: 38px;
+      height: 38px;
+      background: var(--accent);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
 
-  /* Typing dots */
-  .typing-dots { display: flex; gap: 4px; padding: 12px 14px; align-items: center; }
-  .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--text-muted); animation: pulse 1.3s ease-in-out infinite; }
-  .dot:nth-child(2) { animation-delay: 0.2s; }
-  .dot:nth-child(3) { animation-delay: 0.4s; }
-  @keyframes pulse { 0%,60%,100% { transform: scale(0.8); opacity: 0.4; } 30% { transform: scale(1); opacity: 1; } }
+    .logo-name {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: -0.3px;
+    }
 
-  /* ── INPUT ── */
-  .input-section {
-    padding: 10px 14px 14px; background: var(--white);
-    border-top: 1px solid var(--border-light); flex-shrink: 0;
-  }
-  .input-box {
-    display: flex; align-items: flex-end; gap: 8px;
-    background: var(--surface); border: 1.5px solid var(--border);
-    border-radius: 14px; padding: 8px 8px 8px 14px;
-    transition: border-color 0.15s, box-shadow 0.15s;
-  }
-  .input-box:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(196,98,45,0.08); }
-  #userInput {
-    flex: 1; background: none; border: none; outline: none;
-    color: var(--text-primary); font-family: inherit;
-    font-size: 14px; line-height: 1.55;
-    resize: none; max-height: 120px; min-height: 22px; scrollbar-width: none;
-  }
-  #userInput::-webkit-scrollbar { display: none; }
-  .send-btn {
-    width: 34px; height: 34px; border-radius: 9px;
-    background: var(--accent); border: none; cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0; transition: background 0.15s, transform 0.12s; color: white;
-  }
-  .send-btn:hover { background: var(--accent-hover); }
-  .send-btn:active { transform: scale(0.95); }
-  .send-btn:disabled { background: var(--border); cursor: not-allowed; }
-  .input-hint { font-size: 10px; color: var(--text-muted); text-align: center; margin-top: 6px; }
-  .msg-counter { font-size: 10px; color: var(--text-muted); text-align: right; margin-top: 4px; }
-  .msg-counter.warning { color: var(--accent); }
+    .new-chat-btn {
+      margin: 0 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      background: transparent;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-family: var(--font);
+      font-size: 13px;
+      color: var(--text-muted);
+      transition: all 0.15s;
+    }
 
-  /* ── MOBILE NAV ── */
-  .mobile-nav {
-    display: none; position: fixed; bottom: 0; left: 0; right: 0;
-    height: var(--nav-h); background: var(--white);
-    border-top: 1px solid var(--border); z-index: 50;
-    padding: 0 4px; overflow-x: auto; scrollbar-width: none;
-    align-items: center; gap: 2px;
-  }
-  .mobile-nav::-webkit-scrollbar { display: none; }
-  .nav-item {
-    display: flex; flex-direction: column; align-items: center; gap: 3px;
-    padding: 6px 10px; border-radius: var(--radius-sm);
-    cursor: pointer; transition: background 0.12s; flex-shrink: 0; min-width: 60px;
-  }
-  .nav-item:hover, .nav-item:active { background: var(--accent-light); }
-  .nav-icon { font-size: 18px; }
-  .nav-label { font-size: 9px; color: var(--text-muted); white-space: nowrap; font-family: inherit; }
-  .nav-lang { display: flex; gap: 3px; padding: 6px 8px; border-left: 1px solid var(--border-light); flex-shrink: 0; margin-left: auto; }
-  .nav-lang-btn {
-    padding: 4px 7px; border-radius: 5px; font-size: 10px;
-    border: 1px solid var(--border); background: none; color: var(--text-muted);
-    cursor: pointer; font-family: inherit; transition: all 0.12s;
-  }
-  .nav-lang-btn.active { background: var(--accent); border-color: var(--accent); color: white; }
+    .new-chat-btn:hover {
+      background: var(--sidebar-hover);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
 
-  @media (max-width: 640px) {
-    .sidebar { display: none; }
-    .mobile-nav { display: flex; }
-    .chat-area { padding-bottom: calc(var(--nav-h) + 4px); }
-    .input-section { padding-bottom: calc(var(--nav-h) + 10px); }
-    .welcome-screen { padding: 24px 16px 20px; }
-    .suggestions { grid-template-columns: repeat(2, 1fr); gap: 8px; }
-    .message-row { padding: 4px 12px; }
-    .msg-content { max-width: 85vw; }
-  }
-  @media (max-width: 380px) {
-    .suggestions { grid-template-columns: 1fr; }
-    .welcome-title { font-size: 20px; }
-  }
-</style>
+    .sidebar-section-label {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--text-light);
+      padding: 0 16px 8px;
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0 8px;
+    }
+
+    .sidebar-nav::-webkit-scrollbar { width: 3px; }
+    .sidebar-nav::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 10px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-size: 13px;
+      color: var(--text-muted);
+      transition: all 0.15s;
+      margin-bottom: 2px;
+    }
+
+    .nav-item:hover {
+      background: var(--sidebar-hover);
+      color: var(--text);
+    }
+
+    .nav-item.active {
+      background: var(--accent-light);
+      color: var(--accent);
+    }
+
+    .nav-icon { font-size: 16px; flex-shrink: 0; }
+
+    /* ââ MAP PANEL ââ */
+    #map-panel {
+      display: none;
+      position: fixed;
+      top: 0; right: 0; bottom: 0;
+      width: 360px;
+      background: var(--bg);
+      border-left: 1.5px solid var(--border);
+      z-index: 100;
+      flex-direction: column;
+      box-shadow: -4px 0 20px rgba(180,100,60,0.1);
+    }
+
+    #map-panel.open { display: flex; }
+
+    .map-panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--border);
+      background: var(--sidebar-bg);
+    }
+
+    .map-panel-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .map-close-btn {
+      background: none;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      color: var(--text-muted);
+      padding: 2px 6px;
+      border-radius: 6px;
+      line-height: 1;
+    }
+
+    .map-close-btn:hover { background: var(--sidebar-hover); }
+
+    .map-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border);
+      background: var(--sidebar-bg);
+      overflow-x: auto;
+    }
+
+    .map-tab {
+      flex: 1;
+      padding: 10px 6px;
+      font-size: 11px;
+      font-weight: 600;
+      text-align: center;
+      cursor: pointer;
+      color: var(--text-muted);
+      border-bottom: 2px solid transparent;
+      transition: all 0.15s;
+      white-space: nowrap;
+      font-family: var(--font);
+      background: none;
+      border-top: none;
+      border-left: none;
+      border-right: none;
+    }
+
+    .map-tab:hover { color: var(--accent); }
+    .map-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+    .map-search-row {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      gap: 8px;
+    }
+
+    .map-search-input {
+      flex: 1;
+      padding: 8px 12px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-family: var(--font);
+      font-size: 13px;
+      background: var(--input-bg);
+      color: var(--text);
+      outline: none;
+    }
+
+    .map-search-input:focus { border-color: var(--accent); }
+
+    .map-search-btn {
+      padding: 8px 14px;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: var(--font);
+      transition: background 0.15s;
+    }
+
+    .map-search-btn:hover { background: var(--accent-hover); }
+
+    .map-locations-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px;
+    }
+
+    .map-locations-list::-webkit-scrollbar { width: 3px; }
+    .map-locations-list::-webkit-scrollbar-thumb { background: var(--border); }
+
+    .map-location-card {
+      background: var(--card-bg);
+      border: 1.5px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 14px;
+      margin-bottom: 10px;
+      box-shadow: var(--shadow);
+    }
+
+    .map-loc-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 3px;
+    }
+
+    .map-loc-kr {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 2px;
+    }
+
+    .map-loc-note {
+      font-size: 11px;
+      color: var(--text-light);
+      margin-bottom: 10px;
+      line-height: 1.4;
+    }
+
+    .map-buttons {
+      display: flex;
+      gap: 6px;
+    }
+
+    .map-btn {
+      flex: 1;
+      padding: 7px 6px;
+      border-radius: var(--radius-sm);
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+      transition: all 0.15s;
+      display: block;
+    }
+
+    .map-btn.kakao {
+      background: #FEE500;
+      color: #3C1E1E;
+      border: none;
+    }
+
+    .map-btn.kakao:hover { background: #f5dc00; }
+
+    .map-btn.naver {
+      background: #03C75A;
+      color: white;
+      border: none;
+    }
+
+    .map-btn.naver:hover { background: #02b350; }
+
+    .map-btn.google {
+      background: var(--accent-light);
+      color: var(--accent);
+      border: 1px solid var(--card-border);
+    }
+
+    .map-btn.google:hover { background: #fde0d4; }
+
+    /* Map link in chat bubble */
+    .map-link-row {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid var(--card-border);
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .inline-map-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .inline-map-btn.kakao { background: #FEE500; color: #3C1E1E; }
+    .inline-map-btn.naver { background: #03C75A; color: white; }
+    .inline-map-btn.panel { background: var(--accent-light); color: var(--accent); border: none; font-family: var(--font); }
+    .inline-map-btn.panel:hover { background: #fde0d4; }
+
+    /* Language switcher */
+    .lang-section {
+      padding: 14px 12px;
+      border-top: 1px solid var(--border);
+    }
+
+    .lang-label {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--text-light);
+      margin-bottom: 8px;
+    }
+
+    .lang-buttons {
+      display: flex;
+      gap: 6px;
+    }
+
+    .lang-btn {
+      flex: 1;
+      padding: 6px 4px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: transparent;
+      font-family: var(--font);
+      font-size: 11px;
+      cursor: pointer;
+      color: var(--text-muted);
+      transition: all 0.15s;
+      text-align: center;
+    }
+
+    .lang-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .lang-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: white;
+      font-weight: 600;
+    }
+
+    /* ââââââââââââââââââââââââââââââ
+       MAIN AREA
+    ââââââââââââââââââââââââââââââ */
+    #main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      background: var(--bg);
+    }
+
+    /* ââ CHAT MESSAGES ââ */
+    #chat {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    #chat::-webkit-scrollbar { width: 4px; }
+    #chat::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+    /* ââ WELCOME SCREEN ââ */
+    .welcome {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex: 1;
+      padding: 32px 16px;
+      text-align: center;
+      min-height: 60vh;
+    }
+
+    .welcome-logo {
+      width: 72px;
+      height: 72px;
+      background: var(--accent);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-md);
+    }
+
+    .welcome h2 {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 10px;
+      line-height: 1.3;
+    }
+
+    .welcome-sub {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 32px;
+      line-height: 1.6;
+      max-width: 420px;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      max-width: 620px;
+      width: 100%;
+    }
+
+    @media (max-width: 900px) {
+      .cards-grid { grid-template-columns: 1fr 1fr; max-width: 460px; }
+    }
+
+    .topic-card {
+      background: var(--card-bg);
+      border: 1.5px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 18px 16px;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.2s;
+      box-shadow: var(--shadow);
+    }
+
+    .topic-card:hover {
+      background: var(--card-hover);
+      border-color: var(--accent);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .card-icon { font-size: 22px; margin-bottom: 8px; display: block; }
+    .card-title { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+    .card-sub { font-size: 12px; color: var(--text-muted); }
+
+    /* ââ MESSAGE ROWS ââ */
+    .msg-row {
+      display: flex;
+      gap: 12px;
+      max-width: 700px;
+      width: 100%;
+    }
+
+    .msg-row.user {
+      flex-direction: row-reverse;
+      align-self: flex-end;
+    }
+
+    .msg-row.bot { align-self: flex-start; }
+
+    .msg-avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .msg-avatar.bot-av {
+      background: var(--accent);
+    }
+
+    .msg-avatar.user-av {
+      background: var(--user-bubble);
+      font-size: 14px;
+    }
+
+    .bubble {
+      padding: 12px 16px;
+      border-radius: var(--radius);
+      font-size: 14px;
+      line-height: 1.7;
+      max-width: calc(100% - 46px);
+      word-break: break-word;
+    }
+
+    .bubble.bot {
+      background: var(--bot-bg);
+      border: 1.5px solid var(--card-border);
+      border-top-left-radius: 4px;
+      color: var(--text);
+      box-shadow: var(--shadow);
+    }
+
+    .bubble.user {
+      background: var(--user-bubble);
+      color: var(--user-text);
+      border-top-right-radius: 4px;
+    }
+
+    .bubble.crisis {
+      background: #fff0f0;
+      border-color: #f87171;
+    }
+
+    /* Markdown rendering */
+    .bubble strong { font-weight: 600; color: var(--accent); }
+    .bubble.user strong { color: #fbbf24; }
+    .bubble em { font-style: italic; color: var(--text-muted); }
+    .bubble .msg-step {
+      display: block;
+      padding: 5px 0 5px 12px;
+      border-left: 2px solid var(--accent);
+      margin: 5px 0;
+    }
+    .bubble .warning-block {
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      border-radius: 8px;
+      padding: 10px 14px;
+      margin: 6px 0;
+      font-weight: 500;
+      color: #92400e;
+    }
+
+    /* ââ TYPING INDICATOR ââ */
+    .typing-dots {
+      display: flex;
+      gap: 5px;
+      align-items: center;
+      padding: 6px 2px;
+    }
+
+    .typing-dots span {
+      width: 7px;
+      height: 7px;
+      background: var(--accent);
+      border-radius: 50%;
+      opacity: 0.4;
+      animation: dot-bounce 1.3s infinite;
+    }
+
+    .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+    .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes dot-bounce {
+      0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+      30% { transform: translateY(-7px); opacity: 1; }
+    }
+
+    /* ââââââââââââââââââââââââââââââ
+       INPUT AREA
+    ââââââââââââââââââââââââââââââ */
+    #input-area {
+      border-top: 1px solid var(--border);
+      padding: 14px 32px 12px;
+      background: var(--bg);
+      flex-shrink: 0;
+    }
+
+    .input-row {
+      display: flex;
+      gap: 10px;
+      align-items: flex-end;
+      max-width: 700px;
+      background: var(--input-bg);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 8px 8px 8px 16px;
+      transition: border-color 0.2s;
+      box-shadow: var(--shadow);
+    }
+
+    .input-row:focus-within { border-color: var(--accent); }
+
+    #user-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      font-family: var(--font);
+      font-size: 14px;
+      color: var(--text);
+      resize: none;
+      min-height: 24px;
+      max-height: 120px;
+      line-height: 1.5;
+      padding: 4px 0;
+    }
+
+    #user-input::placeholder { color: var(--text-light); }
+
+    #send-btn {
+      width: 38px;
+      height: 38px;
+      background: var(--accent);
+      border: none;
+      border-radius: var(--radius-sm);
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    #send-btn:hover { background: var(--accent-hover); }
+    #send-btn:disabled { background: var(--border); cursor: not-allowed; }
+
+    .input-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 8px;
+      max-width: 700px;
+    }
+
+    .emergency-line {
+      font-size: 11px;
+      color: var(--text-light);
+    }
+
+    .emergency-line strong { color: var(--accent); font-weight: 600; }
+
+    #msg-counter {
+      font-size: 11px;
+      color: var(--text-light);
+    }
+
+    /* ââââââââââââââââââââââââââââââ
+       MOBILE
+    ââââââââââââââââââââââââââââââ */
+    @media (max-width: 700px) {
+      #sidebar { display: none; }
+      #chat { padding: 16px 14px; }
+      #input-area { padding: 12px 14px 10px; }
+      .cards-grid { grid-template-columns: 1fr; }
+      .welcome h2 { font-size: 18px; }
+    }
+  </style>
 </head>
-<body class="lang-km">
+<body>
 
-<!-- SIDEBAR -->
-<aside class="sidebar">
-  <div class="sidebar-header">
-    <div class="brand">
-      <div class="brand-icon">🏮</div>
-      <div class="brand-name">K'<span>Helper</span></div>
+<!-- ââ SIDEBAR ââ -->
+<aside id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-icon">ð®</div>
+    <span class="logo-name">K'Helper</span>
+  </div>
+
+  <button class="new-chat-btn" onclick="resetChat()">
+    <span>ï¼</span> <span id="new-chat-label">áá¶ááááááá¶áááá¸</span>
+  </button>
+
+  <div class="sidebar-section-label" id="topics-label">ááááá¶ááááá áá</div>
+
+  <nav class="sidebar-nav">
+    <div class="nav-item" onclick="quickTopic('visa')">
+      <span class="nav-icon">ð</span>
+      <span id="nav-visa">áá¸áá¶ &amp; á¢áááááááááááá</span>
     </div>
-    <button class="new-chat-btn" onclick="newChat()">
-      <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-        <path d="M6.5 1v11M1 6.5h11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-      </svg>
-      <span id="newChatLabel">New conversation</span>
-    </button>
-  </div>
-  <div class="sidebar-section">
-    <div class="sidebar-label" id="topicsLabel">Quick topics</div>
-    <div id="topicsList"></div>
-  </div>
-  <div class="sidebar-footer">
-    <div class="sidebar-label" id="langLabel" style="margin-bottom:6px;">Language</div>
-    <div class="lang-selector">
-      <button class="lang-btn" id="btnEn" onclick="setLang('en')">🇺🇸 EN</button>
-      <button class="lang-btn" id="btnKo" onclick="setLang('ko')">🇰🇷 한국어</button>
-      <button class="lang-btn active" id="btnKm" onclick="setLang('km')">🇰🇭 ខ្មែរ</button>
+    <div class="nav-item" onclick="quickTopic('work')">
+      <span class="nav-icon">ð¼</span>
+      <span id="nav-work">áá¶ááá¶á &amp; áá·áááá·</span>
+    </div>
+    <div class="nav-item" onclick="quickTopic('health')">
+      <span class="nav-icon">ð¥</span>
+      <span id="nav-health">áá»ááá¶á</span>
+    </div>
+    <div class="nav-item" onclick="quickTopic('daily')">
+      <span class="nav-icon">ð</span>
+      <span id="nav-daily">áá¸áá·áááááá¶á</span>
+    </div>
+    <div class="nav-item" onclick="quickTopic('culture')">
+      <span class="nav-icon">ð</span>
+      <span id="nav-culture">ááááááááá¼ááá</span>
+    </div>
+    <div class="nav-item" onclick="quickTopic('language')">
+      <span class="nav-icon">ð¬</span>
+      <span id="nav-language">áááá½ááá¶áá¶</span>
+    </div>
+    <div class="nav-item" onclick="quickTopic('money')">
+      <span class="nav-icon">ð¸</span>
+      <span id="nav-money">áááá¾áááá¶ááááááááá»áá¶</span>
+    </div>
+    <div class="nav-item" onclick="quickTopic('school')">
+      <span class="nav-icon">ð«</span>
+      <span id="nav-school">áá¶ááá»áááááááá¶áá¶</span>
+    </div>
+    <div class="nav-item" onclick="quickTopic('housing')">
+      <span class="nav-icon">ð </span>
+      <span id="nav-housing">áááááááá¶á &amp; áá½á</span>
+    </div>
+    <div class="nav-item" onclick="quickTopic('tourist')">
+      <span class="nav-icon">ðºï¸</span>
+      <span id="nav-tourist">ááááááá</span>
+    </div>
+    <div class="nav-item" onclick="openMapPanel('places')">
+      <span class="nav-icon">ð</span>
+      <span id="nav-location">áá¸áá¶áá &amp; ááááá¸</span>
+    </div>
+  </nav>
+
+  <div class="lang-section">
+    <div class="lang-label" id="lang-label">áá¶áá¶</div>
+    <div class="lang-buttons">
+      <button class="lang-btn" id="btn-en" onclick="setLang('en')">ðºð¸ EN</button>
+      <button class="lang-btn" id="btn-kr" onclick="setLang('kr')">ð°ð· íêµ­ì´</button>
+      <button class="lang-btn active" id="btn-km" onclick="setLang('km')">ð°ð­ ááááá</button>
     </div>
   </div>
 </aside>
 
-<!-- MAIN -->
-<main class="main">
-  <div class="rate-banner" id="rateBanner"></div>
-  <div class="chat-area" id="chatArea">
-    <div class="welcome-screen" id="welcomeScreen">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
-        <span style="font-size:32px;">🇰🇭</span>
-        <span style="font-size:28px;">🇰🇷</span>
-      </div>
-      <h1 class="welcome-title" id="welcomeTitle">សួស្ដីបងប្អូន! 🙏</h1>
-      <p class="welcome-sub" id="welcomeSub">K'Helper ជួយបងប្អូនខ្មែររស់នៅកូរ៉េ។ សួរជាភាសាខ្មែរ ភាសាកូរ៉េ ឬភាសាអង់គ្លេស ខ្ញុំឆ្លើយបាន!</p>
-      <div class="suggestions" id="suggestionGrid"></div>
-      <div id="emergencyStrip" style="margin-top:16px;padding:10px 14px;background:var(--accent-light);border:1px solid var(--border);border-radius:10px;width:100%;max-width:480px;text-align:center;">
-        <p id="emergencyText" style="font-size:12px;color:var(--accent);line-height:1.8;">
-          🆘 បន្ទាន់: ប្រព័ន្ធចំណាកស្រុក <strong>1345</strong> · គ្រោះថ្នាក់ <strong>119</strong> · ស្ថានទូតខ្មែរ <strong>02-3785-1041</strong>
-        </p>
-      </div>
-    </div>
-    <div class="messages-container" id="messages" style="display:none;"></div>
+<!-- ââ MAP PANEL ââ -->
+<div id="map-panel">
+  <div class="map-panel-header">
+    <span class="map-panel-title">ð <span id="map-panel-heading">áá¸áá¶áá &amp; ááááá¸</span></span>
+    <button class="map-close-btn" onclick="closeMapPanel()">â</button>
   </div>
-  <div class="input-section">
-    <div class="input-box">
-      <textarea id="userInput" rows="1" placeholder="សាកសួរ K'Helper..."></textarea>
-      <button class="send-btn" id="sendBtn" onclick="sendMessage()">
-        <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
-          <path d="M13.5 7.5L1.5 1.5l2 6-2 6 12-6z" fill="white"/>
-        </svg>
-      </button>
-    </div>
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px;">
-      <p class="input-hint" id="inputHint">បន្ទាន់: ចំណាកស្រុក 1345 · គ្រោះថ្នាក់ 119</p>
-      <p class="msg-counter" id="msgCounter"></p>
-    </div>
+  <div class="map-tabs">
+    <button class="map-tab active" onclick="switchMapTab('immigration')" id="tab-immigration">ð áááá¶á</button>
+    <button class="map-tab" onclick="switchMapTab('health')" id="tab-health">ð¥ Health</button>
+    <button class="map-tab" onclick="switchMapTab('food')" id="tab-food">ð Food</button>
+    <button class="map-tab" onclick="switchMapTab('cafe')" id="tab-cafe">â CafÃ©</button>
+    <button class="map-tab" onclick="switchMapTab('places')" id="tab-places">ðï¸ Places</button>
+    <button class="map-tab" onclick="switchMapTab('labor')" id="tab-labor">ð¼ Labor</button>
   </div>
-</main>
+  <div class="map-search-row">
+    <input type="text" class="map-search-input" id="map-search-input" placeholder="ááááááááá¸áá¶áá...">
+    <button class="map-search-btn" onclick="doMapSearch()">ð</button>
+  </div>
+  <div class="map-locations-list" id="map-locations-list"></div>
+</div>
 
-<!-- MOBILE BOTTOM NAV -->
-<nav class="mobile-nav" id="mobileNav">
-  <div class="nav-item" onclick="newChat()">
-    <span class="nav-icon">✏️</span>
-    <span class="nav-label" id="navNew">New chat</span>
+<!-- ââ MAIN ââ -->
+<div id="main">
+  <div id="chat">
+    <!-- Welcome screen rendered by JS -->
   </div>
-  <div id="mobileTopics" style="display:flex;gap:2px;"></div>
-  <div class="nav-lang">
-    <button class="nav-lang-btn" id="mBtnEn" onclick="setLang('en')">EN</button>
-    <button class="nav-lang-btn" id="mBtnKo" onclick="setLang('ko')">한국어</button>
-    <button class="nav-lang-btn active" id="mBtnKm" onclick="setLang('km')">ខ្មែរ</button>
+
+  <div id="input-area">
+    <div class="input-row">
+      <textarea
+        id="user-input"
+        rows="1"
+        maxlength="2000"
+        placeholder="áá¶ááá K'Helper..."
+      ></textarea>
+      <button id="send-btn" onclick="sendMessage()">â¤</button>
+    </div>
+    <div class="input-footer">
+      <span class="emergency-line" id="emergency-line">
+        áááá½áááááá¶áá: <strong>áááá¶ááááá»á 1345</strong> Â· <strong>ááááá¶áá 119</strong>
+      </span>
+      <span id="msg-counter">30 áá¶á ááááá</span>
+    </div>
   </div>
-</nav>
+</div>
 
 <script>
-// ============================================================
-// K'HELPER FRONTEND — AGENT 2 CLIENT LAYER
-// Security: All API calls go through /.netlify/functions/chat
-// No API keys in this file.
-// ============================================================
-
-// ── CLIENT-SIDE RATE LIMITER ──
-const HOURLY_LIMIT = 30;
-function getMessageCount() {
-  const data = JSON.parse(localStorage.getItem('kh_rate') || '{"count":0,"hour":0}');
-  const currentHour = Math.floor(Date.now() / 3600000);
-  if (data.hour !== currentHour) return { count: 0, hour: currentHour };
-  return data;
-}
-function incrementMessageCount() {
-  const data = getMessageCount();
-  data.count++;
-  data.hour = Math.floor(Date.now() / 3600000);
-  localStorage.setItem('kh_rate', JSON.stringify(data));
-  return data.count;
-}
-function isClientRateLimited() {
-  return getMessageCount().count >= HOURLY_LIMIT;
-}
-function updateCounter() {
-  const { count } = getMessageCount();
-  const remaining = HOURLY_LIMIT - count;
-  const counter = document.getElementById('msgCounter');
-  if (remaining <= 10) {
-    counter.textContent = `${remaining} messages left this hour`;
-    counter.className = 'msg-counter warning';
-  } else {
-    counter.textContent = '';
-  }
-}
-
-// ── MARKDOWN RENDERER ──
-// Converts AI markdown to safe HTML
-function renderMarkdown(text) {
-  if (!text) return '';
-  let html = text
-    // Escape raw HTML
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    // Warning blocks (⚠️ lines)
-    .replace(/(⚠️[^\n]+)/g, '<div class="warning-block">$1</div>')
-    // Bold
-    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-    // Italic
-    .replace(/\*(.*?)\*/g, '<em>$1</em>')
-    // Numbered list items
-    .replace(/^(\d+)\.\s(.+)$/gm, '<span class="msg-step"><strong>$1.</strong> $2</span>')
-    // Headers
-    .replace(/^#{1,3}\s(.+)$/gm, '<strong>$1</strong>')
-    // Line breaks
-    .replace(/\n/g, '<br>');
-  return html;
-}
-
-// ── TRANSLATIONS ──
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
+// TRANSLATIONS
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
 const T = {
-  en: {
-    newChat: 'New chat', topicsLabel: 'Quick topics', langLabel: 'Language',
-    welcomeTitle: 'Hello! How can I help? 🙏',
-    welcomeSub: "K'Helper helps Cambodians living in Korea. Ask in Khmer, Korean, or English — I speak all three.",
-    placeholder: 'Type your question...',
-    hint: 'Emergency: Immigration 1345 · Ambulance 119',
-    rateLimited: "You've reached the hourly limit (30 messages). Please wait before continuing. For urgent help call 1345 or 112.",
-    topics: [
-      { icon: '🛂', label: 'Visa & Immigration',  prompt: 'I need help with my Korean visa or immigration documents. Please guide me step by step.' },
-      { icon: '💼', label: 'Jobs & Work Rights',  prompt: 'Help me understand my work rights and employment contract in Korea.' },
-      { icon: '🏥', label: 'Healthcare',           prompt: 'I need help with Korean healthcare and health insurance registration.' },
-      { icon: '🚇', label: 'Transport',            prompt: 'How do I use Korean public transport — subway, bus, and T-money card?' },
-      { icon: '🙏', label: 'Korean Culture',       prompt: 'Explain Korean culture, social customs, and daily etiquette I should know.' },
-      { icon: '💬', label: 'Language Help',        prompt: 'Help me learn useful everyday Korean phrases for daily life.' },
-      { icon: '💰', label: 'Send Money Home',      prompt: 'How do I send money back to Cambodia from Korea?' },
-      { icon: '🎓', label: 'School Enrollment',    prompt: 'How do I enroll my child in a Korean school? What documents do I need?' },
-      { icon: '🏠', label: 'Housing & Renting',    prompt: 'Help me understand renting and housing contracts in Korea.' },
-      { icon: '📞', label: 'Support Centers',       prompt: 'What support centers and hotlines can help Cambodians in Korea? Give real addresses and phone numbers.' },
-    ],
-    suggestions: [
-      { icon: '🛂', title: 'Visa & documents',  sub: 'Renewal, registration, permits', prompt: 'What documents do I need to renew my Korean visa?' },
-      { icon: '💼', title: 'Work rights',       sub: 'Contracts, wages, protections',  prompt: 'I just started a new job in Korea. What are my basic work rights?' },
-      { icon: '🏥', title: 'Health insurance',  sub: 'NHIS, hospitals, clinics',       prompt: 'How do I register for Korean health insurance as a foreigner?' },
-      { icon: '🙏', title: 'Korean culture',    sub: 'Customs, etiquette, daily life', prompt: 'What are important Korean customs I should know as a Cambodian?' },
-    ],
-    emergency: '🆘 Emergency: Immigration <strong>1345</strong> · Ambulance <strong>119</strong> · Cambodian Embassy <strong>02-3785-1041</strong>'
-  },
-  ko: {
-    newChat: '새 대화', topicsLabel: '주요 주제', langLabel: '언어 선택',
-    welcomeTitle: '안녕하세요! 무엇을 도와드릴까요? 🙏',
-    welcomeSub: "K'Helper는 한국에 사는 캄보디아 분들을 돕습니다. 크메르어, 한국어, 영어로 질문하세요.",
-    placeholder: '질문을 입력하세요...',
-    hint: '긴급: 이민국 1345 · 응급 119',
-    rateLimited: '시간당 메시지 한도에 도달했습니다. 잠시 후 다시 시도하세요. 긴급 상황이면 1345 또는 112로 전화하세요.',
-    topics: [
-      { icon: '🛂', label: '비자 & 이민',    prompt: '한국 비자 또는 이민 서류에 대해 단계별로 안내해 주세요.' },
-      { icon: '💼', label: '취업 & 근로권',  prompt: '한국에서 나의 근로권과 고용 계약에 대해 알려주세요.' },
-      { icon: '🏥', label: '의료',           prompt: '한국 의료 서비스 및 건강보험 가입 방법을 알려주세요.' },
-      { icon: '🚇', label: '대중교통',       prompt: '한국 지하철, 버스, T-money 카드 사용법을 알려주세요.' },
-      { icon: '🙏', label: '한국 문화',      prompt: '한국 문화, 사회 관습, 예절에 대해 설명해 주세요.' },
-      { icon: '💬', label: '언어 도움',      prompt: '일상생활에 유용한 한국어 표현을 알려주세요.' },
-      { icon: '💰', label: '캄보디아 송금',  prompt: '한국에서 캄보디아로 돈 보내는 방법을 알려주세요.' },
-      { icon: '🎓', label: '학교 등록',      prompt: '자녀를 한국 학교에 등록하려면 어떻게 해야 하나요?' },
-      { icon: '🏠', label: '주거 & 임대',    prompt: '한국의 임대 및 주거 계약에 대해 알려주세요.' },
-      { icon: '📞', label: '지원 센터',      prompt: '한국에서 캄보디아인을 도와주는 지원 센터 정보를 알려주세요.' },
-    ],
-    suggestions: [
-      { icon: '🛂', title: '비자 & 서류',  sub: '갱신, 등록, 허가', prompt: '한국 비자를 갱신하려면 어떤 서류가 필요한가요?' },
-      { icon: '💼', title: '근로권',       sub: '계약, 임금, 보호', prompt: '한국에서 새 직장을 시작했습니다. 기본 근로권을 알려주세요.' },
-      { icon: '🏥', title: '건강보험',     sub: '건강보험공단, 병원', prompt: '외국인으로서 한국 건강보험에 어떻게 가입하나요?' },
-      { icon: '🙏', title: '한국 문화',    sub: '관습, 예절, 일상생활', prompt: '캄보디아 사람으로서 알아야 할 한국 문화는 무엇인가요?' },
-    ],
-    emergency: '🆘 긴급: 이민 <strong>1345</strong> · 응급 <strong>119</strong> · 캄보디아 대사관 <strong>02-3785-1041</strong>'
-  },
   km: {
-    newChat: 'ការសន្ទនាថ្មី', topicsLabel: 'ប្រធានបទរហ័ស', langLabel: 'ភាសា',
-    welcomeTitle: 'សួស្ដីបងប្អូន! 🙏',
-    welcomeSub: "K'Helper ជួយបងប្អូនខ្មែររស់នៅកូរ៉េ។ សួរជាភាសាខ្មែរ ភាសាកូរ៉េ ឬភាសាអង់គ្លេស ខ្ញុំឆ្លើយបាន!",
-    placeholder: 'វាយសំណួររបស់អ្នក...',
-    hint: 'បន្ទាន់: ចំណាកស្រុក 1345 · គ្រោះថ្នាក់ 119',
-    rateLimited: 'អ្នកបានផ្ញើសារច្រើនពេក។ សូមរង់ចាំមួយម៉ោង។ ករណីបន្ទាន់ ហៅ 1345 ឬ 112។',
-    topics: [
-      { icon: '🛂', label: 'វីសា & អន្តោប្រវេសន៍', prompt: 'ខ្ញុំត្រូវការជំនួយជាមួយឯកសារវីសា ឬអន្តោប្រវេសន៍កូរ៉េ។ សូមណែនាំខ្ញុំជាជំហានៗ។' },
-      { icon: '💼', label: 'ការងារ & សិទ្ធិ',       prompt: 'ជួយខ្ញុំយល់ពីសិទ្ធិការងារ និងកិច្ចសន្យារបស់ខ្ញុំនៅកូរ៉េ។' },
-      { icon: '🏥', label: 'សុខភាព',                prompt: 'ខ្ញុំត្រូវការជំនួយជាមួយការថែទាំសុខភាព និងការចុះឈ្មោះធានារ៉ាប់រង។' },
-      { icon: '🚇', label: 'ដឹកជញ្ជូន',             prompt: 'តើខ្ញុំប្រើប្រាស់ការដឹកជញ្ជូនសាធារណៈ — រថភ្លើង, ក្រុងហោះ, T-money យ៉ាងដូចម្ដេច?' },
-      { icon: '🙏', label: 'វប្បធម៌កូរ៉េ',          prompt: 'ពន្យល់វប្បធម៌ ទំនៀមទម្លាប់ និងសុជីវធម៌ប្រចាំថ្ងៃនៅកូរ៉េ។' },
-      { icon: '💬', label: 'ជំនួយភាសា',             prompt: 'ជួយខ្ញុំរៀនឃ្លាភាសាកូរ៉េដែលមានប្រយោជន៍សម្រាប់ជីវិតប្រចាំថ្ងៃ។' },
-      { icon: '💰', label: 'ផ្ញើប្រាក់ទៅកម្ពុជា',   prompt: 'តើខ្ញុំផ្ញើប្រាក់ពីកូរ៉េទៅកម្ពុជាដោយរបៀបណា?' },
-      { icon: '🎓', label: 'ការចុះឈ្មោះសាលា',      prompt: 'តើខ្ញុំចុះឈ្មោះកូនរបស់ខ្ញុំចូលសាលាកូរ៉េដោយរបៀបណា?' },
-      { icon: '🏠', label: 'លំនៅដ្ឋាន & ជួល',       prompt: 'ជួយខ្ញុំយល់ពីការជួល និងកិច្ចសន្យាលំនៅដ្ឋាននៅកូរ៉េ។' },
-      { icon: '📞', label: 'មជ្ឈមណ្ឌលជំនួយ',         prompt: 'តើមានមជ្ឈមណ្ឌលជំនួយ លេខទូរស័ព្ទ ដែលអាចជួយខ្មែរនៅកូរ៉េ? សូមផ្តល់អាសយដ្ឋាន និងលេខពិតប្រាកដ។' },
+    newChat: 'áá¶ááááááá¶áááá¸',
+
+    topicsLabel: 'ááááá¶ááááá áá',
+    langLabel: 'áá¶áá¶',
+    placeholder: 'áá¶ááá K\'Helper...',
+    welcomeTitle: 'áá¾áááá»áá¢á¶ááá½áá¢áááááááááááá¶?',
+    welcomeSub: 'áá½ááááá»áá¢ááá¸áááá¶áá¢ááá¸áá¶áááááá á¬ áááááá¶áá¼ááá â áá¶áá¶áá¶ááááá, áá¼ááá á¬á¢áááááááá',
+    emergency: 'áááá½áááááá¶áá: <strong>áááá¶ááááá»á 1345</strong> Â· <strong>ááááá¶áá 119</strong>',
+    mapPanelTitle: 'áá¸áá¶áá & ááááá¸',
+    msgLeft: (n) => `${n} áá¶á ááááá`,
+    cards: [
+      { icon: 'ð', title: 'áá¸áá¶ & á¯ááá¶á', sub: 'áá¶ááááá, áá»áááááá', topic: 'visa' },
+      { icon: 'ð¼', title: 'áá·áááá·áá¶ááá¶á', sub: 'áá·áááááááá¶, áááá¶áááá', topic: 'work' },
+      { icon: 'ð¥', title: 'áá¶áá¶ááá¶áááááá»ááá¶á', sub: 'NHIS, ááááá¸áááááá', topic: 'health' },
+      { icon: 'ð', title: 'ááááááááá¼ááá', sub: 'áááááááááá¶áá, áá¸áá·á', topic: 'culture' },
+      { icon: 'ðºï¸', title: 'ááááááá & ááááááá', sub: 'áá¸áááááá, ááá á¼á, áá¶á ááá', topic: 'tourist' },
+      { icon: 'ð', title: 'áá¸áá¶áá & ááááá¸', sub: 'Kakao Â· Naver Â· Google', topic: 'location' },
     ],
-    suggestions: [
-      { icon: '🛂', title: 'វីសា & ឯកសារ',      sub: 'ការបន្ត ចុះឈ្មោះ',          prompt: 'ខ្ញុំត្រូវការឯកសារអ្វីខ្លះដើម្បីបន្តវីសាកូរ៉េ?' },
-      { icon: '💼', title: 'សិទ្ធិការងារ',        sub: 'កិច្ចសន្យា ប្រាក់ខែ',       prompt: 'ខ្ញុំទើបតែចាប់ផ្ដើមការងារថ្មី។ សិទ្ធិជាមូលដ្ឋានគឺអ្វី?' },
-      { icon: '🏥', title: 'ធានារ៉ាប់រងសុខភាព', sub: 'NHIS មន្ទីរពេទ្យ',          prompt: 'ជនបរទេសចុះឈ្មោះធានារ៉ាប់រងសុខភាពកូរ៉េដោយរបៀបណា?' },
-      { icon: '🙏', title: 'វប្បធម៌កូរ៉េ',        sub: 'ទំនៀមទម្លាប់ ជីវិត',       prompt: 'ទំនៀមទម្លាប់កូរ៉េសំខាន់ ជាខ្មែររស់នៅកូរ៉េ?' },
+    navItems: {
+      visa: 'áá¸áá¶ & á¢áááááááááááá', work: 'áá¶ááá¶á & áá·áááá·', health: 'áá»ááá¶á',
+      daily: 'áá¸áá·áááááá¶á', culture: 'ááááááááá¼ááá', language: 'áááá½ááá¶áá¶',
+      money: 'áááá¾áááá¶ááááááááá»áá¶', school: 'áá¶ááá»áááááááá¶áá¶', housing: 'áááááááá¶á & áá½á',
+      tourist: 'ááááááá', location: 'áá¸áá¶áá & ááááá¸'
+    },
+    topics: {
+      visa: 'áááá»ááá¶ááááá½áá¢ááá¸áá¸áá¶ ARC á¬ áá¶áá¢áááááááááááááááá¼ááá',
+      work: 'áááá»áááááá¹áá¢ááá¸áá·áááá·áá¶ááá¶á á¬ áááá á¶áá¶áá½ááááá',
+      health: 'áááá»ááááá¼ááá¶ááááá½áá¢ááá¸áá¶ááá¼áááááá¸áááááá á¬ áá¶áá¶ááá¶áááá',
+      daily: 'áááá»áááááá¹áá¢ááá¸áá¶ááááááááááá¶ááááááááá¼ááá',
+      culture: 'áááá»áááááá¹áá¢ááá¸ááááááá á¬ áááááááááá¶áááá¼ááá',
+      language: 'áááá»ááááá¼ááá¶ááááá½ááááááá á¬ áááá¾áá¶áá¶áá¼ááá',
+      money: 'áááá»áááááááá¾áááá¶ááááááááá»áá¶',
+      school: 'áááá»áááááá»áááááááá¼ááááá¶áá¶ááá',
+      housing: 'áááá»ááá¶ááááá á¶á¢ááá¸áá¶ááá½á á¬ áááááááá¶á',
+      tourist: 'áááá»ááá¶ááááááááááá áááá»ááááááááááááá¸áááááááááááááááá¢á¶á ááá á¼ááááá¶áá áá¶á ááá áá·áááááá¸ááááá¶áááá¢á áááá¶ááá¼ááááá¶ááá¼ááá',
+      location: 'áááá»ááááááááááááá¸áá¶áááááá¶áá áá¼ááá¶ áá¶áá·áá¶ááááááá¶ááááá»á ááááá¸áááááá á¬ áááá¶ááá¼á'
+    }
+  },
+  en: {
+    newChat: 'New Conversation',
+    topicsLabel: 'Quick Topics',
+    langLabel: 'Language',
+    placeholder: 'Message K\'Helper...',
+    welcomeTitle: 'How can I help you today?',
+    welcomeSub: 'Ask me anything about living or visiting Korea â in Khmer, Korean, or English.',
+    emergency: 'Emergency: <strong>Immigration 1345</strong> Â· <strong>Emergency 119</strong>',
+    mapPanelTitle: 'Locations & Maps',
+    msgLeft: (n) => `${n} messages left`,
+    cards: [
+      { icon: 'ð', title: 'Visa & Documents', sub: 'Renewal, registration', topic: 'visa' },
+      { icon: 'ð¼', title: 'Work Rights', sub: 'Contract, wages', topic: 'work' },
+      { icon: 'ð¥', title: 'Health Insurance', sub: 'NHIS, hospital', topic: 'health' },
+      { icon: 'ð', title: 'Korean Culture', sub: 'Customs, daily life', topic: 'culture' },
+      { icon: 'ðºï¸', title: 'Tourism & Explore', sub: 'Attractions, food, cafes', topic: 'tourist' },
+      { icon: 'ð', title: 'Locations & Maps', sub: 'Kakao Â· Naver Â· Google', topic: 'location' },
     ],
-    emergency: '🆘 បន្ទាន់: ប្រព័ន្ធចំណាកស្រុក <strong>1345</strong> · គ្រោះថ្នាក់ <strong>119</strong> · ស្ថានទូតខ្មែរ <strong>02-3785-1041</strong>'
+    navItems: {
+      visa: 'Visa & Immigration', work: 'Work & Rights', health: 'Health',
+      daily: 'Daily Life', culture: 'Korean Culture', language: 'Language Help',
+      money: 'Send Money Home', school: 'School Enrollment', housing: 'Housing & Rent',
+      tourist: 'Tourism & Explore', location: 'Locations & Maps'
+    },
+    topics: {
+      visa: 'I have a question about visa, ARC or immigration in Korea',
+      work: 'I want to know about my work rights or a problem with my employer',
+      health: 'I need help with hospital or health insurance in Korea',
+      daily: 'I want to know about daily life in Korea',
+      culture: 'I want to learn about Korean culture and customs',
+      language: 'I need help with Korean language or translation',
+      money: 'I want to send money back to Cambodia',
+      school: 'I want to enroll my child in school',
+      housing: 'I have a question about rent or housing',
+      tourist: 'I am a tourist in Korea. Help me find famous attractions, great food, restaurants, and cafes to visit.',
+      location: 'I need to find an important location like an immigration office, hospital, or embassy'
+    }
+  },
+  kr: {
+    newChat: 'ì ëí',
+    topicsLabel: 'ë¹ ë¥¸ ì£¼ì ',
+    langLabel: 'ì¸ì´',
+    placeholder: 'K\'Helperìê² ë©ìì§...',
+    welcomeTitle: 'ì´ë»ê² ëìëë¦´ê¹ì?',
+    welcomeSub: 'íêµ­ ìíì´ë ê´ê´ì ëí´ ë¬´ìì´ë  ë¬¼ì´ë³´ì¸ì â í¬ë©ë¥´ì´, íêµ­ì´, ìì´ë¡.',
+    emergency: 'ê¸´ê¸: <strong>ì¸êµ­ì¸ 1345</strong> Â· <strong>ìê¸ 119</strong>',
+    mapPanelTitle: 'ìì¹ & ì§ë',
+    msgLeft: (n) => `${n}ê° ë©ìì§ ë¨ì`,
+    cards: [
+      { icon: 'ð', title: 'ë¹ì & ìë¥', sub: 'ê°±ì , ë±ë¡', topic: 'visa' },
+      { icon: 'ð¼', title: 'ê·¼ë¡ ê¶ë¦¬', sub: 'ê³ì½, ìê¸', topic: 'work' },
+      { icon: 'ð¥', title: 'ê±´ê°ë³´í', sub: 'ê±´ê°ë³´í, ë³ì', topic: 'health' },
+      { icon: 'ð', title: 'íêµ­ ë¬¸í', sub: 'ê´ìµ, ì¼ì', topic: 'culture' },
+      { icon: 'ðºï¸', title: 'ê´ê´ & íë°©', sub: 'ê´ê´ì§, ë§ì§, ì¹´í', topic: 'tourist' },
+      { icon: 'ð', title: 'ìì¹ & ì§ë', sub: 'Kakao Â· Naver Â· Google', topic: 'location' },
+    ],
+    navItems: {
+      visa: 'ë¹ì & ì¶ìêµ­', work: 'ê·¼ë¡ & ê¶ë¦¬', health: 'ê±´ê°',
+      daily: 'ì¼ììí', culture: 'íêµ­ ë¬¸í', language: 'ì¸ì´ ëì',
+      money: 'ìºë³´ëì ì¡ê¸', school: 'íêµ ë±ë¡', housing: 'ì£¼ê±° & ìë',
+      tourist: 'ê´ê´ & íë°©', location: 'ìì¹ & ì§ë'
+    },
+    topics: {
+      visa: 'íêµ­ìì ë¹ì, ì¸êµ­ì¸ë±ë¡ì¦ ëë ì¶ìêµ­ì ëí´ ì§ë¬¸ì´ ìì´ì',
+      work: 'ê·¼ë¡ ê¶ë¦¬ë ê³ ì©ì£¼ ë¬¸ì ì ëí´ ìê³  ì¶ì´ì',
+      health: 'ë³ìì´ë ê±´ê°ë³´íì ëí´ ëìì´ íìí´ì',
+      daily: 'íêµ­ììì ì¼ììíì ëí´ ìê³  ì¶ì´ì',
+      culture: 'íêµ­ ë¬¸íì ê´ìµì ëí´ ìê³  ì¶ì´ì',
+      language: 'íêµ­ì´ ë²ì­ì´ë ì¸ì´ ëìì´ íìí´ì',
+      money: 'ìºë³´ëìë¡ ì¡ê¸íê³  ì¶ì´ì',
+      school: 'ìëë¥¼ íêµì ë±ë¡íê³  ì¶ì´ì',
+      housing: 'ìëë ì£¼ê±°ì ëí´ ì§ë¬¸ì´ ìì´ì',
+      tourist: 'íêµ­ ê´ê´ê°ìëë¤. ì ëªí ê´ê´ì§, ë§ì§, ì¹´í, ë ì¤í ëì ì¶ì²í´ ì£¼ì¸ì.',
+      location: 'ì¶ìêµ­ì¬ë¬´ì, ë³ì, ëì¬ê´ ê°ì ì¤ìí ìì¹ë¥¼ ì°¾ê³  ì¶ì´ì'
+    }
   }
 };
 
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
+// STATE
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
+let currentLang = 'km';
 let conversationHistory = [];
-let currentLang = localStorage.getItem('khelper_lang') || 'km';
+let chatStarted = false;
 
-function renderUI() {
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
+// RATE LIMITER
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
+const RATE_LIMIT = 30;
+const RATE_WINDOW = 60 * 60 * 1000;
+const STORAGE_KEY = 'khelper_msg_log';
+
+function getRateData() {
+  try {
+    const data = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+    return data.filter(t => Date.now() - t < RATE_WINDOW);
+  } catch { return []; }
+}
+
+function recordMsg() {
+  const data = getRateData();
+  data.push(Date.now());
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch {}
+  return data.length;
+}
+
+function getRemainingMsgs() {
+  return Math.max(0, RATE_LIMIT - getRateData().length);
+}
+
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
+// UI UPDATES
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
+function updateCounter() {
+  const n = getRemainingMsgs();
   const t = T[currentLang];
-  document.body.className = 'lang-' + currentLang;
-  document.getElementById('newChatLabel').textContent = t.newChat;
-  document.getElementById('topicsLabel').textContent = t.topicsLabel;
-  document.getElementById('langLabel').textContent = t.langLabel;
-  ['en','ko','km'].forEach(l => {
-    const cap = l.charAt(0).toUpperCase() + l.slice(1);
-    document.getElementById('btn' + cap).classList.toggle('active', l === currentLang);
-    document.getElementById('mBtn' + cap).classList.toggle('active', l === currentLang);
-  });
-  // Desktop topics
-  const list = document.getElementById('topicsList');
-  list.innerHTML = '';
-  t.topics.forEach(topic => {
-    const div = document.createElement('div');
-    div.className = 'topic-item';
-    div.onclick = () => sendTopic(topic.prompt);
-    div.innerHTML = `<span class="topic-icon">${topic.icon}</span><span>${topic.label}</span>`;
-    list.appendChild(div);
-  });
-  // Mobile topics
-  const mTopics = document.getElementById('mobileTopics');
-  mTopics.innerHTML = '';
-  t.topics.forEach(topic => {
-    const div = document.createElement('div');
-    div.className = 'nav-item';
-    div.onclick = () => sendTopic(topic.prompt);
-    div.innerHTML = `<span class="nav-icon">${topic.icon}</span><span class="nav-label">${topic.label}</span>`;
-    mTopics.appendChild(div);
-  });
-  // Welcome screen
-  document.getElementById('welcomeTitle').textContent = t.welcomeTitle;
-  document.getElementById('welcomeSub').textContent = t.welcomeSub;
-  document.getElementById('emergencyText').innerHTML = t.emergency;
-  document.getElementById('userInput').placeholder = t.placeholder;
-  document.getElementById('inputHint').textContent = t.hint;
-  document.getElementById('navNew').textContent = t.newChat;
-  // Suggestion cards
-  const grid = document.getElementById('suggestionGrid');
-  grid.innerHTML = '';
-  t.suggestions.forEach(s => {
-    const div = document.createElement('div');
-    div.className = 'suggestion-card';
-    div.onclick = () => sendTopic(s.prompt);
-    div.innerHTML = `<span class="s-icon">${s.icon}</span><div class="s-title">${s.title}</div><div class="s-sub">${s.sub}</div>`;
-    grid.appendChild(div);
-  });
-  updateCounter();
+  const el = document.getElementById('msg-counter');
+  if (el) {
+    el.textContent = t.msgLeft(n);
+    el.style.color = n < 5 ? '#ef4444' : n < 10 ? '#f59e0b' : '';
+  }
 }
 
 function setLang(lang) {
   currentLang = lang;
-  localStorage.setItem('khelper_lang', lang);
-  conversationHistory = [];
-  renderUI();
+  ['en','kr','km'].forEach(l => {
+    document.getElementById('btn-' + l)?.classList.toggle('active', l === lang);
+  });
+  const t = T[lang];
+  document.getElementById('new-chat-label').textContent = t.newChat;
+  document.getElementById('topics-label').textContent = t.topicsLabel;
+  document.getElementById('lang-label').textContent = t.langLabel;
+  document.getElementById('user-input').placeholder = t.placeholder;
+  document.getElementById('emergency-line').innerHTML = t.emergency;
+
+  // Update nav items
+  Object.keys(t.navItems).forEach(key => {
+    const el = document.getElementById('nav-' + key);
+    if (el) el.textContent = t.navItems[key];
+  });
+
+  // Update map panel heading
+  const mapHeading = document.getElementById('map-panel-heading');
+  if (mapHeading) mapHeading.textContent = t.mapPanelTitle;
+
+  updateCounter();
+
+  if (!chatStarted) renderWelcome();
 }
 
-function newChat() {
-  conversationHistory = [];
-  document.getElementById('messages').innerHTML = '';
-  document.getElementById('messages').style.display = 'none';
-  document.getElementById('welcomeScreen').style.display = 'flex';
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
+// WELCOME SCREEN
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
+function renderWelcome() {
+  const chat = document.getElementById('chat');
+  chat.innerHTML = '';
+  const t = T[currentLang];
+
+  const w = document.createElement('div');
+  w.className = 'welcome';
+  w.id = 'welcome-screen';
+
+  w.innerHTML = `
+    <div class="welcome-logo">ð®</div>
+    <h2>${t.welcomeTitle}</h2>
+    <p class="welcome-sub">${t.welcomeSub}</p>
+    <div class="cards-grid">
+      ${t.cards.map(c => `
+        <div class="topic-card" onclick="quickTopic('${c.topic}')">
+          <span class="card-icon">${c.icon}</span>
+          <div class="card-title">${c.title}</div>
+          <div class="card-sub">${c.sub}</div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+
+  chat.appendChild(w);
 }
 
-function showMessages() {
-  document.getElementById('welcomeScreen').style.display = 'none';
-  document.getElementById('messages').style.display = 'flex';
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
+// MARKDOWN RENDERER
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
+function renderMarkdown(text) {
+  return text
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/(â ï¸[^\n]+)/g, '<div class="warning-block">$1</div>')
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.*?)\*/g, '<em>$1</em>')
+    .replace(/^(\d+)\.\s(.+)$/gm, '<span class="msg-step"><strong>$1.</strong> $2</span>')
+    .replace(/^#{1,3}\s(.+)$/gm, '<strong>$1</strong>')
+    .replace(/\n/g, '<br>');
 }
 
-function sendTopic(text) {
-  document.getElementById('userInput').value = text;
-  sendMessage();
-}
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
+// MESSAGES
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
+function appendMessage(role, content) {
+  const chat = document.getElementById('chat');
 
-function appendMessage(role, html, isCrisis = false) {
-  showMessages();
-  const container = document.getElementById('messages');
+  // Remove welcome screen
+  const welcome = document.getElementById('welcome-screen');
+  if (welcome) welcome.remove();
+  chatStarted = true;
+
   const row = document.createElement('div');
-  row.className = `message-row ${role}${isCrisis ? ' crisis' : ''}`;
+  row.className = `msg-row ${role}`;
+
   const avatar = document.createElement('div');
-  avatar.className = 'msg-avatar';
-  avatar.textContent = role === 'assistant' ? '🏮' : '👤';
-  const content = document.createElement('div');
-  content.className = 'msg-content';
+  avatar.className = `msg-avatar ${role === 'user' ? 'user-av' : 'bot-av'}`;
+  avatar.textContent = role === 'user' ? 'ð§' : 'ð®';
+
   const bubble = document.createElement('div');
-  bubble.className = 'msg-bubble';
-  if (role === 'assistant') {
-    bubble.innerHTML = html; // Rendered markdown
+  bubble.className = `bubble ${role === 'user' ? 'user' : 'bot'}`;
+
+  const isCrisis = role !== 'user' && (content.includes('ð') || content.includes('1393'));
+  if (isCrisis) bubble.classList.add('crisis');
+
+  if (role === 'user') {
+    bubble.textContent = content;
   } else {
-    bubble.textContent = html; // Plain text for user messages
+    bubble.innerHTML = renderMarkdown(content);
   }
-  content.appendChild(bubble);
+
   row.appendChild(avatar);
-  row.appendChild(content);
-  container.appendChild(row);
-  document.getElementById('chatArea').scrollTop = 999999;
+  row.appendChild(bubble);
+  chat.appendChild(row);
+  chat.scrollTop = chat.scrollHeight;
+  return bubble;
 }
 
-function addTyping() {
-  showMessages();
-  const container = document.getElementById('messages');
+function showTyping() {
+  const chat = document.getElementById('chat');
   const row = document.createElement('div');
-  row.className = 'message-row assistant';
-  row.id = 'typingRow';
+  row.className = 'msg-row bot';
+  row.id = 'typing-row';
+
   const avatar = document.createElement('div');
-  avatar.className = 'msg-avatar';
-  avatar.textContent = '🏮';
-  const content = document.createElement('div');
-  content.className = 'msg-content';
+  avatar.className = 'msg-avatar bot-av';
+  avatar.textContent = 'ð®';
+
   const bubble = document.createElement('div');
-  bubble.className = 'msg-bubble typing-dots';
-  bubble.innerHTML = '<div class="dot"></div><div class="dot"></div><div class="dot"></div>';
-  content.appendChild(bubble);
+  bubble.className = 'bubble bot';
+  bubble.innerHTML = '<div class="typing-dots"><span></span><span></span><span></span></div>';
+
   row.appendChild(avatar);
-  row.appendChild(content);
-  container.appendChild(row);
-  document.getElementById('chatArea').scrollTop = 999999;
+  row.appendChild(bubble);
+  chat.appendChild(row);
+  chat.scrollTop = chat.scrollHeight;
 }
 
-function removeTyping() {
-  const el = document.getElementById('typingRow');
-  if (el) el.remove();
+function hideTyping() {
+  document.getElementById('typing-row')?.remove();
 }
 
-// ── AUTO-RESIZE TEXTAREA ──
-const ta = document.getElementById('userInput');
-ta.addEventListener('input', () => {
-  ta.style.height = 'auto';
-  ta.style.height = Math.min(ta.scrollHeight, 120) + 'px';
-});
-ta.addEventListener('keydown', e => {
-  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
-});
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
+// MAP LOCATIONS DATA
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
+const MAP_DATA = {
+  immigration: [
+    { name: 'Seoul Immigration Office', kr: 'ìì¸ì¶ìêµ­ì¸êµ­ì¸ì²­', note: 'ARC renewal, visa extension, work permits', query: 'ìì¸ì¶ìêµ­ì¸êµ­ì¸ì²­' },
+    { name: 'Ansan Immigration Office', kr: 'ìì°ì¶ìêµ­ì¸êµ­ì¸ì¬ë¬´ì', note: 'Factory worker hub â Multicultural village nearby', query: 'ìì°ì¶ìêµ­ì¸êµ­ì¸ì¬ë¬´ì' },
+    { name: 'Incheon Immigration Office', kr: 'ì¸ì²ì¶ìêµ­ì¸êµ­ì¸ì²­', note: 'Near Incheon Airport â airport arrivals', query: 'ì¸ì²ì¶ìêµ­ì¸êµ­ì¸ì²­' },
+    { name: 'Suwon Immigration Office', kr: 'ììì¶ìêµ­ì¸êµ­ì¸ì¬ë¬´ì', note: 'Covers all of Gyeonggi-do', query: 'ììì¶ìêµ­ì¸êµ­ì¸ì¬ë¬´ì' },
+  ],
+  health: [
+    { name: 'Migrant Worker Hospital Guro', kr: 'ì´ì£¼ë¯¼ë³ì êµ¬ë¡', note: 'ð 02-2677-4071 Â· Free/low-cost care for migrants', query: 'ì´ì£¼ë¯¼ë³ì êµ¬ë¡' },
+    { name: 'Seoul Medical Center', kr: 'ìì¸ìë£ì', note: 'Public hospital â translation services available', query: 'ìì¸ìë£ì' },
+    { name: 'Ansan Migrant Health Center', kr: 'ìì°ìì¸êµ­ì¸ë³µì§ì¼í°', note: 'Free health checkups for migrant workers', query: 'ìì°ìì¸êµ­ì¸ë³µì§ì¼í°' },
+    { name: 'Community Health Center (ë³´ê±´ì)', kr: 'ë³´ê±´ì', note: 'In every district â cheap vaccines, basic care', query: 'ë³´ê±´ì' },
+  ],
+  labor: [
+    { name: 'Seoul Labor Office', kr: 'ìì¸ì§ë°©ê³ ì©ë¸ëì²­', note: 'File wage theft complaints, unfair dismissal claims', query: 'ìì¸ì§ë°©ê³ ì©ë¸ëì²­' },
+    { name: 'Korea Employment Agency', kr: 'ê³ ì©ì¼í°', note: 'Job placement, E-9 visa support', query: 'ê³ ì©ì¼í°' },
+    { name: 'Migrant Worker Center Seoul', kr: 'ì¸êµ­ì¸ë¸ëìì§ìì¼í° ìì¸', note: 'Free legal aid â call 1350 for emergencies', query: 'ì¸êµ­ì¸ë¸ëìì§ìì¼í° ìì¸' },
+    { name: 'Cambodian Embassy Seoul', kr: 'ì£¼í ìºë³´ëìëì¬ê´', note: 'ð 02-3785-1041 Â· Yongsan-gu, Hannam-dong', query: 'ì£¼íìºë³´ëìëì¬ê´' },
+  ],
+  food: [
+    { name: 'Gwangjang Market', kr: 'ê´ì¥ìì¥', note: 'ð¥ Best Korean street food â bindaetteok, fresh kimbap, yukhoe', query: 'ê´ì¥ìì¥' },
+    { name: 'Myeongdong Street Food', kr: 'ëªë ê¸¸ê±°ë¦¬ ìì', note: 'Tteokbokki, corn dogs, tornado potatoes â tourist classic', query: 'ëªë ê¸¸ê±°ë¦¬ ìì' },
+    { name: 'Noryangjin Fish Market', kr: 'ë¸ëì§ìì°ìì¥', note: 'ð¦ 24hr fresh seafood â buy & eat sashimi on-site', query: 'ë¸ëì§ìì°ìì¥' },
+    { name: 'Itaewon Halal Food Street', kr: 'ì´íì í ëìì', note: 'Halal restaurants, international cuisine', query: 'ì´íì í ëìì' },
+    { name: 'Pojangmacha Euljiro', kr: 'ìì§ë¡ í¬ì¥ë§ì°¨', note: 'ðº Night outdoor tent stalls â makgeolli & Korean snacks', query: 'ìì§ë¡ í¬ì¥ë§ì°¨' },
+    { name: 'Tongin Market', kr: 'íµì¸ìì¥', note: 'Pay with old coins, build your own banchan tray', query: 'íµì¸ìì¥' },
+    { name: 'Dongdaemun Night Market', kr: 'ëëë¬¸ ì¼ìì¥', note: 'ð Open till 5am â street food + shopping', query: 'ëëë¬¸ ì¼ìì¥' },
+    { name: 'Busan Jagalchi Fish Market', kr: 'ë¶ì° ìê°ì¹ìì¥', note: "Korea's biggest seafood market â famous for raw fish", query: 'ë¶ì° ìê°ì¹ìì¥' },
+  ],
+  cafe: [
+    { name: 'Bukchon Hanok Cafes', kr: 'ë¶ì´íì¥ë§ì ì¹´í', note: 'ð¯ Traditional house cafes â stunning architecture + matcha', query: 'ë¶ì´íì¥ë§ì ì¹´í' },
+    { name: 'Insadong Cafe Street', kr: 'ì¸ì¬ë ì¹´íê±°ë¦¬', note: 'Unique themed cafes, tea houses, craft galleries', query: 'ì¸ì¬ë ì¹´í' },
+    { name: 'Hongdae Cafes', kr: 'íë ì¹´í', note: 'ð¨ 24hr cafes, cheap eats, young creative energy', query: 'íë ì¹´í' },
+    { name: 'Seongsu Coffee Street', kr: 'ì±ìë ì¹´íê±°ë¦¬', note: "ìì¸ì ë¸ë£¨í´ë¦° â specialty coffee, industrial-chic vibes", query: 'ì±ìë ì¹´í' },
+    { name: 'Yeonnam-dong Cafes', kr: 'ì°ë¨ë ì¹´í', note: 'Quiet, charming street â great for solo or couple visits', query: 'ì°ë¨ë ì¹´í' },
+    { name: 'Gangnam Cafe District', kr: 'ê°ë¨ ì¹´íê±°ë¦¬', note: 'Upscale cafes, K-beauty desserts, high-end vibes', query: 'ê°ë¨ ì¹´í' },
+    { name: 'Ikseon-dong Cafe Alley', kr: 'ìµì ë ì¹´íê³¨ëª©', note: 'ð¸ Hanok-turned-cafes â most photogenic in Seoul', query: 'ìµì ë ì¹´í' },
+  ],
+  places: [
+    { name: 'Gyeongbokgung Palace', kr: 'ê²½ë³µê¶', note: 'ð° Royal palace Â· Wear hanbok = free entry Â· Guard ceremony', query: 'ê²½ë³µê¶' },
+    { name: 'Namsan Seoul Tower', kr: 'ë¨ì°ìì¸íì', note: 'ð¼ Best Seoul panorama Â· Love locks Â· Cable car available', query: 'ë¨ì°íì' },
+    { name: 'Myeongdong', kr: 'ëªë', note: 'ðï¸ K-beauty, skincare, street food â essential tourist stop', query: 'ëªë' },
+    { name: 'Bukchon Hanok Village', kr: 'ë¶ì´íì¥ë§ì', note: 'ð¸ Traditional Korean village â iconic photo destination', query: 'ë¶ì´íì¥ë§ì' },
+    { name: 'Hongdae Street', kr: 'íë', note: 'ð¨ Street art, buskers, night market, young energy', query: 'íë' },
+    { name: 'Nami Island', kr: 'ë¨ì´ì¬', note: 'ð¿ K-drama filming location Â· Seasonal trees Â· Peaceful ferry', query: 'ë¨ì´ì¬' },
+    { name: 'Lotte World & Theme Park', kr: 'ë¡¯ë°ìë', note: 'ð¢ Indoor/outdoor amusement park â family favorite', query: 'ë¡¯ë°ìë' },
+    { name: 'DMZ (Korean Border)', kr: 'ë¹ë¬´ì¥ì§ë(DMZ)', note: 'ð­ Historic Korean War border â book tour in advance', query: 'DMZ í¬ì´' },
+    { name: 'Jeju Island', kr: 'ì ì£¼ë', note: 'ð Korea\'s #1 getaway â Hallasan, black lava beaches, waterfalls', query: 'ì ì£¼ë ê´ê´' },
+    { name: 'Busan Gamcheon Culture Village', kr: 'ë¶ì° ê°ì²ë¬¸íë§ì', note: 'ð¨ Colorful hillside village â art installations, cafes', query: 'ê°ì²ë¬¸íë§ì' },
+    { name: 'Seoraksan National Park', kr: 'ì¤ìì° êµ­ë¦½ê³µì', note: 'ðï¸ Korea\'s most beautiful mountain â hiking, cable car', query: 'ì¤ìì° êµ­ë¦½ê³µì' },
+  ],
+};
 
-// ── SEND MESSAGE ──
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
+// MAP PANEL FUNCTIONS
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
+let currentMapTab = 'immigration';
+
+function openMapPanel(tab) {
+  currentMapTab = tab || currentMapTab;
+  document.getElementById('map-panel').classList.add('open');
+  switchMapTab(currentMapTab);
+}
+
+function closeMapPanel() {
+  document.getElementById('map-panel').classList.remove('open');
+}
+
+function switchMapTab(tab) {
+  currentMapTab = tab;
+  document.querySelectorAll('.map-tab').forEach(btn => {
+    btn.classList.toggle('active', btn.id === 'tab-' + tab);
+  });
+  renderMapLocations(MAP_DATA[tab] || []);
+}
+
+function renderMapLocations(locs) {
+  const list = document.getElementById('map-locations-list');
+  if (!locs.length) {
+    list.innerHTML = '<p style="padding:24px;color:var(--text-muted);text-align:center;font-size:13px">No locations found</p>';
+    return;
+  }
+  list.innerHTML = locs.map(loc => `
+    <div class="map-location-card">
+      <div class="map-loc-name">${loc.name}</div>
+      <div class="map-loc-kr">${loc.kr}</div>
+      <div class="map-loc-note">${loc.note}</div>
+      <div class="map-buttons">
+        <a href="https://map.kakao.com/?q=${encodeURIComponent(loc.query)}" target="_blank" rel="noopener" class="map-btn kakao">ðºï¸ Kakao</a>
+        <a href="https://map.naver.com/v5/search/${encodeURIComponent(loc.query)}" target="_blank" rel="noopener" class="map-btn naver">N Naver</a>
+        <a href="https://www.google.com/maps/search/${encodeURIComponent(loc.query + ' Korea')}" target="_blank" rel="noopener" class="map-btn google">G Google</a>
+      </div>
+    </div>
+  `).join('');
+}
+
+function doMapSearch() {
+  const q = document.getElementById('map-search-input').value.trim();
+  if (!q) return;
+  window.open('https://map.kakao.com/?q=' + encodeURIComponent(q), '_blank');
+}
+
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
+// QUICK TOPICS
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
+function quickTopic(topic) {
+  if (topic === 'location') {
+    openMapPanel('places');
+    return;
+  }
+  const msg = T[currentLang].topics[topic];
+  if (msg) {
+    document.getElementById('user-input').value = msg;
+    sendMessage();
+  }
+}
+
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
+// RESET
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
+function resetChat() {
+  conversationHistory = [];
+  chatStarted = false;
+  renderWelcome();
+}
+
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
+// SEND MESSAGE
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
 async function sendMessage() {
-  const text = ta.value.trim();
+  const input = document.getElementById('user-input');
+  const text = input.value.trim();
   if (!text) return;
 
-  // Client-side rate limit check
-  if (isClientRateLimited()) {
-    const banner = document.getElementById('rateBanner');
-    banner.textContent = T[currentLang].rateLimited;
-    banner.style.display = 'block';
+  if (getRemainingMsgs() <= 0) {
+    appendMessage('assistant', T[currentLang].langLabel === 'áá¶áá¶'
+      ? 'â ï¸ á¢ááááá¶ááááá¾áá¶ááááá¾ááááá áá¼áááááááááááááá»á á¡ ááááá ááááá·ááá¾ááááá¶áá áá¼áááááá 1345 á¬ 112á'
+      : 'â ï¸ Message limit reached for this hour. Please wait 60 minutes. For+urgent help call 1345 or 112.');
     return;
   }
 
-  ta.value = '';
-  ta.style.height = 'auto';
-  document.getElementById('sendBtn').disabled = true;
+  recordMsg();
+  updateCounter();
+
+  input.value = '';
+  input.style.height = 'auto';
+  document.getElementById('send-btn').disabled = true;
 
   appendMessage('user', text);
   conversationHistory.push({ role: 'user', content: text });
-  addTyping();
 
-  const count = incrementMessageCount();
-  updateCounter();
+  showTyping();
 
   try {
-    // ── Secure API call — NO key in frontend ──
     const res = await fetch('/.netlify/functions/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ messages: conversationHistory })
+      body: JSON.stringify({ messages: conversationHistory }),
     });
 
-    const data = await res.json();
-    removeTyping();
+    hideTyping();
 
-    if (data.error) {
-      const isCrisis = data.error.includes('1345') || data.error.includes('112');
-      appendMessage('assistant', renderMarkdown(data.error), isCrisis);
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      appendMessage('assistant', err.error || 'Error. Please try again.');
+      conversationHistory.pop();
     } else {
-      const reply = data.choices?.[0]?.message?.content || 'Sorry, no response received.';
-      const isCrisis = reply.includes('1393') || reply.includes('EMERGENCY');
-      appendMessage('assistant', renderMarkdown(reply), isCrisis);
+      const data = await res.json();
+      const reply = data.choices?.[0]?.message?.content || 'Sorry, please try again.';
+      const bubble = appendMessage('assistant', reply);
       conversationHistory.push({ role: 'assistant', content: reply });
+      if (conversationHistory.length > 40) conversationHistory.splice(0, 2);
+
+      // Inject map shortcut button based on AI triage category
+      const meta = data._meta;
+      if (meta && meta.category) {
+        const tabMap = {
+          VISA: 'immigration', HEALTH: 'health', WORK: 'labor',
+          COMMUNITY: 'labor', TOURIST: 'places', HOUSING: null, DAILY: null, SCHOOL: null
+        };
+        const tab = tabMap[meta.category];
+        if (tab && bubble) {
+          const labels = {
+            km: { VISA: 'ð áá¶áá·âáá¶áááâáááá¶ááááá»á', HEALTH: 'ð áááááááááááá¸áááááá', WORK: 'ð áá¶ááá¶á & áááá½á', COMMUNITY: 'ð áááá¶ááá¼á & áá áááá', TOURIST: 'ð ááááááááá¸áááááá' },
+            en: { VISA: 'ð Find Immigration Office', HEALTH: 'ð Find Hospital', WORK: 'ð Labor Support', COMMUNITY: 'ð Embassy & Community', TOURIST: 'ð Explore Places' },
+            kr: { VISA: 'ð ì¶ìêµ­ì¬ë¬´ì ì°¾ê¸°', HEALTH: 'ð ë³ì ì°¾ê¸°', WORK: 'ð ë¸ëì§ìì¼í°', COMMUNITY: 'ð ëì¬ê´ ê°ì ì¤ìí ìì¹ë¥¼ ì°¾ê³  ì¶ì´ì'
+          };
+          const langLabels = labels[currentLang] || labels.en;
+          const btnLabel = langLabels[meta.category] || 'ð Find Locations';
+          const mapRow = document.createElement('div');
+          mapRow.className = 'map-link-row';
+          mapRow.innerHTML = `<button class="inline-map-btn panel" onclick="openMapPanel('${tab}')">${btnLabel}</button>`;
+          bubble.appendChild(mapRow);
+        }
+      }
     }
-  } catch (err) {
-    removeTyping();
-    appendMessage('assistant', renderMarkdown('⚠️ Connection error. Please check your internet and try again.\n\nFor urgent help: **Immigration 1345** · **Police 112**'));
+  } catch (e) {
+    hideTyping();
+    appendMessage('assistant', 'â ï¸ Connection error. For urgent help call **1345** or **112**.');
+    conversationHistory.pop();
   }
 
-  document.getElementById('sendBtn').disabled = false;
-  ta.focus();
+  document.getElementById('send-btn').disabled = false;
+  input.focus();
 }
 
-window.onload = renderUI;
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
+// INIT
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
+document.getElementById('user-input').addEventListener('input', function() {
+  this.style.height = 'auto';
+  this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+});
+
+document.getElementById('user-input').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+});
+
+// Boot
+setLang('km');
+document.getElementById('user-input').focus();
 </script>
 </body>
 </html>
