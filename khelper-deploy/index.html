@@ -1,0 +1,1355 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>K'Helper — ជំនួយការខ្មែរនៅកូរ៉េ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Khmer:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #fdf6f2;
+      --sidebar-bg: #f5ebe4;
+      --sidebar-hover: #ecddd5;
+      --border: #e8d5cb;
+      --accent: #d94e1f;
+      --accent-hover: #c44018;
+      --accent-light: #fce8df;
+      --text: #2d1f1a;
+      --text-muted: #8c6b5e;
+      --text-light: #b8907e;
+      --user-bubble: #1a1a2e;
+      --user-text: #ffffff;
+      --bot-bg: #ffffff;
+      --card-bg: #ffffff;
+      --card-border: #f0ddd5;
+      --card-hover: #fff3ee;
+      --input-bg: #ffffff;
+      --shadow: 0 1px 3px rgba(180,100,60,0.08);
+      --shadow-md: 0 4px 12px rgba(180,100,60,0.12);
+      --radius: 12px;
+      --radius-sm: 8px;
+      --font: 'Inter', 'Noto Sans Khmer', sans-serif;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      height: 100dvh;
+      display: flex;
+      overflow: hidden;
+    }
+
+    /* ══════════════════════════════
+       SIDEBAR
+    ══════════════════════════════ */
+    #sidebar {
+      width: 260px;
+      min-width: 260px;
+      background: var(--sidebar-bg);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 18px 16px 14px;
+    }
+
+    .logo-icon {
+      width: 38px;
+      height: 38px;
+      background: var(--accent);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .logo-name {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: -0.3px;
+    }
+
+    .new-chat-btn {
+      margin: 0 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      background: transparent;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-family: var(--font);
+      font-size: 13px;
+      color: var(--text-muted);
+      transition: all 0.15s;
+    }
+
+    .new-chat-btn:hover {
+      background: var(--sidebar-hover);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .sidebar-section-label {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--text-light);
+      padding: 0 16px 8px;
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0 8px;
+    }
+
+    .sidebar-nav::-webkit-scrollbar { width: 3px; }
+    .sidebar-nav::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 10px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-size: 13px;
+      color: var(--text-muted);
+      transition: all 0.15s;
+      margin-bottom: 2px;
+    }
+
+    .nav-item:hover {
+      background: var(--sidebar-hover);
+      color: var(--text);
+    }
+
+    .nav-item.active {
+      background: var(--accent-light);
+      color: var(--accent);
+    }
+
+    .nav-icon { font-size: 16px; flex-shrink: 0; }
+
+    /* ── MAP PANEL ── */
+    #map-panel {
+      display: none;
+      position: fixed;
+      top: 0; right: 0; bottom: 0;
+      width: 360px;
+      background: var(--bg);
+      border-left: 1.5px solid var(--border);
+      z-index: 100;
+      flex-direction: column;
+      box-shadow: -4px 0 20px rgba(180,100,60,0.1);
+    }
+
+    #map-panel.open { display: flex; }
+
+    .map-panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--border);
+      background: var(--sidebar-bg);
+    }
+
+    .map-panel-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .map-close-btn {
+      background: none;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      color: var(--text-muted);
+      padding: 2px 6px;
+      border-radius: 6px;
+      line-height: 1;
+    }
+
+    .map-close-btn:hover { background: var(--sidebar-hover); }
+
+    .map-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border);
+      background: var(--sidebar-bg);
+      overflow-x: auto;
+    }
+
+    .map-tab {
+      flex: 1;
+      padding: 10px 6px;
+      font-size: 11px;
+      font-weight: 600;
+      text-align: center;
+      cursor: pointer;
+      color: var(--text-muted);
+      border-bottom: 2px solid transparent;
+      transition: all 0.15s;
+      white-space: nowrap;
+      font-family: var(--font);
+      background: none;
+      border-top: none;
+      border-left: none;
+      border-right: none;
+    }
+
+    .map-tab:hover { color: var(--accent); }
+    .map-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+    .map-search-row {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      gap: 8px;
+    }
+
+    .map-search-input {
+      flex: 1;
+      padding: 8px 12px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-family: var(--font);
+      font-size: 13px;
+      background: var(--input-bg);
+      color: var(--text);
+      outline: none;
+    }
+
+    .map-search-input:focus { border-color: var(--accent); }
+
+    .map-search-btn {
+      padding: 8px 14px;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: var(--font);
+      transition: background 0.15s;
+    }
+
+    .map-search-btn:hover { background: var(--accent-hover); }
+
+    .map-locations-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px;
+    }
+
+    .map-locations-list::-webkit-scrollbar { width: 3px; }
+    .map-locations-list::-webkit-scrollbar-thumb { background: var(--border); }
+
+    .map-location-card {
+      background: var(--card-bg);
+      border: 1.5px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 14px;
+      margin-bottom: 10px;
+      box-shadow: var(--shadow);
+    }
+
+    .map-loc-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 3px;
+    }
+
+    .map-loc-kr {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 2px;
+    }
+
+    .map-loc-note {
+      font-size: 11px;
+      color: var(--text-light);
+      margin-bottom: 10px;
+      line-height: 1.4;
+    }
+
+    .map-buttons {
+      display: flex;
+      gap: 6px;
+    }
+
+    .map-btn {
+      flex: 1;
+      padding: 7px 6px;
+      border-radius: var(--radius-sm);
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+      transition: all 0.15s;
+      display: block;
+    }
+
+    .map-btn.kakao {
+      background: #FEE500;
+      color: #3C1E1E;
+      border: none;
+    }
+
+    .map-btn.kakao:hover { background: #f5dc00; }
+
+    .map-btn.naver {
+      background: #03C75A;
+      color: white;
+      border: none;
+    }
+
+    .map-btn.naver:hover { background: #02b350; }
+
+    .map-btn.google {
+      background: var(--accent-light);
+      color: var(--accent);
+      border: 1px solid var(--card-border);
+    }
+
+    .map-btn.google:hover { background: #fde0d4; }
+
+    /* Map link in chat bubble */
+    .map-link-row {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid var(--card-border);
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .inline-map-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .inline-map-btn.kakao { background: #FEE500; color: #3C1E1E; }
+    .inline-map-btn.naver { background: #03C75A; color: white; }
+    .inline-map-btn.panel { background: var(--accent-light); color: var(--accent); border: none; font-family: var(--font); }
+    .inline-map-btn.panel:hover { background: #fde0d4; }
+
+    /* Language switcher */
+    .lang-section {
+      padding: 14px 12px;
+      border-top: 1px solid var(--border);
+    }
+
+    .lang-label {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--text-light);
+      margin-bottom: 8px;
+    }
+
+    .lang-buttons {
+      display: flex;
+      gap: 6px;
+    }
+
+    .lang-btn {
+      flex: 1;
+      padding: 6px 4px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: transparent;
+      font-family: var(--font);
+      font-size: 11px;
+      cursor: pointer;
+      color: var(--text-muted);
+      transition: all 0.15s;
+      text-align: center;
+    }
+
+    .lang-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .lang-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: white;
+      font-weight: 600;
+    }
+
+    /* ══════════════════════════════
+       MAIN AREA
+    ══════════════════════════════ */
+    #main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      background: var(--bg);
+    }
+
+    /* ── CHAT MESSAGES ── */
+    #chat {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    #chat::-webkit-scrollbar { width: 4px; }
+    #chat::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+    /* ── WELCOME SCREEN ── */
+    .welcome {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex: 1;
+      padding: 32px 16px;
+      text-align: center;
+      min-height: 60vh;
+    }
+
+    .welcome-logo {
+      width: 72px;
+      height: 72px;
+      background: var(--accent);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-md);
+    }
+
+    .welcome h2 {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 10px;
+      line-height: 1.3;
+    }
+
+    .welcome-sub {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 32px;
+      line-height: 1.6;
+      max-width: 420px;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      max-width: 620px;
+      width: 100%;
+    }
+
+    @media (max-width: 900px) {
+      .cards-grid { grid-template-columns: 1fr 1fr; max-width: 460px; }
+    }
+
+    .topic-card {
+      background: var(--card-bg);
+      border: 1.5px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 18px 16px;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.2s;
+      box-shadow: var(--shadow);
+    }
+
+    .topic-card:hover {
+      background: var(--card-hover);
+      border-color: var(--accent);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .card-icon { font-size: 22px; margin-bottom: 8px; display: block; }
+    .card-title { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+    .card-sub { font-size: 12px; color: var(--text-muted); }
+
+    /* ── MESSAGE ROWS ── */
+    .msg-row {
+      display: flex;
+      gap: 12px;
+      max-width: 700px;
+      width: 100%;
+    }
+
+    .msg-row.user {
+      flex-direction: row-reverse;
+      align-self: flex-end;
+    }
+
+    .msg-row.bot { align-self: flex-start; }
+
+    .msg-avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .msg-avatar.bot-av {
+      background: var(--accent);
+    }
+
+    .msg-avatar.user-av {
+      background: var(--user-bubble);
+      font-size: 14px;
+    }
+
+    .bubble {
+      padding: 12px 16px;
+      border-radius: var(--radius);
+      font-size: 14px;
+      line-height: 1.7;
+      max-width: calc(100% - 46px);
+      word-break: break-word;
+    }
+
+    .bubble.bot {
+      background: var(--bot-bg);
+      border: 1.5px solid var(--card-border);
+      border-top-left-radius: 4px;
+      color: var(--text);
+      box-shadow: var(--shadow);
+    }
+
+    .bubble.user {
+      background: var(--user-bubble);
+      color: var(--user-text);
+      border-top-right-radius: 4px;
+    }
+
+    .bubble.crisis {
+      background: #fff0f0;
+      border-color: #f87171;
+    }
+
+    /* Markdown rendering */
+    .bubble strong { font-weight: 600; color: var(--accent); }
+    .bubble.user strong { color: #fbbf24; }
+    .bubble em { font-style: italic; color: var(--text-muted); }
+    .bubble .msg-step {
+      display: block;
+      padding: 5px 0 5px 12px;
+      border-left: 2px solid var(--accent);
+      margin: 5px 0;
+    }
+    .bubble .warning-block {
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      border-radius: 8px;
+      padding: 10px 14px;
+      margin: 6px 0;
+      font-weight: 500;
+      color: #92400e;
+    }
+
+    /* ── TYPING INDICATOR ── */
+    .typing-dots {
+      display: flex;
+      gap: 5px;
+      align-items: center;
+      padding: 6px 2px;
+    }
+
+    .typing-dots span {
+      width: 7px;
+      height: 7px;
+      background: var(--accent);
+      border-radius: 50%;
+      opacity: 0.4;
+      animation: dot-bounce 1.3s infinite;
+    }
+
+    .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+    .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes dot-bounce {
+      0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+      30% { transform: translateY(-7px); opacity: 1; }
+    }
+
+    /* ══════════════════════════════
+       INPUT AREA
+    ══════════════════════════════ */
+    #input-area {
+      border-top: 1px solid var(--border);
+      padding: 14px 32px 12px;
+      background: var(--bg);
+      flex-shrink: 0;
+    }
+
+    .input-row {
+      display: flex;
+      gap: 10px;
+      align-items: flex-end;
+      max-width: 700px;
+      background: var(--input-bg);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 8px 8px 8px 16px;
+      transition: border-color 0.2s;
+      box-shadow: var(--shadow);
+    }
+
+    .input-row:focus-within { border-color: var(--accent); }
+
+    #user-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      font-family: var(--font);
+      font-size: 14px;
+      color: var(--text);
+      resize: none;
+      min-height: 24px;
+      max-height: 120px;
+      line-height: 1.5;
+      padding: 4px 0;
+    }
+
+    #user-input::placeholder { color: var(--text-light); }
+
+    #send-btn {
+      width: 38px;
+      height: 38px;
+      background: var(--accent);
+      border: none;
+      border-radius: var(--radius-sm);
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    #send-btn:hover { background: var(--accent-hover); }
+    #send-btn:disabled { background: var(--border); cursor: not-allowed; }
+
+    .input-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 8px;
+      max-width: 700px;
+    }
+
+    .emergency-line {
+      font-size: 11px;
+      color: var(--text-light);
+    }
+
+    .emergency-line strong { color: var(--accent); font-weight: 600; }
+
+    #msg-counter {
+      font-size: 11px;
+      color: var(--text-light);
+    }
+
+    /* ══════════════════════════════
+       MOBILE
+    ══════════════════════════════ */
+    @media (max-width: 700px) {
+      #sidebar { display: none; }
+      #chat { padding: 16px 14px; }
+      #input-area { padding: 12px 14px 10px; }
+      .cards-grid { grid-template-columns: 1fr; }
+      .welcome h2 { font-size: 18px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══ SIDEBAR ══ -->
+<aside id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-icon">🏮</div>
+    <span class="logo-name">K'Helper</span>
+  </div>
+
+  <button class="new-chat-btn" onclick="resetChat()">
+    <span>＋</span> <span id="new-chat-label">ការសន្ទនាថ្មី</span>
+  </button>
+
+  <div class="sidebar-section-label" id="topics-label">ប្រធានបទរហ័ស</div>
+
+  <nav class="sidebar-nav">
+    <div class="nav-item" onclick="quickTopic('visa')">
+      <span class="nav-icon">🛂</span>
+      <span id="nav-visa">វីសា &amp; អន្តោប្រវេសន៍</span>
+    </div>
+    <div class="nav-item" onclick="quickTopic('work')">
+      <span class="nav-icon">💼</span>
+      <span id="nav-work">ការងារ &amp; សិទ្ធិ</span>
+    </div>
+    <div class="nav-item" onclick="quickTopic('health')">
+      <span class="nav-icon">🏥</span>
+      <span id="nav-health">សុខភាព</span>
+    </div>
+    <div class="nav-item" onclick="quickTopic('daily')">
+      <span class="nav-icon">🌏</span>
+      <span id="nav-daily">ជីវិតប្រចាំ</span>
+    </div>
+    <div class="nav-item" onclick="quickTopic('culture')">
+      <span class="nav-icon">🙏</span>
+      <span id="nav-culture">វប្បធម៌កូរ៉េ</span>
+    </div>
+    <div class="nav-item" onclick="quickTopic('language')">
+      <span class="nav-icon">💬</span>
+      <span id="nav-language">ជំនួយភាសា</span>
+    </div>
+    <div class="nav-item" onclick="quickTopic('money')">
+      <span class="nav-icon">💸</span>
+      <span id="nav-money">ផ្ញើប្រាក់ទៅកម្ពុជា</span>
+    </div>
+    <div class="nav-item" onclick="quickTopic('school')">
+      <span class="nav-icon">🏫</span>
+      <span id="nav-school">ការចុះឈ្មោះសាលា</span>
+    </div>
+    <div class="nav-item" onclick="quickTopic('housing')">
+      <span class="nav-icon">🏠</span>
+      <span id="nav-housing">លំនៅដ្ឋាន &amp; ជួល</span>
+    </div>
+    <div class="nav-item" onclick="quickTopic('tourist')">
+      <span class="nav-icon">🗺️</span>
+      <span id="nav-tourist">ទេសចរណ៍</span>
+    </div>
+    <div class="nav-item" onclick="openMapPanel('places')">
+      <span class="nav-icon">📍</span>
+      <span id="nav-location">ទីតាំង &amp; ផែនទី</span>
+    </div>
+  </nav>
+
+  <div class="lang-section">
+    <div class="lang-label" id="lang-label">ភាសា</div>
+    <div class="lang-buttons">
+      <button class="lang-btn" id="btn-en" onclick="setLang('en')">🇺🇸 EN</button>
+      <button class="lang-btn" id="btn-kr" onclick="setLang('kr')">🇰🇷 한국어</button>
+      <button class="lang-btn active" id="btn-km" onclick="setLang('km')">🇰🇭 ខ្មែរ</button>
+    </div>
+  </div>
+</aside>
+
+<!-- ══ MAP PANEL ══ -->
+<div id="map-panel">
+  <div class="map-panel-header">
+    <span class="map-panel-title">📍 <span id="map-panel-heading">ទីតាំង &amp; ផែនទី</span></span>
+    <button class="map-close-btn" onclick="closeMapPanel()">✕</button>
+  </div>
+  <div class="map-tabs">
+    <button class="map-tab active" onclick="switchMapTab('immigration')" id="tab-immigration">🛂 ចំណាក</button>
+    <button class="map-tab" onclick="switchMapTab('health')" id="tab-health">🏥 Health</button>
+    <button class="map-tab" onclick="switchMapTab('food')" id="tab-food">🍜 Food</button>
+    <button class="map-tab" onclick="switchMapTab('cafe')" id="tab-cafe">☕ Café</button>
+    <button class="map-tab" onclick="switchMapTab('places')" id="tab-places">🏛️ Places</button>
+    <button class="map-tab" onclick="switchMapTab('labor')" id="tab-labor">💼 Labor</button>
+  </div>
+  <div class="map-search-row">
+    <input type="text" class="map-search-input" id="map-search-input" placeholder="ស្វែងរកទីតាំង...">
+    <button class="map-search-btn" onclick="doMapSearch()">🔍</button>
+  </div>
+  <div class="map-locations-list" id="map-locations-list"></div>
+</div>
+
+<!-- ══ MAIN ══ -->
+<div id="main">
+  <div id="chat">
+    <!-- Welcome screen rendered by JS -->
+  </div>
+
+  <div id="input-area">
+    <div class="input-row">
+      <textarea
+        id="user-input"
+        rows="1"
+        maxlength="2000"
+        placeholder="សារទៅ K'Helper..."
+      ></textarea>
+      <button id="send-btn" onclick="sendMessage()">➤</button>
+    </div>
+    <div class="input-footer">
+      <span class="emergency-line" id="emergency-line">
+        ជំនួយបន្ទាន់: <strong>ចំណាកស្រុក 1345</strong> · <strong>បន្ទាន់ 119</strong>
+      </span>
+      <span id="msg-counter">30 សារ នៅសល់</span>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════
+// TRANSLATIONS
+// ══════════════════════════════════════════════════
+const T = {
+  km: {
+    newChat: 'ការសន្ទនាថ្មី',
+
+    topicsLabel: 'ប្រធានបទរហ័ស',
+    langLabel: 'ភាសា',
+    placeholder: 'សារទៅ K\'Helper...',
+    welcomeTitle: 'តើខ្ញុំអាចជួយអ្នកដោយរបៀបណា?',
+    welcomeSub: 'សួរខ្ញុំអ្វីក៏បានអំពីការរស់នៅ ឬ ទស្សនាកូរ៉េ — ជាភាសាខ្មែរ, កូរ៉េ ឬអង់គ្លេស។',
+    emergency: 'ជំនួយបន្ទាន់: <strong>ចំណាកស្រុក 1345</strong> · <strong>បន្ទាន់ 119</strong>',
+    mapPanelTitle: 'ទីតាំង & ផែនទី',
+    msgLeft: (n) => `${n} សារ នៅសល់`,
+    cards: [
+      { icon: '🛂', title: 'វីសា & ឯកសារ', sub: 'ការបន្ត, ចុះឈ្មោះ', topic: 'visa' },
+      { icon: '💼', title: 'សិទ្ធិការងារ', sub: 'កិច្ចសន្យា, ប្រាក់ខែ', topic: 'work' },
+      { icon: '🏥', title: 'ធានារ៉ាប់រងសុខភាព', sub: 'NHIS, មន្ទីរពេទ្យ', topic: 'health' },
+      { icon: '🙏', title: 'វប្បធម៌កូរ៉េ', sub: 'ទំនៀមទម្លាប់, ជីវិត', topic: 'culture' },
+      { icon: '🗺️', title: 'ទេសចរណ៍ & ស្វែងរក', sub: 'ទីកន្លែង, ម្ហូប, កាហ្វេ', topic: 'tourist' },
+      { icon: '📍', title: 'ទីតាំង & ផែនទី', sub: 'Kakao · Naver · Google', topic: 'location' },
+    ],
+    navItems: {
+      visa: 'វីសា & អន្តោប្រវេសន៍', work: 'ការងារ & សិទ្ធិ', health: 'សុខភាព',
+      daily: 'ជីវិតប្រចាំ', culture: 'វប្បធម៌កូរ៉េ', language: 'ជំនួយភាសា',
+      money: 'ផ្ញើប្រាក់ទៅកម្ពុជា', school: 'ការចុះឈ្មោះសាលា', housing: 'លំនៅដ្ឋាន & ជួល',
+      tourist: 'ទេសចរណ៍', location: 'ទីតាំង & ផែនទី'
+    },
+    topics: {
+      visa: 'ខ្ញុំមានសំណួរអំពីវីសា ARC ឬ ការអន្តោប្រវេសន៍នៅកូរ៉េ',
+      work: 'ខ្ញុំចង់ដឹងអំពីសិទ្ធិការងារ ឬ បញ្ហាជាមួយថៅកែ',
+      health: 'ខ្ញុំត្រូវការជំនួយអំពីការចូលមន្ទីរពេទ្យ ឬ ធានារ៉ាប់រង',
+      daily: 'ខ្ញុំចង់ដឹងអំពីការរស់នៅប្រចាំថ្ងៃនៅកូរ៉េ',
+      culture: 'ខ្ញុំចង់ដឹងអំពីវប្បធម៌ ឬ ទំនៀមទម្លាប់កូរ៉េ',
+      language: 'ខ្ញុំត្រូវការជំនួយបកប្រែ ឬ ប្រើភាសាកូរ៉េ',
+      money: 'ខ្ញុំចង់ផ្ញើប្រាក់ទៅកម្ពុជា',
+      school: 'ខ្ញុំចង់ចុះឈ្មោះកូននៅសាលារៀន',
+      housing: 'ខ្ញុំមានបញ្ហាអំពីការជួល ឬ លំនៅដ្ឋាន',
+      tourist: 'ខ្ញុំជាភ្ញៀវទេសចរ។ ខ្ញុំចង់ស្វែងរកទីកន្លែងដ៏ស្រស់ស្អាត ម្ហូបឆ្ងាញ់ កាហ្វេ និងភោជនីយដ្ឋានល្អៗ នៅតាមមូលដ្ឋានកូរ៉េ',
+      location: 'ខ្ញុំចង់ស្វែងរកទីតាំងសំខាន់ ដូចជា ការិយាល័យចំណាកស្រុក មន្ទីរពេទ្យ ឬ ស្ថានទូត'
+    }
+  },
+  en: {
+    newChat: 'New Conversation',
+    topicsLabel: 'Quick Topics',
+    langLabel: 'Language',
+    placeholder: 'Message K\'Helper...',
+    welcomeTitle: 'How can I help you today?',
+    welcomeSub: 'Ask me anything about living or visiting Korea — in Khmer, Korean, or English.',
+    emergency: 'Emergency: <strong>Immigration 1345</strong> · <strong>Emergency 119</strong>',
+    mapPanelTitle: 'Locations & Maps',
+    msgLeft: (n) => `${n} messages left`,
+    cards: [
+      { icon: '🛂', title: 'Visa & Documents', sub: 'Renewal, registration', topic: 'visa' },
+      { icon: '💼', title: 'Work Rights', sub: 'Contract, wages', topic: 'work' },
+      { icon: '🏥', title: 'Health Insurance', sub: 'NHIS, hospital', topic: 'health' },
+      { icon: '🙏', title: 'Korean Culture', sub: 'Customs, daily life', topic: 'culture' },
+      { icon: '🗺️', title: 'Tourism & Explore', sub: 'Attractions, food, cafes', topic: 'tourist' },
+      { icon: '📍', title: 'Locations & Maps', sub: 'Kakao · Naver · Google', topic: 'location' },
+    ],
+    navItems: {
+      visa: 'Visa & Immigration', work: 'Work & Rights', health: 'Health',
+      daily: 'Daily Life', culture: 'Korean Culture', language: 'Language Help',
+      money: 'Send Money Home', school: 'School Enrollment', housing: 'Housing & Rent',
+      tourist: 'Tourism & Explore', location: 'Locations & Maps'
+    },
+    topics: {
+      visa: 'I have a question about visa, ARC or immigration in Korea',
+      work: 'I want to know about my work rights or a problem with my employer',
+      health: 'I need help with hospital or health insurance in Korea',
+      daily: 'I want to know about daily life in Korea',
+      culture: 'I want to learn about Korean culture and customs',
+      language: 'I need help with Korean language or translation',
+      money: 'I want to send money back to Cambodia',
+      school: 'I want to enroll my child in school',
+      housing: 'I have a question about rent or housing',
+      tourist: 'I am a tourist in Korea. Help me find famous attractions, great food, restaurants, and cafes to visit.',
+      location: 'I need to find an important location like an immigration office, hospital, or embassy'
+    }
+  },
+  kr: {
+    newChat: '새 대화',
+    topicsLabel: '빠른 주제',
+    langLabel: '언어',
+    placeholder: 'K\'Helper에게 메시지...',
+    welcomeTitle: '어떻게 도와드릴까요?',
+    welcomeSub: '한국 생활이나 관광에 대해 무엇이든 물어보세요 — 크메르어, 한국어, 영어로.',
+    emergency: '긴급: <strong>외국인 1345</strong> · <strong>응급 119</strong>',
+    mapPanelTitle: '위치 & 지도',
+    msgLeft: (n) => `${n}개 메시지 남음`,
+    cards: [
+      { icon: '🛂', title: '비자 & 서류', sub: '갱신, 등록', topic: 'visa' },
+      { icon: '💼', title: '근로 권리', sub: '계약, 임금', topic: 'work' },
+      { icon: '🏥', title: '건강보험', sub: '건강보험, 병원', topic: 'health' },
+      { icon: '🙏', title: '한국 문화', sub: '관습, 일상', topic: 'culture' },
+      { icon: '🗺️', title: '관광 & 탐방', sub: '관광지, 맛집, 카페', topic: 'tourist' },
+      { icon: '📍', title: '위치 & 지도', sub: 'Kakao · Naver · Google', topic: 'location' },
+    ],
+    navItems: {
+      visa: '비자 & 출입국', work: '근로 & 권리', health: '건강',
+      daily: '일상생활', culture: '한국 문화', language: '언어 도움',
+      money: '캄보디아 송금', school: '학교 등록', housing: '주거 & 임대',
+      tourist: '관광 & 탐방', location: '위치 & 지도'
+    },
+    topics: {
+      visa: '한국에서 비자, 외국인등록증 또는 출입국에 대해 질문이 있어요',
+      work: '근로 권리나 고용주 문제에 대해 알고 싶어요',
+      health: '병원이나 건강보험에 대해 도움이 필요해요',
+      daily: '한국에서의 일상생활에 대해 알고 싶어요',
+      culture: '한국 문화와 관습에 대해 알고 싶어요',
+      language: '한국어 번역이나 언어 도움이 필요해요',
+      money: '캄보디아로 송금하고 싶어요',
+      school: '자녀를 학교에 등록하고 싶어요',
+      housing: '임대나 주거에 대해 질문이 있어요',
+      tourist: '한국 관광객입니다. 유명한 관광지, 맛집, 카페, 레스토랑을 추천해 주세요.',
+      location: '출입국사무소, 병원, 대사관 같은 중요한 위치를 찾고 싶어요'
+    }
+  }
+};
+
+// ══════════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════════
+let currentLang = 'km';
+let conversationHistory = [];
+let chatStarted = false;
+
+// ══════════════════════════════════════════════════
+// RATE LIMITER
+// ══════════════════════════════════════════════════
+const RATE_LIMIT = 30;
+const RATE_WINDOW = 60 * 60 * 1000;
+const STORAGE_KEY = 'khelper_msg_log';
+
+function getRateData() {
+  try {
+    const data = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+    return data.filter(t => Date.now() - t < RATE_WINDOW);
+  } catch { return []; }
+}
+
+function recordMsg() {
+  const data = getRateData();
+  data.push(Date.now());
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch {}
+  return data.length;
+}
+
+function getRemainingMsgs() {
+  return Math.max(0, RATE_LIMIT - getRateData().length);
+}
+
+// ══════════════════════════════════════════════════
+// UI UPDATES
+// ══════════════════════════════════════════════════
+function updateCounter() {
+  const n = getRemainingMsgs();
+  const t = T[currentLang];
+  const el = document.getElementById('msg-counter');
+  if (el) {
+    el.textContent = t.msgLeft(n);
+    el.style.color = n < 5 ? '#ef4444' : n < 10 ? '#f59e0b' : '';
+  }
+}
+
+function setLang(lang) {
+  currentLang = lang;
+  ['en','kr','km'].forEach(l => {
+    document.getElementById('btn-' + l)?.classList.toggle('active', l === lang);
+  });
+  const t = T[lang];
+  document.getElementById('new-chat-label').textContent = t.newChat;
+  document.getElementById('topics-label').textContent = t.topicsLabel;
+  document.getElementById('lang-label').textContent = t.langLabel;
+  document.getElementById('user-input').placeholder = t.placeholder;
+  document.getElementById('emergency-line').innerHTML = t.emergency;
+
+  // Update nav items
+  Object.keys(t.navItems).forEach(key => {
+    const el = document.getElementById('nav-' + key);
+    if (el) el.textContent = t.navItems[key];
+  });
+
+  // Update map panel heading
+  const mapHeading = document.getElementById('map-panel-heading');
+  if (mapHeading) mapHeading.textContent = t.mapPanelTitle;
+
+  updateCounter();
+
+  if (!chatStarted) renderWelcome();
+}
+
+// ══════════════════════════════════════════════════
+// WELCOME SCREEN
+// ══════════════════════════════════════════════════
+function renderWelcome() {
+  const chat = document.getElementById('chat');
+  chat.innerHTML = '';
+  const t = T[currentLang];
+
+  const w = document.createElement('div');
+  w.className = 'welcome';
+  w.id = 'welcome-screen';
+
+  w.innerHTML = `
+    <div class="welcome-logo">🏮</div>
+    <h2>${t.welcomeTitle}</h2>
+    <p class="welcome-sub">${t.welcomeSub}</p>
+    <div class="cards-grid">
+      ${t.cards.map(c => `
+        <div class="topic-card" onclick="quickTopic('${c.topic}')">
+          <span class="card-icon">${c.icon}</span>
+          <div class="card-title">${c.title}</div>
+          <div class="card-sub">${c.sub}</div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+
+  chat.appendChild(w);
+}
+
+// ══════════════════════════════════════════════════
+// MARKDOWN RENDERER
+// ══════════════════════════════════════════════════
+function renderMarkdown(text) {
+  return text
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/(⚠️[^\n]+)/g, '<div class="warning-block">$1</div>')
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.*?)\*/g, '<em>$1</em>')
+    .replace(/^(\d+)\.\s(.+)$/gm, '<span class="msg-step"><strong>$1.</strong> $2</span>')
+    .replace(/^#{1,3}\s(.+)$/gm, '<strong>$1</strong>')
+    .replace(/\n/g, '<br>');
+}
+
+// ══════════════════════════════════════════════════
+// MESSAGES
+// ══════════════════════════════════════════════════
+function appendMessage(role, content) {
+  const chat = document.getElementById('chat');
+
+  // Remove welcome screen
+  const welcome = document.getElementById('welcome-screen');
+  if (welcome) welcome.remove();
+  chatStarted = true;
+
+  const row = document.createElement('div');
+  row.className = `msg-row ${role}`;
+
+  const avatar = document.createElement('div');
+  avatar.className = `msg-avatar ${role === 'user' ? 'user-av' : 'bot-av'}`;
+  avatar.textContent = role === 'user' ? '🧑' : '🏮';
+
+  const bubble = document.createElement('div');
+  bubble.className = `bubble ${role === 'user' ? 'user' : 'bot'}`;
+
+  const isCrisis = role !== 'user' && (content.includes('🆘') || content.includes('1393'));
+  if (isCrisis) bubble.classList.add('crisis');
+
+  if (role === 'user') {
+    bubble.textContent = content;
+  } else {
+    bubble.innerHTML = renderMarkdown(content);
+  }
+
+  row.appendChild(avatar);
+  row.appendChild(bubble);
+  chat.appendChild(row);
+  chat.scrollTop = chat.scrollHeight;
+  return bubble;
+}
+
+function showTyping() {
+  const chat = document.getElementById('chat');
+  const row = document.createElement('div');
+  row.className = 'msg-row bot';
+  row.id = 'typing-row';
+
+  const avatar = document.createElement('div');
+  avatar.className = 'msg-avatar bot-av';
+  avatar.textContent = '🏮';
+
+  const bubble = document.createElement('div');
+  bubble.className = 'bubble bot';
+  bubble.innerHTML = '<div class="typing-dots"><span></span><span></span><span></span></div>';
+
+  row.appendChild(avatar);
+  row.appendChild(bubble);
+  chat.appendChild(row);
+  chat.scrollTop = chat.scrollHeight;
+}
+
+function hideTyping() {
+  document.getElementById('typing-row')?.remove();
+}
+
+// ══════════════════════════════════════════════════
+// MAP LOCATIONS DATA
+// ══════════════════════════════════════════════════
+const MAP_DATA = {
+  immigration: [
+    { name: 'Seoul Immigration Office', kr: '서울출입국외국인청', note: 'ARC renewal, visa extension, work permits', query: '서울출입국외국인청' },
+    { name: 'Ansan Immigration Office', kr: '안산출입국외국인사무소', note: 'Factory worker hub — Multicultural village nearby', query: '안산출입국외국인사무소' },
+    { name: 'Incheon Immigration Office', kr: '인천출입국외국인청', note: 'Near Incheon Airport — airport arrivals', query: '인천출입국외국인청' },
+    { name: 'Suwon Immigration Office', kr: '수원출입국외국인사무소', note: 'Covers all of Gyeonggi-do', query: '수원출입국외국인사무소' },
+  ],
+  health: [
+    { name: 'Migrant Worker Hospital Guro', kr: '이주민병원 구로', note: '📞 02-2677-4071 · Free/low-cost care for migrants', query: '이주민병원 구로' },
+    { name: 'Seoul Medical Center', kr: '서울의료원', note: 'Public hospital — translation services available', query: '서울의료원' },
+    { name: 'Ansan Migrant Health Center', kr: '안산시외국인복지센터', note: 'Free health checkups for migrant workers', query: '안산시외국인복지센터' },
+    { name: 'Community Health Center (보건소)', kr: '보건소', note: 'In every district — cheap vaccines, basic care', query: '보건소' },
+  ],
+  labor: [
+    { name: 'Seoul Labor Office', kr: '서울지방고용노동청', note: 'File wage theft complaints, unfair dismissal claims', query: '서울지방고용노동청' },
+    { name: 'Korea Employment Agency', kr: '고용센터', note: 'Job placement, E-9 visa support', query: '고용센터' },
+    { name: 'Migrant Worker Center Seoul', kr: '외국인노동자지원센터 서울', note: 'Free legal aid — call 1350 for emergencies', query: '외국인노동자지원센터 서울' },
+    { name: 'Cambodian Embassy Seoul', kr: '주한 캄보디아대사관', note: '📞 02-3785-1041 · Yongsan-gu, Hannam-dong', query: '주한캄보디아대사관' },
+  ],
+  food: [
+    { name: 'Gwangjang Market', kr: '광장시장', note: '🔥 Best Korean street food — bindaetteok, fresh kimbap, yukhoe', query: '광장시장' },
+    { name: 'Myeongdong Street Food', kr: '명동 길거리 음식', note: 'Tteokbokki, corn dogs, tornado potatoes — tourist classic', query: '명동 길거리 음식' },
+    { name: 'Noryangjin Fish Market', kr: '노량진수산시장', note: '🦞 24hr fresh seafood — buy & eat sashimi on-site', query: '노량진수산시장' },
+    { name: 'Itaewon Halal Food Street', kr: '이태원 할랄음식', note: 'Halal restaurants, international cuisine', query: '이태원 할랄음식' },
+    { name: 'Pojangmacha Euljiro', kr: '을지로 포장마차', note: '🍺 Night outdoor tent stalls — makgeolli & Korean snacks', query: '을지로 포장마차' },
+    { name: 'Tongin Market', kr: '통인시장', note: 'Pay with old coins, build your own banchan tray', query: '통인시장' },
+    { name: 'Dongdaemun Night Market', kr: '동대문 야시장', note: '🌙 Open till 5am — street food + shopping', query: '동대문 야시장' },
+    { name: 'Busan Jagalchi Fish Market', kr: '부산 자갈치시장', note: "Korea's biggest seafood market — famous for raw fish", query: '부산 자갈치시장' },
+  ],
+  cafe: [
+    { name: 'Bukchon Hanok Cafes', kr: '북촌한옥마을 카페', note: '🏯 Traditional house cafes — stunning architecture + matcha', query: '북촌한옥마을 카페' },
+    { name: 'Insadong Cafe Street', kr: '인사동 카페거리', note: 'Unique themed cafes, tea houses, craft galleries', query: '인사동 카페' },
+    { name: 'Hongdae Cafes', kr: '홍대 카페', note: '🎨 24hr cafes, cheap eats, young creative energy', query: '홍대 카페' },
+    { name: 'Seongsu Coffee Street', kr: '성수동 카페거리', note: "서울의 브루클린 — specialty coffee, industrial-chic vibes", query: '성수동 카페' },
+    { name: 'Yeonnam-dong Cafes', kr: '연남동 카페', note: 'Quiet, charming street — great for solo or couple visits', query: '연남동 카페' },
+    { name: 'Gangnam Cafe District', kr: '강남 카페거리', note: 'Upscale cafes, K-beauty desserts, high-end vibes', query: '강남 카페' },
+    { name: 'Ikseon-dong Cafe Alley', kr: '익선동 카페골목', note: '📸 Hanok-turned-cafes — most photogenic in Seoul', query: '익선동 카페' },
+  ],
+  places: [
+    { name: 'Gyeongbokgung Palace', kr: '경복궁', note: '🏰 Royal palace · Wear hanbok = free entry · Guard ceremony', query: '경복궁' },
+    { name: 'Namsan Seoul Tower', kr: '남산서울타워', note: '🗼 Best Seoul panorama · Love locks · Cable car available', query: '남산타워' },
+    { name: 'Myeongdong', kr: '명동', note: '🛍️ K-beauty, skincare, street food — essential tourist stop', query: '명동' },
+    { name: 'Bukchon Hanok Village', kr: '북촌한옥마을', note: '📸 Traditional Korean village — iconic photo destination', query: '북촌한옥마을' },
+    { name: 'Hongdae Street', kr: '홍대', note: '🎨 Street art, buskers, night market, young energy', query: '홍대' },
+    { name: 'Nami Island', kr: '남이섬', note: '🌿 K-drama filming location · Seasonal trees · Peaceful ferry', query: '남이섬' },
+    { name: 'Lotte World & Theme Park', kr: '롯데월드', note: '🎢 Indoor/outdoor amusement park — family favorite', query: '롯데월드' },
+    { name: 'DMZ (Korean Border)', kr: '비무장지대(DMZ)', note: '🔭 Historic Korean War border — book tour in advance', query: 'DMZ 투어' },
+    { name: 'Jeju Island', kr: '제주도', note: '🌊 Korea\'s #1 getaway — Hallasan, black lava beaches, waterfalls', query: '제주도 관광' },
+    { name: 'Busan Gamcheon Culture Village', kr: '부산 감천문화마을', note: '🎨 Colorful hillside village — art installations, cafes', query: '감천문화마을' },
+    { name: 'Seoraksan National Park', kr: '설악산 국립공원', note: '🏔️ Korea\'s most beautiful mountain — hiking, cable car', query: '설악산 국립공원' },
+  ],
+};
+
+// ══════════════════════════════════════════════════
+// MAP PANEL FUNCTIONS
+// ══════════════════════════════════════════════════
+let currentMapTab = 'immigration';
+
+function openMapPanel(tab) {
+  currentMapTab = tab || currentMapTab;
+  document.getElementById('map-panel').classList.add('open');
+  switchMapTab(currentMapTab);
+}
+
+function closeMapPanel() {
+  document.getElementById('map-panel').classList.remove('open');
+}
+
+function switchMapTab(tab) {
+  currentMapTab = tab;
+  document.querySelectorAll('.map-tab').forEach(btn => {
+    btn.classList.toggle('active', btn.id === 'tab-' + tab);
+  });
+  renderMapLocations(MAP_DATA[tab] || []);
+}
+
+function renderMapLocations(locs) {
+  const list = document.getElementById('map-locations-list');
+  if (!locs.length) {
+    list.innerHTML = '<p style="padding:24px;color:var(--text-muted);text-align:center;font-size:13px">No locations found</p>';
+    return;
+  }
+  list.innerHTML = locs.map(loc => `
+    <div class="map-location-card">
+      <div class="map-loc-name">${loc.name}</div>
+      <div class="map-loc-kr">${loc.kr}</div>
+      <div class="map-loc-note">${loc.note}</div>
+      <div class="map-buttons">
+        <a href="https://map.kakao.com/?q=${encodeURIComponent(loc.query)}" target="_blank" rel="noopener" class="map-btn kakao">🗺️ Kakao</a>
+        <a href="https://map.naver.com/v5/search/${encodeURIComponent(loc.query)}" target="_blank" rel="noopener" class="map-btn naver">N Naver</a>
+        <a href="https://www.google.com/maps/search/${encodeURIComponent(loc.query + ' Korea')}" target="_blank" rel="noopener" class="map-btn google">G Google</a>
+      </div>
+    </div>
+  `).join('');
+}
+
+function doMapSearch() {
+  const q = document.getElementById('map-search-input').value.trim();
+  if (!q) return;
+  window.open('https://map.kakao.com/?q=' + encodeURIComponent(q), '_blank');
+}
+
+// ══════════════════════════════════════════════════
+// QUICK TOPICS
+// ══════════════════════════════════════════════════
+function quickTopic(topic) {
+  if (topic === 'location') {
+    openMapPanel('places');
+    return;
+  }
+  const msg = T[currentLang].topics[topic];
+  if (msg) {
+    document.getElementById('user-input').value = msg;
+    sendMessage();
+  }
+}
+
+// ══════════════════════════════════════════════════
+// RESET
+// ══════════════════════════════════════════════════
+function resetChat() {
+  conversationHistory = [];
+  chatStarted = false;
+  renderWelcome();
+}
+
+// ══════════════════════════════════════════════════
+// SEND MESSAGE
+// ══════════════════════════════════════════════════
+async function sendMessage() {
+  const input = document.getElementById('user-input');
+  const text = input.value.trim();
+  if (!text) return;
+
+  if (getRemainingMsgs() <= 0) {
+    appendMessage('assistant', T[currentLang].langLabel === 'ភាសា'
+      ? '⚠️ អ្នកបានផ្ញើសារច្រើនពេក។ សូមមកម្តងទៀតក្នុង ១ ម៉ោង។ ប្រសិនបើបន្ទាន់ ទូរស័ព្ទ 1345 ឬ 112។'
+      : '⚠️ Message limit reached for this hour. Please wait 60 minutes. For urgent help call 1345 or 112.');
+    return;
+  }
+
+  recordMsg();
+  updateCounter();
+
+  input.value = '';
+  input.style.height = 'auto';
+  document.getElementById('send-btn').disabled = true;
+
+  appendMessage('user', text);
+  conversationHistory.push({ role: 'user', content: text });
+
+  showTyping();
+
+  try {
+    const res = await fetch('/.netlify/functions/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ messages: conversationHistory }),
+    });
+
+    hideTyping();
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      appendMessage('assistant', err.error || 'Error. Please try again.');
+      conversationHistory.pop();
+    } else {
+      const data = await res.json();
+      const reply = data.choices?.[0]?.message?.content || 'Sorry, please try again.';
+      const bubble = appendMessage('assistant', reply);
+      conversationHistory.push({ role: 'assistant', content: reply });
+      if (conversationHistory.length > 40) conversationHistory.splice(0, 2);
+
+      // Inject map shortcut button based on AI triage category
+      const meta = data._meta;
+      if (meta && meta.category) {
+        const tabMap = {
+          VISA: 'immigration', HEALTH: 'health', WORK: 'labor',
+          COMMUNITY: 'labor', TOURIST: 'places', HOUSING: null, DAILY: null, SCHOOL: null
+        };
+        const tab = tabMap[meta.category];
+        if (tab && bubble) {
+          const labels = {
+            km: { VISA: '📍 ការិ​យាល័យ​ចំណាកស្រុក', HEALTH: '📍 ស្វែងរកមន្ទីរពេទ្យ', WORK: '📍 ការងារ & ជំនួយ', COMMUNITY: '📍 ស្ថានទូត & សហគមន៍', TOURIST: '📍 ស្វែងរកទីកន្លែង' },
+            en: { VISA: '📍 Find Immigration Office', HEALTH: '📍 Find Hospital', WORK: '📍 Labor Support', COMMUNITY: '📍 Embassy & Community', TOURIST: '📍 Explore Places' },
+            kr: { VISA: '📍 출입국사무소 찾기', HEALTH: '📍 병원 찾기', WORK: '📍 노동지원센터', COMMUNITY: '📍 대사관 & 커뮤니티', TOURIST: '📍 관광지 찾기' },
+          };
+          const langLabels = labels[currentLang] || labels.en;
+          const btnLabel = langLabels[meta.category] || '📍 Find Locations';
+          const mapRow = document.createElement('div');
+          mapRow.className = 'map-link-row';
+          mapRow.innerHTML = `<button class="inline-map-btn panel" onclick="openMapPanel('${tab}')">${btnLabel}</button>`;
+          bubble.appendChild(mapRow);
+        }
+      }
+    }
+  } catch (e) {
+    hideTyping();
+    appendMessage('assistant', '⚠️ Connection error. For urgent help call **1345** or **112**.');
+    conversationHistory.pop();
+  }
+
+  document.getElementById('send-btn').disabled = false;
+  input.focus();
+}
+
+// ══════════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════════
+document.getElementById('user-input').addEventListener('input', function() {
+  this.style.height = 'auto';
+  this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+});
+
+document.getElementById('user-input').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+});
+
+// Boot
+setLang('km');
+document.getElementById('user-input').focus();
+</script>
+</body>
+</html>
