@@ -1,0 +1,62 @@
+{
+  "name": "K'Helper — ជំនួយការខ្មែរ",
+  "short_name": "K'Helper",
+  "description": "AI assistant for Cambodians in Korea | ជំនួយការ AI សម្រាប់ខ្មែរនៅកូរ៉េ | 한국의 캄보디아인을 위한 AI 도우미",
+  "lang": "km",
+  "dir": "ltr",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#fdf6f2",
+  "theme_color": "#d94e1f",
+  "orientation": "portrait-primary",
+  "categories": ["utilities", "lifestyle"],
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Visa Info | ទិដ្ឋាការ | 비자 정보",
+      "short_name": "Visa",
+      "url": "/",
+      "description": "Visa and immigration information for Korea"
+    },
+    {
+      "name": "Worker Rights | សិទ្ធិការងារ | 노동권",
+      "short_name": "Rights",
+      "url": "/",
+      "description": "Labor law and worker rights in Korea"
+    },
+    {
+      "name": "Healthcare | សុខភាព | 의료",
+      "short_name": "Health",
+      "url": "/",
+      "description": "Healthcare and hospitals in Korea"
+    }
+  ],
+  "screenshots": [],
+  "prefer_related_applications": false
+}
