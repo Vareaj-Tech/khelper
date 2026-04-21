@@ -694,6 +694,34 @@
       color: var(--text-light);
     }
 
+    .legal-footer {
+      font-size: 11px;
+      color: var(--text-light);
+      text-align: center;
+      padding: 8px 0 2px;
+      max-width: 700px;
+    }
+    .legal-footer a {
+      color: var(--text-light);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .legal-footer a:hover { color: var(--accent); }
+
+    .ai-disclaimer-note {
+      font-size: 11px;
+      color: var(--text-light);
+      text-align: center;
+      margin-top: 20px;
+      padding: 10px 16px;
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      border-radius: 8px;
+      max-width: 480px;
+      line-height: 1.5;
+    }
+    .ai-disclaimer-note a { color: var(--accent); text-decoration: none; }
+
     /* ══════════════════════════════
        MOBILE HEADER (hamburger)
     ══════════════════════════════ */
@@ -930,6 +958,11 @@
       </span>
       <span id="msg-counter">30 សារ នៅសល់</span>
     </div>
+    <div class="legal-footer">
+      🤖 AI assistant — not legal/medical advice &nbsp;·&nbsp;
+      <a href="/privacy.html">Privacy</a> &nbsp;·&nbsp;
+      <a href="/terms.html">Terms</a>
+    </div>
   </div>
 </div>
 
@@ -1152,6 +1185,11 @@ function renderWelcome() {
         </div>
       `).join('')}
     </div>
+    <p class="ai-disclaimer-note">
+      🤖 K'Helper is an AI assistant — not a lawyer, doctor, or immigration officer.
+      Always verify important information with official sources.
+      <a href="/terms.html">Terms</a> · <a href="/privacy.html">Privacy</a>
+    </p>
   `;
 
   chat.appendChild(w);

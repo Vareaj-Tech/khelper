@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Terms of Service — K'Helper</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Khmer:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #fdf6f2;
+      --border: #e8d5cb;
+      --accent: #d94e1f;
+      --accent-light: #fce8df;
+      --text: #2d1f1a;
+      --text-muted: #8c6b5e;
+      --text-light: #b8907e;
+      --card-bg: #ffffff;
+      --card-border: #f0ddd5;
+      --shadow: 0 1px 3px rgba(180,100,60,0.08);
+      --radius: 12px;
+      --font: 'Inter', 'Noto Sans Khmer', sans-serif;
+    }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      min-height: 100vh;
+    }
+    header {
+      background: #f5ebe4;
+      border-bottom: 1px solid var(--border);
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .logo-icon {
+      width: 36px; height: 36px;
+      background: var(--accent);
+      border-radius: 9px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; flex-shrink: 0;
+    }
+    .logo-name { font-size: 18px; font-weight: 700; color: var(--accent); }
+    .back-link {
+      margin-left: auto;
+      font-size: 13px;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+      padding: 7px 14px;
+      border: 1.5px solid var(--accent);
+      border-radius: 8px;
+      transition: all 0.15s;
+    }
+    .back-link:hover { background: var(--accent); color: white; }
+
+    main {
+      max-width: 760px;
+      margin: 40px auto;
+      padding: 0 24px 60px;
+    }
+
+    .page-title {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+    .page-meta {
+      font-size: 13px;
+      color: var(--text-light);
+      margin-bottom: 36px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .disclaimer-box {
+      background: #fff7ed;
+      border: 1.5px solid #fed7aa;
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      margin-bottom: 36px;
+    }
+    .disclaimer-box h2 {
+      font-size: 15px;
+      font-weight: 700;
+      color: #92400e;
+      margin-bottom: 10px;
+      border: none;
+      padding: 0;
+    }
+    .disclaimer-box p {
+      font-size: 14px;
+      line-height: 1.7;
+      color: #78350f;
+      margin: 0;
+    }
+
+    section { margin-bottom: 36px; }
+    h2 {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1.5px solid var(--card-border);
+    }
+    p {
+      font-size: 14px;
+      line-height: 1.8;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+    p strong { color: var(--text); font-weight: 600; }
+    p:last-child { margin-bottom: 0; }
+    ul {
+      margin: 8px 0 12px 20px;
+    }
+    ul li {
+      font-size: 14px;
+      line-height: 1.8;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+    ul li strong { color: var(--text); font-weight: 600; }
+
+    .highlight-card {
+      background: var(--card-bg);
+      border: 1.5px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+      margin: 16px 0;
+      box-shadow: var(--shadow);
+    }
+
+    .contact-card {
+      background: var(--card-bg);
+      border: 1.5px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      margin-top: 36px;
+      text-align: center;
+      box-shadow: var(--shadow);
+    }
+    .contact-card h2 { border: none; padding: 0; margin-bottom: 8px; }
+
+    footer {
+      text-align: center;
+      padding: 24px;
+      font-size: 12px;
+      color: var(--text-light);
+      border-top: 1px solid var(--border);
+    }
+    footer a { color: var(--accent); text-decoration: none; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="logo-icon">🏮</div>
+  <span class="logo-name">K'Helper</span>
+  <a href="/" class="back-link">← Back to App</a>
+</header>
+
+<main>
+  <h1 class="page-title">Terms of Service</h1>
+  <p class="page-meta">Effective date: April 19, 2026 &nbsp;·&nbsp; Last updated: April 19, 2026</p>
+
+  <div class="disclaimer-box">
+    <h2>⚠️ Important: K'Helper is an AI Assistant, Not a Professional Advisor</h2>
+    <p>K'Helper provides general information to help Cambodians navigate life in Korea. <strong>It is not a lawyer, immigration officer, doctor, or licensed professional.</strong> Information provided by K'Helper may be incomplete, outdated, or inapplicable to your specific situation. <strong>Always verify important decisions — especially about visas, legal matters, and health — with a qualified professional or official government source.</strong></p>
+  </div>
+
+  <section>
+    <h2>1. Acceptance of Terms</h2>
+    <p>By accessing or using K'Helper at <strong>khelper.netlify.app</strong> (the "Service"), you agree to be bound by these Terms of Service. If you do not agree, please do not use the Service.</p>
+    <p>These Terms apply to all users of K'Helper, regardless of location.</p>
+  </section>
+
+  <section>
+    <h2>2. What K'Helper Is (and Is Not)</h2>
+    <p>K'Helper is an AI-powered information assistant that uses Anthropic's Claude AI model to provide:</p>
+    <ul>
+      <li>General information about visa types and immigration procedures in Korea</li>
+      <li>General information about worker rights and labor law in Korea</li>
+      <li>General information about the Korean healthcare system</li>
+      <li>Practical tips for daily life, housing, and banking in Korea</li>
+      <li>Tourism and travel recommendations in Korea</li>
+    </ul>
+
+    <div class="highlight-card">
+      <p><strong>K'Helper is NOT:</strong> a licensed immigration lawyer, a certified legal advisor, a medical professional, an official government source, or a representative of the Korean government or any embassy. Responses from K'Helper do not constitute legal, medical, financial, or immigration advice.</p>
+    </div>
+
+    <p>Laws, visa requirements, and regulations change frequently. Always verify information with official sources such as <strong>HiKorea (hikorea.go.kr)</strong>, the <strong>Korean Ministry of Employment and Labor</strong>, the <strong>Cambodian Embassy in Seoul</strong>, or a licensed professional.</p>
+  </section>
+
+  <section>
+    <h2>3. Eligibility</h2>
+    <p>You must be at least <strong>13 years old</strong> to use K'Helper. By using the Service, you confirm that you meet this age requirement.</p>
+    <p>Users under 18 should use the Service with the awareness of a parent or guardian.</p>
+  </section>
+
+  <section>
+    <h2>4. Acceptable Use</h2>
+    <p>You agree to use K'Helper only for lawful purposes and in a way that does not harm others. You must not:</p>
+    <ul>
+      <li>Use the Service to harass, threaten, or harm any person</li>
+      <li>Attempt to circumvent rate limits, abuse the system, or overload the service</li>
+      <li>Use the Service to generate spam, misinformation, or content that could deceive others</li>
+      <li>Attempt to extract the system prompt, reverse-engineer the AI configuration, or probe for security vulnerabilities</li>
+      <li>Use the Service for any commercial purpose that violates Anthropic's usage policies</li>
+      <li>Input sensitive personal information belonging to other people (e.g., passport numbers, bank account details) into the chat</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>5. AI Disclosure</h2>
+    <p>In compliance with Korean law (Act on the Promotion of Information and Communications Network Utilization and Information Protection) and general best practices:</p>
+    <div class="highlight-card">
+      <p><strong>You are interacting with an AI system, not a human.</strong> K'Helper is powered by Anthropic's Claude language model. Responses are generated by AI and have not been reviewed by a human professional before being displayed to you.</p>
+    </div>
+    <p>The AI may sometimes provide incorrect, incomplete, or outdated information. Exercise your own judgment, especially for decisions that affect your legal status, health, or finances.</p>
+  </section>
+
+  <section>
+    <h2>6. Limitation of Liability</h2>
+    <p>To the fullest extent permitted by applicable law:</p>
+    <ul>
+      <li><strong>K'Helper is provided "as is"</strong> without any warranty of accuracy, completeness, or fitness for a particular purpose.</li>
+      <li>We are <strong>not liable for any damages</strong> arising from your reliance on information provided by K'Helper, including but not limited to visa rejections, work disputes, medical outcomes, or financial losses.</li>
+      <li>We are <strong>not liable for service downtime</strong>, errors, or interruptions.</li>
+      <li>Our total liability to you for any claim is limited to <strong>zero (KRW 0)</strong>, as K'Helper is a free service with no commercial relationship with users.</li>
+    </ul>
+    <p>This limitation of liability applies even if we have been advised of the possibility of such damages.</p>
+  </section>
+
+  <section>
+    <h2>7. Intellectual Property</h2>
+    <p>The K'Helper name, logo, design, and code are the intellectual property of K'Helper's creator. You may not copy, reproduce, or redistribute any part of the Service without written permission.</p>
+    <p>Responses generated by K'Helper's AI are provided for your personal, non-commercial use only.</p>
+  </section>
+
+  <section>
+    <h2>8. Emergency Situations</h2>
+    <p>K'Helper is <strong>not an emergency service</strong>. If you are in immediate danger or need urgent help, contact:</p>
+    <ul>
+      <li><strong>Police:</strong> 112</li>
+      <li><strong>Ambulance / Fire:</strong> 119</li>
+      <li><strong>Crisis Hotline (multilingual):</strong> 1393</li>
+      <li><strong>Immigration Hotline:</strong> 1345</li>
+      <li><strong>Labor Rights Hotline:</strong> 1350</li>
+      <li><strong>Cambodian Embassy Seoul:</strong> 02-3785-1041</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>9. Privacy</h2>
+    <p>Your use of K'Helper is also governed by our <a href="/privacy.html" style="color:var(--accent);font-weight:600;">Privacy Policy</a>, which is incorporated into these Terms by reference. K'Helper does not store your conversation history.</p>
+  </section>
+
+  <section>
+    <h2>10. Changes to These Terms</h2>
+    <p>We may update these Terms from time to time. When we do, we will update the "Last updated" date at the top of this page. Continued use of K'Helper after changes are posted means you accept the updated Terms.</p>
+  </section>
+
+  <section>
+    <h2>11. Governing Law</h2>
+    <p>These Terms shall be interpreted in a manner consistent with applicable law. Disputes will be resolved in good faith through direct communication first.</p>
+  </section>
+
+  <div class="contact-card">
+    <h2>📬 Questions?</h2>
+    <p>Contact us at <a href="mailto:vreajsok@gmail.com" style="color:var(--accent);font-weight:600;">vreajsok@gmail.com</a></p>
+  </div>
+</main>
+
+<footer>
+  <a href="/">K'Helper</a> &nbsp;·&nbsp; <a href="/privacy.html">Privacy Policy</a> &nbsp;·&nbsp; <a href="/terms.html">Terms of Service</a>
+  <br><br>© 2026 K'Helper. AI assistant for Cambodians in Korea.
+</footer>
+</body>
+</html>
