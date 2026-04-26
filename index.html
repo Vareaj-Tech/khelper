@@ -4,19 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>K'Helper — ជំនួយការខ្មែរនៅកូរ៉េ</title>
-
-  <!-- PWA / App Install -->
-  <link rel="manifest" href="/manifest.json" />
-  <meta name="theme-color" content="#d94e1f" />
-  <link rel="icon" href="/icon.svg" type="image/svg+xml" />
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <meta name="apple-mobile-web-app-title" content="K'Helper" />
-
-  <!-- SEO / Social -->
-  <meta name="description" content="AI assistant for Cambodians in Korea. Visa, worker rights, healthcare, daily life. | ជំនួយការ AI សម្រាប់ខ្មែរនៅកូរ៉េ | 한국의 캄보디아인을 위한 AI 도우미" />
-
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Khmer:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
@@ -707,156 +694,19 @@
       color: var(--text-light);
     }
 
-    .legal-footer {
-      font-size: 11px;
-      color: var(--text-light);
-      text-align: center;
-      padding: 8px 0 2px;
-      max-width: 700px;
-    }
-    .legal-footer a {
-      color: var(--text-light);
-      text-decoration: none;
-      transition: color 0.15s;
-    }
-    .legal-footer a:hover { color: var(--accent); }
-
-    .ai-disclaimer-note {
-      font-size: 11px;
-      color: var(--text-light);
-      text-align: center;
-      margin-top: 20px;
-      padding: 10px 16px;
-      background: #fff7ed;
-      border: 1px solid #fed7aa;
-      border-radius: 8px;
-      max-width: 480px;
-      line-height: 1.5;
-    }
-    .ai-disclaimer-note a { color: var(--accent); text-decoration: none; }
-
-    /* ══════════════════════════════
-       MOBILE HEADER (hamburger)
-    ══════════════════════════════ */
-    #mobile-header {
-      display: none;
-      align-items: center;
-      justify-content: space-between;
-      padding: 12px 16px;
-      border-bottom: 1px solid var(--border);
-      background: var(--sidebar-bg);
-      flex-shrink: 0;
-    }
-
-    .mobile-logo {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 17px;
-      font-weight: 700;
-      color: var(--accent);
-    }
-
-    .mobile-logo-icon {
-      width: 32px;
-      height: 32px;
-      background: var(--accent);
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 17px;
-    }
-
-    #hamburger-btn {
-      background: none;
-      border: 1.5px solid var(--border);
-      border-radius: var(--radius-sm);
-      width: 38px;
-      height: 38px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
-      cursor: pointer;
-      color: var(--text-muted);
-    }
-
-    #sidebar-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.45);
-      z-index: 199;
-    }
-
-    #sidebar-overlay.open { display: block; }
-
     /* ══════════════════════════════
        MOBILE
     ══════════════════════════════ */
     @media (max-width: 700px) {
-      body { flex-direction: column; }
-
-      #mobile-header { display: flex; }
-
-      /* Sidebar slides in from left */
-      #sidebar {
-        display: flex;
-        position: fixed;
-        top: 0; left: -280px; bottom: 0;
-        width: 260px;
-        z-index: 200;
-        transition: left 0.25s ease;
-        box-shadow: 4px 0 20px rgba(0,0,0,0.18);
-      }
-      #sidebar.open { left: 0; }
-
+      #sidebar { display: none; }
       #chat { padding: 16px 14px; }
-      #input-area { padding: 12px 14px env(safe-area-inset-bottom, 10px); }
-      .cards-grid { grid-template-columns: 1fr 1fr; max-width: 100%; gap: 8px; }
-      .topic-card { padding: 14px 12px; }
-      .card-title { font-size: 13px; }
-      .welcome h2 { font-size: 19px; }
-      .welcome-sub { font-size: 13px; margin-bottom: 24px; }
-      .welcome-logo { width: 60px; height: 60px; font-size: 30px; margin-bottom: 16px; }
-
-      /* Map panel full-screen on mobile */
-      #map-panel {
-        width: 100% !important;
-        left: 0 !important;
-        right: 0 !important;
-      }
-
-      /* Bigger tap targets */
-      .nav-item { padding: 12px 10px; }
-      #send-btn { width: 44px; height: 44px; font-size: 18px; }
-      #user-input { font-size: 16px; } /* prevents iOS zoom */
-      .input-footer { display: none; } /* cleaner on mobile */
-
-      /* Message bubbles narrower */
-      .msg-row { max-width: 100%; }
-      .bubble { font-size: 14px; }
-    }
-
-    @media (max-width: 400px) {
+      #input-area { padding: 12px 14px 10px; }
       .cards-grid { grid-template-columns: 1fr; }
+      .welcome h2 { font-size: 18px; }
     }
   </style>
 </head>
 <body>
-
-<!-- ══ SIDEBAR OVERLAY (mobile) ══ -->
-<div id="sidebar-overlay" onclick="closeSidebar()"></div>
-
-<!-- ══ MOBILE HEADER ══ -->
-<div id="mobile-header">
-  <div class="mobile-logo">
-    <div class="mobile-logo-icon">🏮</div>
-    <span>K'Helper</span>
-  </div>
-  <button id="hamburger-btn" onclick="toggleSidebar()" aria-label="Menu">☰</button>
-</div>
 
 <!-- ══ SIDEBAR ══ -->
 <aside id="sidebar">
@@ -935,12 +785,12 @@
     <button class="map-close-btn" onclick="closeMapPanel()">✕</button>
   </div>
   <div class="map-tabs">
-    <button class="map-tab active" onclick="switchMapTab('immigration')" id="tab-immigration">🛂 ចំណាក</button>
-    <button class="map-tab" onclick="switchMapTab('health')" id="tab-health">🏥 Health</button>
-    <button class="map-tab" onclick="switchMapTab('food')" id="tab-food">🍜 Food</button>
-    <button class="map-tab" onclick="switchMapTab('cafe')" id="tab-cafe">☕ Café</button>
-    <button class="map-tab" onclick="switchMapTab('places')" id="tab-places">🏛️ Places</button>
-    <button class="map-tab" onclick="switchMapTab('labor')" id="tab-labor">💼 Labor</button>
+    <button class="map-tab active" onclick="switchMapTab('immigration')" id="tab-immigration">🛂 ចំណាកស្រុក</button>
+    <button class="map-tab" onclick="switchMapTab('health')" id="tab-health">🏥 សុខភាព</button>
+    <button class="map-tab" onclick="switchMapTab('food')" id="tab-food">🍜 ម្ហូប</button>
+    <button class="map-tab" onclick="switchMapTab('cafe')" id="tab-cafe">☕ កាហ្វេ</button>
+    <button class="map-tab" onclick="switchMapTab('places')" id="tab-places">🏛️ ទីកន្លែង</button>
+    <button class="map-tab" onclick="switchMapTab('labor')" id="tab-labor">💼 ការងារ</button>
   </div>
   <div class="map-search-row">
     <input type="text" class="map-search-input" id="map-search-input" placeholder="ស្វែងរកទីតាំង...">
@@ -971,11 +821,6 @@
       </span>
       <span id="msg-counter">30 សារ នៅសល់</span>
     </div>
-    <div class="legal-footer">
-      🤖 AI assistant — not legal/medical advice &nbsp;·&nbsp;
-      <a href="/privacy.html">Privacy</a> &nbsp;·&nbsp;
-      <a href="/terms.html">Terms</a>
-    </div>
   </div>
 </div>
 
@@ -998,7 +843,7 @@ const T = {
     cards: [
       { icon: '🛂', title: 'វីសា & ឯកសារ', sub: 'ការបន្ត, ចុះឈ្មោះ', topic: 'visa' },
       { icon: '💼', title: 'សិទ្ធិការងារ', sub: 'កិច្ចសន្យា, ប្រាក់ខែ', topic: 'work' },
-      { icon: '🏥', title: 'ធានារ៉ាប់រងសុខភាព', sub: 'NHIS, មន្ទីរពេទ្យ', topic: 'health' },
+      { icon: '🏥', title: 'ធានារ៉ាប់រងសុខភាព', sub: 'ធានារ៉ាប់រង, មន្ទីរពេទ្យ', topic: 'health' },
       { icon: '🙏', title: 'វប្បធម៌កូរ៉េ', sub: 'ទំនៀមទម្លាប់, ជីវិត', topic: 'culture' },
       { icon: '🗺️', title: 'ទេសចរណ៍ & ស្វែងរក', sub: 'ទីកន្លែង, ម្ហូប, កាហ្វេ', topic: 'tourist' },
       { icon: '📍', title: 'ទីតាំង & ផែនទី', sub: 'Kakao · Naver · Google', topic: 'location' },
@@ -1010,7 +855,7 @@ const T = {
       tourist: 'ទេសចរណ៍', location: 'ទីតាំង & ផែនទី'
     },
     topics: {
-      visa: 'ខ្ញុំមានសំណួរអំពីវីសា ARC ឬ ការអន្តោប្រវេសន៍នៅកូរ៉េ',
+      visa: 'ខ្ញុំមានសំណួរអំពីវីសា ឬ កាតចុះបញ្ជីជនបរទេស នៅកូរ៉េ',
       work: 'ខ្ញុំចង់ដឹងអំពីសិទ្ធិការងារ ឬ បញ្ហាជាមួយថៅកែ',
       health: 'ខ្ញុំត្រូវការជំនួយអំពីការចូលមន្ទីរពេទ្យ ឬ ធានារ៉ាប់រង',
       daily: 'ខ្ញុំចង់ដឹងអំពីការរស់នៅប្រចាំថ្ងៃនៅកូរ៉េ',
@@ -1048,7 +893,7 @@ const T = {
       tourist: 'Tourism & Explore', location: 'Locations & Maps'
     },
     topics: {
-      visa: 'I have a question about visa, ARC or immigration in Korea',
+      visa: 'I have a question about visa, Alien Registration Card (ARC), or immigration in Korea',
       work: 'I want to know about my work rights or a problem with my employer',
       health: 'I need help with hospital or health insurance in Korea',
       daily: 'I want to know about daily life in Korea',
@@ -1198,11 +1043,6 @@ function renderWelcome() {
         </div>
       `).join('')}
     </div>
-    <p class="ai-disclaimer-note">
-      🤖 K'Helper is an AI assistant — not a lawyer, doctor, or immigration officer.
-      Always verify important information with official sources.
-      <a href="/terms.html">Terms</a> · <a href="/privacy.html">Privacy</a>
-    </p>
   `;
 
   chat.appendChild(w);
@@ -1288,22 +1128,22 @@ function hideTyping() {
 // ══════════════════════════════════════════════════
 const MAP_DATA = {
   immigration: [
-    { name: 'Seoul Immigration Office', kr: '서울출입국외국인청', note: 'ARC renewal, visa extension, work permits', query: '서울출입국외국인청' },
-    { name: 'Ansan Immigration Office', kr: '안산출입국외국인사무소', note: 'Factory worker hub — Multicultural village nearby', query: '안산출입국외국인사무소' },
-    { name: 'Incheon Immigration Office', kr: '인천출입국외국인청', note: 'Near Incheon Airport — airport arrivals', query: '인천출입국외국인청' },
-    { name: 'Suwon Immigration Office', kr: '수원출입국외국인사무소', note: 'Covers all of Gyeonggi-do', query: '수원출입국외국인사무소' },
+    { name: 'ការិយាល័យចំណាកស្រុក សេអ៊ូល', kr: '서울출입국외국인청', note: 'បន្តកាតចុះបញ្ជី · បន្តវីសា · ការអនុញ្ញាតការងារ', query: '서울출입국외국인청' },
+    { name: 'ការិយាល័យចំណាកស្រុក អានសាន', kr: '안산출입국외국인사무소', note: 'ច្រើនកម្មករ — ភូមិពហុវប្បធម៌ [다문화마을] នៅជិត', query: '안산출입국외국인사무소' },
+    { name: 'ការិយាល័យចំណាកស្រុក អាំងឆ័ន', kr: '인천출입국외국인청', note: 'ជិតអាកាសយានដ្ឋានអាំងឆ័ន — ល្អសម្រាប់អ្នកទើបមកដល់', query: '인천출입국외국인청' },
+    { name: 'ការិយាល័យចំណាកស្រុក ស្វូវ៉ន', kr: '수원출입국외국인사무소', note: 'ទទួលបម្រើខេត្ត Gyeonggi-do ទាំងមូល', query: '수원출입국외국인사무소' },
   ],
   health: [
-    { name: 'Migrant Worker Hospital Guro', kr: '이주민병원 구로', note: '📞 02-2677-4071 · Free/low-cost care for migrants', query: '이주민병원 구로' },
-    { name: 'Seoul Medical Center', kr: '서울의료원', note: 'Public hospital — translation services available', query: '서울의료원' },
-    { name: 'Ansan Migrant Health Center', kr: '안산시외국인복지센터', note: 'Free health checkups for migrant workers', query: '안산시외국인복지센터' },
-    { name: 'Community Health Center (보건소)', kr: '보건소', note: 'In every district — cheap vaccines, basic care', query: '보건소' },
+    { name: 'មន្ទីរពេទ្យជនបរទេស គូរ៉ូ', kr: '이주민병원 구로', note: '📞 02-2677-4071 · ថ្លៃថោក ឬ ឥតគិតថ្លៃ សម្រាប់ជនបរទេស', query: '이주민병원 구로' },
+    { name: 'មន្ទីរពេទ្យសាធារណៈ សេអ៊ូល', kr: '서울의료원', note: 'មន្ទីរពេទ្យរដ្ឋ — មានសេវាបកប្រែ', query: '서울의료원' },
+    { name: 'មជ្ឈមណ្ឌលសុខភាព អានសាន', kr: '안산시외국인복지센터', note: 'ពិនិត្យសុខភាពឥតគិតថ្លៃ សម្រាប់កម្មករបរទេស', query: '안산시외국인복지센터' },
+    { name: 'ការិយាល័យសុខភាពស្រុក [보건소]', kr: '보건소', note: 'មាននៅគ្រប់ស្រុក — ចាក់វ៉ាក់សាំ, ព្យាបាលជំងឺ, ថ្លៃថោក', query: '보건소' },
   ],
   labor: [
-    { name: 'Seoul Labor Office', kr: '서울지방고용노동청', note: 'File wage theft complaints, unfair dismissal claims', query: '서울지방고용노동청' },
-    { name: 'Korea Employment Agency', kr: '고용센터', note: 'Job placement, E-9 visa support', query: '고용센터' },
-    { name: 'Migrant Worker Center Seoul', kr: '외국인노동자지원센터 서울', note: 'Free legal aid — call 1350 for emergencies', query: '외국인노동자지원센터 서울' },
-    { name: 'Cambodian Embassy Seoul', kr: '주한 캄보디아대사관', note: '📞 02-3785-1041 · Yongsan-gu, Hannam-dong', query: '주한캄보디아대사관' },
+    { name: 'ការិយាល័យការងារ សេអ៊ូល', kr: '서울지방고용노동청', note: 'ដាក់ពាក្យបណ្ដឹង: ប្រាក់ខែមិនបង់, ចាកចេញការងារមិនស្មោះ', query: '서울지방고용노동청' },
+    { name: 'មជ្ឈមណ្ឌលការងារ [고용센터]', kr: '고용센터', note: 'រកការងារ · ជំនួយវីសាការងារ E-9 (ការអនុញ្ញាតការងារ)', query: '고용센터' },
+    { name: 'មជ្ឈមណ្ឌលជំនួយកម្មករ សេអ៊ូល', kr: '외국인노동자지원센터 서울', note: 'ជំនួយច្បាប់ ឥតគិតថ្លៃ — ទូរស័ព្ទ 1350 ក្នុងករណីបន្ទាន់', query: '외국인노동자지원센터 서울' },
+    { name: 'ស្ថានទូតកម្ពុជា នៅកូរ៉េ', kr: '주한 캄보디아대사관', note: '📞 02-3785-1041 · យ៉ុងសានគូ, ហានណាមដុង', query: '주한캄보디아대사관' },
   ],
   food: [
     { name: 'Gwangjang Market', kr: '광장시장', note: '🔥 Best Korean street food — bindaetteok, fresh kimbap, yukhoe', query: '광장시장' },
@@ -1491,30 +1331,6 @@ async function sendMessage() {
   document.getElementById('send-btn').disabled = false;
   input.focus();
 }
-
-// ══════════════════════════════════════════════════
-// MOBILE SIDEBAR TOGGLE
-// ══════════════════════════════════════════════════
-function toggleSidebar() {
-  const sidebar = document.getElementById('sidebar');
-  const overlay = document.getElementById('sidebar-overlay');
-  sidebar.classList.toggle('open');
-  overlay.classList.toggle('open');
-}
-
-function closeSidebar() {
-  document.getElementById('sidebar').classList.remove('open');
-  document.getElementById('sidebar-overlay').classList.remove('open');
-}
-
-// Close sidebar when a nav item is clicked on mobile
-document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('.nav-item').forEach(item => {
-    item.addEventListener('click', () => {
-      if (window.innerWidth <= 700) closeSidebar();
-    });
-  });
-});
 
 // ══════════════════════════════════════════════════
 // INIT

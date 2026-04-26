@@ -55,10 +55,10 @@ const TRIAGE_RULES = [
     keywords: ['visa','e-9','d-4','d-2','arc','alien registration','overstay','immigration',
       'hikorea','departure','extend','renewal','passport','entry','work permit','eps','hrd korea'],
     augmentation: `## TRIAGE: VISA & IMMIGRATION
-Key visa types for Cambodians: E-9 (factory/farm), D-4 (language), D-2 (student).
-ARC must be registered within 90 days. Renewal: apply 4 months before expiry.
-Resources: HiKorea (hikorea.go.kr), Immigration hotline: 1345, EPS: eps.go.kr
-Overstay: fines + deportation ban 1-5 years. Voluntary surrender gets leniency.
+Key visa types for Cambodians: E-9 (កម្មករ/ការងារ), D-4 (ភាសា), D-2 (សិស្ស).
+កាតចុះបញ្ជីជនបរទេស [ARC/외국인등록증]: ត្រូវចុះបញ្ជីក្នុង 90 ថ្ងៃ. បន្ត: ដាក់ពាក្យ 4 ខែ មុន.
+Resources: hikorea.go.kr (គេហទំព័រចំណាកស្រុក), ទូរស័ព្ទ 1345, eps.go.kr (ការងារ EPS).
+Overstay: ពិន័យ + ហាមឃាត់ 1-5 ឆ្នាំ. ចុះស្ម័គ្រចិត្ត = ទទួលបានការអត់ទោស.
 Always verify at hikorea.go.kr as policies change.`,
   },
   {
@@ -67,11 +67,11 @@ Always verify at hikorea.go.kr as policies change.`,
       'resign','workplace','injury','accident','labor','not paid','unpaid','minimum wage',
       'work hours','day off','leave','mistreatment','abuse','harassment','severance'],
     augmentation: `## TRIAGE: WORK RIGHTS
-Minimum wage 2024: 9,860 KRW/hour. Overtime (>8hr/day or >40hr/week) = 1.5x pay.
-Paid leave: 15 days/year after 1 year. Severance: 30 days pay per year worked.
-Employer CANNOT confiscate passport or ARC — this is a crime.
-Wage theft: call Labor Rights hotline 1350 (free, 24hr, multilingual).
-File complaint at Ministry of Employment and Labor (고용노동부).`,
+ប្រាក់ខែអប្បបរមា 2024: 9,860 វ៉ុន/ម៉ោង. ម៉ោងបន្ថែម (>8ម៉ោង/ថ្ងៃ ឬ >40ម៉ោង/សប្តាហ៍) = x1.5.
+ច្បាប់휴가: 15 ថ្ងៃ/ឆ្នាំ (ក្រោយ 1 ឆ្នាំ). ប្រាក់បំណែកចែក: 30 ថ្ងៃ × ចំនួនឆ្នាំ.
+ថៅកែ មិនអាចរឹបអូស លិខិតឆ្លងដែន ឬ កាតចុះបញ្ជី [ARC] — នេះជាបទឧក្រិដ្ឋ.
+ប្រាក់ខែមិនបង់: ទូរស័ព្ទ 1350 (ឥតគិតថ្លៃ, 24ម៉ោង, ច្រើនភាសា).
+ដាក់ពាក្យបណ្ដឹងនៅ: ក្រសួងការងារ [고용노동부].`,
   },
   {
     category: 'HEALTH',
@@ -79,11 +79,11 @@ File complaint at Ministry of Employment and Labor (고용노동부).`,
       'prescription','clinic','emergency room','ambulance','pregnant','pregnancy','baby',
       'dental','mental health','depression','anxiety','free clinic','medical','injury','fever'],
     augmentation: `## TRIAGE: HEALTHCARE
-NHIS: E-9 workers auto-enrolled, ~3-4% salary deducted. Covers 60-80% medical costs.
-See doctor: find clinic (의원) → bring ARC → get prescription → pharmacy (약국) next door.
-Typical cost with insurance: 5,000-30,000 KRW.
-Free/low-cost: Migrant Health Center Seoul Guro: 02-2677-4071. Community Health Centers (보건소).
-Emergency: Call 119 for ambulance (free).`,
+ធានារ៉ាប់រងសុខភាព [건강보험/NHIS]: កម្មករ E-9 ចុះឈ្មោះស្វ័យប្រវត្តិ, ~3-4% នៃប្រាក់ខែ. គ្រប់ 60-80% ថ្លៃព្យាបាល.
+ទៅពេទ្យ: រក គ្លីនិក [의원] → យក កាតចុះបញ្ជី [ARC] → ទទួល វេជ្ជបញ្ជា → ទៅ ឱសថស្ថាន [약국] ជិតៗ.
+ថ្លៃប្រើការធានារ៉ាប់រង: 5,000-30,000 វ៉ុន.
+ឥតគិតថ្លៃ/ថ្លៃថោក: មន្ទីរពេទ្យជនបរទេស គូរ៉ូ: 02-2677-4071. ការិយាល័យសុខភាព [보건소] គ្រប់ស្រុក.
+បន្ទាន់: ទូរស័ព្ទ 119 សម្រាប់រថយន្តសង្គ្រោះ (ឥតគិតថ្លៃ).`,
   },
   {
     category: 'DAILY',
@@ -181,6 +181,22 @@ Detect the language of the user's MOST RECENT message. Reply in THAT EXACT langu
 - NEVER use overly formal or royal vocabulary
 - Keep sentences SHORT — one idea per sentence
 - Korean terms: write Khmer meaning first, then Korean in brackets: [건강보험]
+
+## ABBREVIATION RULES — NEVER use alone, always explain first in Khmer:
+- ARC → "កាតចុះបញ្ជីជនបរទេស [외국인등록증/ARC]"
+- NHIS → "ធានារ៉ាប់រងសុខភាព [건강보험/NHIS]"
+- EPS → "កម្មវិធីការអនុញ្ញាតការងារ [EPS/고용허가제]"
+- HRD Korea → "មជ្ឈមណ្ឌលអភិវឌ្ឍន៍ធនធានមនុស្ស [HRD Korea]"
+- HiKorea → "គេហទំព័រការអន្តោប្រវេសន៍ [hikorea.go.kr]"
+- MOU → "កិច្ចព្រមព្រៀងផ្លូវការ [MOU]"
+
+## EVERY POINT MUST HAVE AN ACTION
+After every piece of advice, always give the user something concrete to DO next:
+→ A hotline number to call (e.g. 1350, 1345, 119)
+→ A website to check (e.g. hikorea.go.kr, eps.go.kr)
+→ A place to go (e.g. ការិយាល័យចំណាកស្រុក)
+→ A follow-up question they can ask K'Helper
+NEVER leave the user with information and no next step.
 
 ## HOW TO OPEN YOUR RESPONSES
 NEVER start with: "I'm sorry to hear that", "I understand your concern", "That must be difficult"
