@@ -697,12 +697,97 @@
     /* ══════════════════════════════
        MOBILE
     ══════════════════════════════ */
+
+    #mobile-header {
+      display: none;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      background: var(--sidebar-bg);
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    #hamburger-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 24px;
+      color: var(--text);
+      padding: 2px 6px;
+      line-height: 1;
+      border-radius: 6px;
+    }
+    #hamburger-btn:active { background: var(--border); }
+
+    #mobile-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex: 1;
+    }
+
+    .logo-icon-sm {
+      width: 30px;
+      height: 30px;
+      background: var(--accent);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+
+    .logo-name-sm {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    #sidebar-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      z-index: 100;
+    }
+
+    #sidebar-overlay.open { display: block; }
+
     @media (max-width: 700px) {
-      #sidebar { display: none; }
-      #chat { padding: 16px 14px; }
-      #input-area { padding: 12px 14px 10px; }
-      .cards-grid { grid-template-columns: 1fr; }
-      .welcome h2 { font-size: 18px; }
+      #mobile-header { display: flex; }
+
+      #sidebar {
+        position: fixed;
+        left: -280px;
+        top: 0;
+        bottom: 0;
+        z-index: 200;
+        width: 260px;
+        min-width: 260px;
+        transition: left 0.25s ease;
+        box-shadow: 4px 0 20px rgba(0,0,0,0.15);
+      }
+
+      #sidebar.open { left: 0; }
+
+      #chat { padding: 14px 12px; }
+      #input-area {
+        padding: 10px 12px;
+        padding-bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+      }
+      .cards-grid { grid-template-columns: 1fr 1fr; max-width: 100%; gap: 8px; }
+      .welcome h2 { font-size: 17px; }
+      .welcome { padding: 16px 8px; min-height: auto; }
+      .welcome-sub { font-size: 13px; margin-bottom: 20px; }
+      .welcome-logo { width: 56px; height: 56px; font-size: 28px; margin-bottom: 14px; }
+      .input-row { max-width: 100%; }
+      .input-footer { max-width: 100%; font-size: 10px; }
+      .msg-row { max-width: 100%; }
+      .topic-card { padding: 12px; }
+      .card-title { font-size: 12px; }
+      .card-sub { font-size: 11px; }
+      .card-icon { font-size: 18px; margin-bottom: 5px; }
     }
   </style>
 </head>
@@ -799,8 +884,20 @@
   <div class="map-locations-list" id="map-locations-list"></div>
 </div>
 
+<!-- ══ SIDEBAR OVERLAY ══ -->
+<div id="sidebar-overlay" onclick="closeSidebar()"></div>
+
 <!-- ══ MAIN ══ -->
 <div id="main">
+  <!-- Mobile header — only visible on small screens -->
+  <div id="mobile-header">
+    <button id="hamburger-btn" onclick="toggleSidebar()" aria-label="Menu">☰</button>
+    <div id="mobile-logo">
+      <div class="logo-icon-sm">🏮</div>
+      <span class="logo-name-sm">K'Helper</span>
+    </div>
+  </div>
+
   <div id="chat">
     <!-- Welcome screen rendered by JS -->
   </div>
@@ -1231,7 +1328,18 @@ function doMapSearch() {
 // ══════════════════════════════════════════════════
 // QUICK TOPICS
 // ══════════════════════════════════════════════════
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sidebar-overlay').classList.toggle('open');
+}
+
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebar-overlay').classList.remove('open');
+}
+
 function quickTopic(topic) {
+  closeSidebar();
   if (topic === 'location') {
     openMapPanel('places');
     return;
@@ -1247,6 +1355,7 @@ function quickTopic(topic) {
 // RESET
 // ══════════════════════════════════════════════════
 function resetChat() {
+  closeSidebar();
   conversationHistory = [];
   chatStarted = false;
   renderWelcome();
@@ -1294,62 +1403,4 @@ async function sendMessage() {
       conversationHistory.pop();
     } else {
       const data = await res.json();
-      const reply = data.choices?.[0]?.message?.content || 'Sorry, please try again.';
-      const bubble = appendMessage('assistant', reply);
-      conversationHistory.push({ role: 'assistant', content: reply });
-      if (conversationHistory.length > 40) conversationHistory.splice(0, 2);
-
-      // Inject map shortcut button based on AI triage category
-      const meta = data._meta;
-      if (meta && meta.category) {
-        const tabMap = {
-          VISA: 'immigration', HEALTH: 'health', WORK: 'labor',
-          COMMUNITY: 'labor', TOURIST: 'places', HOUSING: null, DAILY: null, SCHOOL: null
-        };
-        const tab = tabMap[meta.category];
-        if (tab && bubble) {
-          const labels = {
-            km: { VISA: '📍 ការិ​យាល័យ​ចំណាកស្រុក', HEALTH: '📍 ស្វែងរកមន្ទីរពេទ្យ', WORK: '📍 ការងារ & ជំនួយ', COMMUNITY: '📍 ស្ថានទូត & សហគមន៍', TOURIST: '📍 ស្វែងរកទីកន្លែង' },
-            en: { VISA: '📍 Find Immigration Office', HEALTH: '📍 Find Hospital', WORK: '📍 Labor Support', COMMUNITY: '📍 Embassy & Community', TOURIST: '📍 Explore Places' },
-            kr: { VISA: '📍 출입국사무소 찾기', HEALTH: '📍 병원 찾기', WORK: '📍 노동지원센터', COMMUNITY: '📍 대사관 & 커뮤니티', TOURIST: '📍 관광지 찾기' },
-          };
-          const langLabels = labels[currentLang] || labels.en;
-          const btnLabel = langLabels[meta.category] || '📍 Find Locations';
-          const mapRow = document.createElement('div');
-          mapRow.className = 'map-link-row';
-          mapRow.innerHTML = `<button class="inline-map-btn panel" onclick="openMapPanel('${tab}')">${btnLabel}</button>`;
-          bubble.appendChild(mapRow);
-        }
-      }
-    }
-  } catch (e) {
-    hideTyping();
-    appendMessage('assistant', '⚠️ Connection error. For urgent help call **1345** or **112**.');
-    conversationHistory.pop();
-  }
-
-  document.getElementById('send-btn').disabled = false;
-  input.focus();
-}
-
-// ══════════════════════════════════════════════════
-// INIT
-// ══════════════════════════════════════════════════
-document.getElementById('user-input').addEventListener('input', function() {
-  this.style.height = 'auto';
-  this.style.height = Math.min(this.scrollHeight, 120) + 'px';
-});
-
-document.getElementById('user-input').addEventListener('keydown', function(e) {
-  if (e.key === 'Enter' && !e.shiftKey) {
-    e.preventDefault();
-    sendMessage();
-  }
-});
-
-// Boot
-setLang('km');
-document.getElementById('user-input').focus();
-</script>
-</body>
-</html>
+      const reply = data.choices?.[0]?.message?.content || 'Sorry, pleas
