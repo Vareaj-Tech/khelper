@@ -21,18 +21,19 @@
       --text: #2d1f1a;
       --text-muted: #8c6b5e;
       --text-light: #b8907e;
-      --user-bubble: #1a1a2e;
-      --user-text: #ffffff;
-      --bot-bg: #ffffff;
+      --user-bubble: #3d1506;
+      --user-text: #fff8f5;
+      --bot-bg: #fffaf8;
       --card-bg: #ffffff;
       --card-border: #f0ddd5;
       --card-hover: #fff3ee;
       --input-bg: #ffffff;
       --shadow: 0 1px 3px rgba(180,100,60,0.08);
       --shadow-md: 0 4px 12px rgba(180,100,60,0.12);
-      --radius: 12px;
-      --radius-sm: 8px;
-      --font: 'Inter', 'Noto Sans Khmer', sans-serif;
+      --radius: 14px;
+      --radius-sm: 10px;
+      --radius-lg: 20px;
+      --font: 'Noto Sans Khmer', 'Inter', sans-serif;
     }
 
     body {
@@ -65,22 +66,32 @@
     }
 
     .logo-icon {
-      width: 38px;
-      height: 38px;
+      width: 40px;
+      height: 40px;
       background: var(--accent);
-      border-radius: 10px;
+      border-radius: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 20px;
+      font-size: 22px;
       flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(217,78,31,0.3);
     }
 
     .logo-name {
-      font-size: 18px;
+      font-size: 17px;
       font-weight: 700;
       color: var(--accent);
-      letter-spacing: -0.3px;
+      letter-spacing: -0.2px;
+    }
+
+    .logo-sub {
+      font-size: 10px;
+      color: var(--text-light);
+      font-weight: 400;
+      letter-spacing: 0;
+      display: block;
+      margin-top: 1px;
     }
 
     .new-chat-btn {
@@ -89,20 +100,19 @@
       align-items: center;
       gap: 8px;
       padding: 10px 14px;
-      background: transparent;
-      border: 1.5px solid var(--border);
+      background: var(--accent);
+      border: none;
       border-radius: var(--radius-sm);
       cursor: pointer;
       font-family: var(--font);
       font-size: 13px;
-      color: var(--text-muted);
+      color: white;
+      font-weight: 600;
       transition: all 0.15s;
     }
 
     .new-chat-btn:hover {
-      background: var(--sidebar-hover);
-      border-color: var(--accent);
-      color: var(--accent);
+      background: var(--accent-hover);
     }
 
     .sidebar-section-label {
@@ -144,9 +154,32 @@
     .nav-item.active {
       background: var(--accent-light);
       color: var(--accent);
+      font-weight: 600;
     }
 
     .nav-icon { font-size: 16px; flex-shrink: 0; }
+
+    /* ── SIDEBAR bottom brand strip ── */
+    .sidebar-brand-strip {
+      padding: 10px 16px 16px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      border-top: 1px solid var(--border);
+      margin-top: 4px;
+    }
+    .brand-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      opacity: 0.5;
+    }
+    .brand-tagline {
+      font-size: 10px;
+      color: var(--text-light);
+      letter-spacing: 0.3px;
+    }
 
     /* ── MAP PANEL ── */
     #map-panel {
@@ -442,32 +475,42 @@
     }
 
     .welcome-logo {
-      width: 72px;
-      height: 72px;
+      width: 84px;
+      height: 84px;
       background: var(--accent);
-      border-radius: 20px;
+      border-radius: 24px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 36px;
+      font-size: 42px;
       margin-bottom: 20px;
-      box-shadow: var(--shadow-md);
+      box-shadow: 0 0 0 8px var(--accent-light), 0 0 0 16px #fde8d4;
+    }
+
+    .welcome-tagline {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent);
+      opacity: 0.75;
+      margin-bottom: 10px;
     }
 
     .welcome h2 {
-      font-size: 22px;
+      font-size: 23px;
       font-weight: 700;
       color: var(--text);
       margin-bottom: 10px;
-      line-height: 1.3;
+      line-height: 1.35;
     }
 
     .welcome-sub {
       font-size: 14px;
       color: var(--text-muted);
       margin-bottom: 32px;
-      line-height: 1.6;
-      max-width: 420px;
+      line-height: 1.7;
+      max-width: 400px;
     }
 
     .cards-grid {
@@ -485,8 +528,8 @@
     .topic-card {
       background: var(--card-bg);
       border: 1.5px solid var(--card-border);
-      border-radius: var(--radius);
-      padding: 18px 16px;
+      border-radius: var(--radius-lg);
+      padding: 18px 16px 16px;
       cursor: pointer;
       text-align: left;
       transition: all 0.2s;
@@ -496,13 +539,28 @@
     .topic-card:hover {
       background: var(--card-hover);
       border-color: var(--accent);
-      transform: translateY(-1px);
+      transform: translateY(-2px);
       box-shadow: var(--shadow-md);
     }
 
-    .card-icon { font-size: 22px; margin-bottom: 8px; display: block; }
-    .card-title { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
-    .card-sub { font-size: 12px; color: var(--text-muted); }
+    .topic-card:active { transform: translateY(0); }
+
+    .card-icon-wrap {
+      width: 44px;
+      height: 44px;
+      background: var(--accent-light);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      margin-bottom: 12px;
+      flex-shrink: 0;
+    }
+
+    .card-icon { font-size: 22px; }
+    .card-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 3px; line-height: 1.3; }
+    .card-sub { font-size: 11px; color: var(--text-muted); line-height: 1.4; }
 
     /* ── MESSAGE ROWS ── */
     .msg-row {
@@ -541,10 +599,10 @@
     }
 
     .bubble {
-      padding: 12px 16px;
+      padding: 13px 17px;
       border-radius: var(--radius);
       font-size: 14px;
-      line-height: 1.7;
+      line-height: 1.75;
       max-width: calc(100% - 46px);
       word-break: break-word;
     }
@@ -561,6 +619,7 @@
       background: var(--user-bubble);
       color: var(--user-text);
       border-top-right-radius: 4px;
+      box-shadow: 0 2px 8px rgba(61,21,6,0.25);
     }
 
     .bubble.crisis {
@@ -632,11 +691,14 @@
       border: 1.5px solid var(--border);
       border-radius: var(--radius);
       padding: 8px 8px 8px 16px;
-      transition: border-color 0.2s;
+      transition: border-color 0.2s, box-shadow 0.2s;
       box-shadow: var(--shadow);
     }
 
-    .input-row:focus-within { border-color: var(--accent); }
+    .input-row:focus-within {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(217,78,31,0.12);
+    }
 
     #user-input {
       flex: 1;
@@ -656,23 +718,25 @@
     #user-input::placeholder { color: var(--text-light); }
 
     #send-btn {
-      width: 38px;
-      height: 38px;
+      width: 40px;
+      height: 40px;
       background: var(--accent);
       border: none;
       border-radius: var(--radius-sm);
       color: white;
-      font-size: 16px;
+      font-size: 17px;
       cursor: pointer;
       transition: all 0.15s;
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
+      box-shadow: 0 2px 6px rgba(217,78,31,0.35);
     }
 
-    #send-btn:hover { background: var(--accent-hover); }
-    #send-btn:disabled { background: var(--border); cursor: not-allowed; }
+    #send-btn:hover { background: var(--accent-hover); box-shadow: 0 4px 10px rgba(217,78,31,0.4); }
+    #send-btn:active { transform: scale(0.95); }
+    #send-btn:disabled { background: var(--border); cursor: not-allowed; box-shadow: none; }
 
     .input-footer {
       display: flex;
@@ -704,7 +768,7 @@
       gap: 12px;
       padding: 12px 16px;
       background: var(--sidebar-bg);
-      border-bottom: 1px solid var(--border);
+      border-bottom: 2px solid var(--accent);
       flex-shrink: 0;
     }
 
@@ -728,20 +792,22 @@
     }
 
     .logo-icon-sm {
-      width: 30px;
-      height: 30px;
+      width: 32px;
+      height: 32px;
       background: var(--accent);
-      border-radius: 8px;
+      border-radius: 9px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 16px;
+      font-size: 18px;
+      box-shadow: 0 2px 6px rgba(217,78,31,0.3);
     }
 
     .logo-name-sm {
       font-size: 16px;
       font-weight: 700;
       color: var(--accent);
+      letter-spacing: -0.2px;
     }
 
     #sidebar-overlay {
@@ -784,10 +850,10 @@
       .input-row { max-width: 100%; }
       .input-footer { max-width: 100%; font-size: 10px; }
       .msg-row { max-width: 100%; }
-      .topic-card { padding: 12px; }
+      .topic-card { padding: 12px 11px 11px; }
       .card-title { font-size: 12px; }
       .card-sub { font-size: 11px; }
-      .card-icon { font-size: 18px; margin-bottom: 5px; }
+      .card-icon-wrap { width: 38px; height: 38px; font-size: 18px; border-radius: 10px; margin-bottom: 9px; }
     }
   </style>
 </head>
@@ -797,7 +863,10 @@
 <aside id="sidebar">
   <div class="sidebar-logo">
     <div class="logo-icon">🏮</div>
-    <span class="logo-name">K'Helper</span>
+    <div>
+      <span class="logo-name">K'Helper</span>
+      <span class="logo-sub">ជំនួយការ AI ខ្មែរ</span>
+    </div>
   </div>
 
   <button class="new-chat-btn" onclick="resetChat()">
@@ -860,6 +929,10 @@
       <button class="lang-btn" id="btn-kr" onclick="setLang('kr')">🇰🇷 한국어</button>
       <button class="lang-btn active" id="btn-km" onclick="setLang('km')">🇰🇭 ខ្មែរ</button>
     </div>
+  </div>
+  <div class="sidebar-brand-strip">
+    <div class="brand-dot"></div>
+    <span class="brand-tagline">khelper.netlify.app</span>
   </div>
 </aside>
 
@@ -1127,14 +1200,16 @@ function renderWelcome() {
   w.className = 'welcome';
   w.id = 'welcome-screen';
 
+  const taglines = { km: 'ជំនួយការ AI ខ្មែរ', en: 'Your AI Community Guide', kr: '캄보디아 AI 도우미' };
   w.innerHTML = `
     <div class="welcome-logo">🏮</div>
+    <div class="welcome-tagline">${taglines[currentLang] || taglines.km}</div>
     <h2>${t.welcomeTitle}</h2>
     <p class="welcome-sub">${t.welcomeSub}</p>
     <div class="cards-grid">
       ${t.cards.map(c => `
         <div class="topic-card" onclick="quickTopic('${c.topic}')">
-          <span class="card-icon">${c.icon}</span>
+          <div class="card-icon-wrap"><span class="card-icon">${c.icon}</span></div>
           <div class="card-title">${c.title}</div>
           <div class="card-sub">${c.sub}</div>
         </div>
