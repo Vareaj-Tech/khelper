@@ -1478,4 +1478,62 @@ async function sendMessage() {
       conversationHistory.pop();
     } else {
       const data = await res.json();
-      const reply = data.choices?.[0]?.message?.content || 'Sorry, pleas
+      const reply = data.choices?.[0]?.message?.content || 'Sorry, please try again.';
+      const bubble = appendMessage('assistant', reply);
+      conversationHistory.push({ role: 'assistant', content: reply });
+      if (conversationHistory.length > 40) conversationHistory.splice(0, 2);
+
+      // Inject map shortcut button based on AI triage category
+      const meta = data._meta;
+      if (meta && meta.category) {
+        const tabMap = {
+          VISA: 'immigration', HEALTH: 'health', WORK: 'labor',
+          COMMUNITY: 'labor', TOURIST: 'places', HOUSING: null, DAILY: null, SCHOOL: null
+        };
+        const tab = tabMap[meta.category];
+        if (tab && bubble) {
+          const labels = {
+            km: { VISA: '📍 ការិ​យាល័យ​ចំណាកស្រុក', HEALTH: '📍 ស្វែងរកមន្ទីរពេទ្យ', WORK: '📍 ការងារ & ជំនួយ', COMMUNITY: '📍 ស្ថានទូត & សហគមន៍', TOURIST: '📍 ស្វែងរកទីកន្លែង' },
+            en: { VISA: '📍 Find Immigration Office', HEALTH: '📍 Find Hospital', WORK: '📍 Labor Support', COMMUNITY: '📍 Embassy & Community', TOURIST: '📍 Explore Places' },
+            kr: { VISA: '📍 출입국사무소 찾기', HEALTH: '📍 병원 찾기', WORK: '📍 노동지원센터', COMMUNITY: '📍 대사관 & 커뮤니티', TOURIST: '📍 관광지 찾기' },
+          };
+          const langLabels = labels[currentLang] || labels.en;
+          const btnLabel = langLabels[meta.category] || '📍 Find Locations';
+          const mapRow = document.createElement('div');
+          mapRow.className = 'map-link-row';
+          mapRow.innerHTML = `<button class="inline-map-btn panel" onclick="openMapPanel('${tab}')">${btnLabel}</button>`;
+          bubble.appendChild(mapRow);
+        }
+      }
+    }
+  } catch (e) {
+    hideTyping();
+    appendMessage('assistant', '⚠️ Connection error. For urgent help call **1345** or **112**.');
+    conversationHistory.pop();
+  }
+
+  document.getElementById('send-btn').disabled = false;
+  input.focus();
+}
+
+// ══════════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════════
+document.getElementById('user-input').addEventListener('input', function() {
+  this.style.height = 'auto';
+  this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+});
+
+document.getElementById('user-input').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+});
+
+// Boot
+setLang('km');
+document.getElementById('user-input').focus();
+</script>
+</body>
+</html>
