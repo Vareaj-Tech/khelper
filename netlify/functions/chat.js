@@ -62,19 +62,25 @@ function detectLanguage(text) {
 }
 
 const LANG_INSTRUCTIONS = {
-  km: `## LANGUAGE LOCK: KHMER ONLY
-The user wrote in Khmer. You MUST reply 100% in Khmer script (Unicode).
-ZERO English or Korean words — except phone numbers and bracketed Korean terms like [건강보험].
-Write like a real Cambodian friend. Short sentences. Natural everyday Khmer, NOT formal.`,
+  km: `## ⚠️ ABSOLUTE LANGUAGE RULE — KHMER ONLY ⚠️
+The user wrote in Khmer. Your ENTIRE reply must be in Khmer script ONLY.
+DO NOT write even a single word in English or Korean.
+DO NOT start with English greetings like "Hello", "Great", "Sure", "Of course".
+Phone numbers (1345, 119 etc.) and website URLs are allowed.
+Korean institution names may appear in brackets only: [건강보험].
+Write like a real Cambodian friend — short sentences, everyday Khmer, NOT formal.`,
 
-  en: `## LANGUAGE LOCK: ENGLISH ONLY
-The user wrote in English. You MUST reply 100% in English.
-ZERO Khmer or Korean words — except bracketed Korean terms where needed, e.g. [건강보험].
+  en: `## ⚠️ ABSOLUTE LANGUAGE RULE — ENGLISH ONLY ⚠️
+The user wrote in English. Your ENTIRE reply must be in English ONLY.
+DO NOT write even a single word in Khmer or Korean.
+DO NOT start with Khmer greetings or mix in any Khmer script.
+Korean institution names may appear in brackets only: [건강보험].
 Be warm, clear, and direct.`,
 
-  kr: `## LANGUAGE LOCK: KOREAN ONLY
-The user wrote in Korean. You MUST reply 100% in Korean (한국어).
-ZERO Khmer or English words — except bracketed English terms where needed.
+  kr: `## ⚠️ ABSOLUTE LANGUAGE RULE — KOREAN ONLY ⚠️
+The user wrote in Korean. Your ENTIRE reply must be in Korean (한국어) ONLY.
+DO NOT write even a single word in Khmer or English.
+DO NOT mix in any Khmer script or English sentences.
 Speak naturally and warmly in Korean.`,
 };
 
@@ -83,36 +89,36 @@ const TRIAGE_RULES = [
     category: 'VISA',
     keywords: ['visa','e-9','d-4','d-2','arc','alien registration','overstay','immigration',
       'hikorea','departure','extend','renewal','passport','entry','work permit','eps','hrd korea'],
-    augmentation: `## TRIAGE: VISA & IMMIGRATION
-Key visa types for Cambodians: E-9 (កម្មករ/ការងារ), D-4 (ភាសា), D-2 (សិស្ស).
-កាតចុះបញ្ជីជនបរទេស [ARC/외국인등록증]: ត្រូវចុះបញ្ជីក្នុង 90 ថ្ងៃ. បន្ត: ដាក់ពាក្យ 4 ខែ មុន.
-Resources: hikorea.go.kr (គេហទំព័រចំណាកស្រុក), ទូរស័ព្ទ 1345, eps.go.kr (ការងារ EPS).
-Overstay: ពិន័យ + ហាមឃាត់ 1-5 ឆ្នាំ. ចុះស្ម័គ្រចិត្ត = ទទួលបានការអត់ទោស.
-Always verify at hikorea.go.kr as policies change.`,
+    augmentation: `## BACKGROUND: VISA & IMMIGRATION (AI knowledge — reply in user's language)
+Key visa types: E-9 (unskilled work), D-4 (language study), D-2 (university student).
+ARC (Alien Registration Card / 외국인등록증): must register within 90 days of arrival. Renew 4 months before expiry.
+Resources: hikorea.go.kr for all immigration services, call 1345 for immigration hotline, eps.go.kr for EPS work program.
+Overstay penalty: fine + entry ban 1-5 years. Voluntary surrender = reduced penalty.
+Always verify at hikorea.go.kr as policies change frequently.`,
   },
   {
     category: 'WORK',
     keywords: ['salary','wage','pay','boss','employer','contract','overtime','fired','quit',
       'resign','workplace','injury','accident','labor','not paid','unpaid','minimum wage',
       'work hours','day off','leave','mistreatment','abuse','harassment','severance'],
-    augmentation: `## TRIAGE: WORK RIGHTS
-ប្រាក់ខែអប្បបរមា 2024: 9,860 វ៉ុន/ម៉ោង. ម៉ោងបន្ថែម (>8ម៉ោង/ថ្ងៃ ឬ >40ម៉ោង/សប្តាហ៍) = x1.5.
-ច្បាប់휴가: 15 ថ្ងៃ/ឆ្នាំ (ក្រោយ 1 ឆ្នាំ). ប្រាក់បំណែកចែក: 30 ថ្ងៃ × ចំនួនឆ្នាំ.
-ថៅកែ មិនអាចរឹបអូស លិខិតឆ្លងដែន ឬ កាតចុះបញ្ជី [ARC] — នេះជាបទឧក្រិដ្ឋ.
-ប្រាក់ខែមិនបង់: ទូរស័ព្ទ 1350 (ឥតគិតថ្លៃ, 24ម៉ោង, ច្រើនភាសា).
-ដាក់ពាក្យបណ្ដឹងនៅ: ក្រសួងការងារ [고용노동부].`,
+    augmentation: `## BACKGROUND: WORK RIGHTS (AI knowledge — reply in user's language)
+Minimum wage 2024: 9,860 won/hour. Overtime (>8hrs/day or >40hrs/week) = x1.5 pay.
+Annual leave: 15 days/year after 1 year. Severance pay: 30 days x years worked.
+Employers CANNOT confiscate passport or ARC card — this is a criminal offense.
+Unpaid wages: call 1350 (free, 24hr, multilingual). File complaint at Ministry of Employment and Labor.
+Employer housing deduction must not exceed 20% of wage.`,
   },
   {
     category: 'HEALTH',
     keywords: ['hospital','doctor','sick','pain','health','insurance','nhis','medicine',
       'prescription','clinic','emergency room','ambulance','pregnant','pregnancy','baby',
       'dental','mental health','depression','anxiety','free clinic','medical','injury','fever'],
-    augmentation: `## TRIAGE: HEALTHCARE
-ធានារ៉ាប់រងសុខភាព [건강보험/NHIS]: កម្មករ E-9 ចុះឈ្មោះស្វ័យប្រវត្តិ, ~3-4% នៃប្រាក់ខែ. គ្រប់ 60-80% ថ្លៃព្យាបាល.
-ទៅពេទ្យ: រក គ្លីនិក [의원] → យក កាតចុះបញ្ជី [ARC] → ទទួល វេជ្ជបញ្ជា → ទៅ ឱសថស្ថាន [약국] ជិតៗ.
-ថ្លៃប្រើការធានារ៉ាប់រង: 5,000-30,000 វ៉ុន.
-ឥតគិតថ្លៃ/ថ្លៃថោក: មន្ទីរពេទ្យជនបរទេស គូរ៉ូ: 02-2677-4071. ការិយាល័យសុខភាព [보건소] គ្រប់ស្រុក.
-បន្ទាន់: ទូរស័ព្ទ 119 សម្រាប់រថយន្តសង្គ្រោះ (ឥតគិតថ្លៃ).`,
+    augmentation: `## BACKGROUND: HEALTHCARE (AI knowledge — reply in user's language)
+Health insurance (NHIS / 건강보험): E-9 workers auto-enrolled, ~3-4% of wage. Covers 60-80% of medical costs.
+How to visit doctor: find clinic (의원) → bring ARC card → get prescription → go to nearby pharmacy (약국).
+Co-pay with insurance: 5,000-30,000 won.
+Free/low-cost options: Migrants hospital Guro 02-2677-4071. Local health center (보건소) in every district.
+Emergency: call 119 for ambulance (free).`,
   },
   {
     category: 'DAILY',
@@ -337,11 +343,12 @@ exports.handler = async function(event, context) {
     const detectedLang = detectLanguage(lastMessage);
     const langInstruction = LANG_INSTRUCTIONS[detectedLang];
 
-    // Language lock goes at the TOP so it overrides everything else
+    // Language lock goes at BOTH TOP and BOTTOM — sandwiches everything
     const enrichedSystem = [
       langInstruction,
       KHELPER_SYSTEM_PROMPT,
       triage.augmentation || '',
+      langInstruction,  // repeat at end for emphasis
     ].filter(Boolean).join('\n\n');
 
     const apiKey = process.env.ANTHROPIC_API_KEY;
