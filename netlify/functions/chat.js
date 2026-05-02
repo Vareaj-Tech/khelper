@@ -49,6 +49,35 @@ const EMERGENCY_CONTACTS = `
 function detectCrisis(text) { return CRISIS_KEYWORDS.some(kw => text.toLowerCase().includes(kw)); }
 function detectScam(text) { return SCAM_RED_FLAGS.some(flag => text.toLowerCase().includes(flag)); }
 
+// ── LANGUAGE DETECTION ──────────────────────────────────────────────────────
+function detectLanguage(text) {
+  // Count characters in each script
+  const khmerChars   = (text.match(/[ក-៿᧠-᧿]/g) || []).length;
+  const koreanChars  = (text.match(/[가-힯ᄀ-ᇿ㄰-㆏]/g) || []).length;
+  const total = text.replace(/\s/g, '').length || 1;
+
+  if (khmerChars / total > 0.15)  return 'km';
+  if (koreanChars / total > 0.15) return 'kr';
+  return 'en';  // default to English if no dominant script
+}
+
+const LANG_INSTRUCTIONS = {
+  km: `## LANGUAGE LOCK: KHMER ONLY
+The user wrote in Khmer. You MUST reply 100% in Khmer script (Unicode).
+ZERO English or Korean words — except phone numbers and bracketed Korean terms like [건강보험].
+Write like a real Cambodian friend. Short sentences. Natural everyday Khmer, NOT formal.`,
+
+  en: `## LANGUAGE LOCK: ENGLISH ONLY
+The user wrote in English. You MUST reply 100% in English.
+ZERO Khmer or Korean words — except bracketed Korean terms where needed, e.g. [건강보험].
+Be warm, clear, and direct.`,
+
+  kr: `## LANGUAGE LOCK: KOREAN ONLY
+The user wrote in Korean. You MUST reply 100% in Korean (한국어).
+ZERO Khmer or English words — except bracketed English terms where needed.
+Speak naturally and warmly in Korean.`,
+};
+
 const TRIAGE_RULES = [
   {
     category: 'VISA',
@@ -305,10 +334,15 @@ exports.handler = async function(event, context) {
 
     const isScam = detectScam(lastLower);
     const triage = triageMessage(lastMessage);
+    const detectedLang = detectLanguage(lastMessage);
+    const langInstruction = LANG_INSTRUCTIONS[detectedLang];
 
-    const enrichedSystem = triage.augmentation
-      ? `${KHELPER_SYSTEM_PROMPT}\n\n${triage.augmentation}`
-      : KHELPER_SYSTEM_PROMPT;
+    // Language lock goes at the TOP so it overrides everything else
+    const enrichedSystem = [
+      langInstruction,
+      KHELPER_SYSTEM_PROMPT,
+      triage.augmentation || '',
+    ].filter(Boolean).join('\n\n');
 
     const apiKey = process.env.ANTHROPIC_API_KEY;
     if (!apiKey) {
