@@ -267,7 +267,7 @@ function sanitizeMessages(messages) {
 
 function logUsage(ip, category, inputTokens, outputTokens, responseTimeMs) {
   const totalTokens = inputTokens + outputTokens;
-  const estimatedCostUSD = ((inputTokens * 0.25) + (outputTokens * 1.25)) / 1_000_000;
+  const estimatedCostUSD = ((inputTokens * 3) + (outputTokens * 15)) / 1_000_000;
   const flags = [];
   if (outputTokens > 1000) flags.push('HIGH_OUTPUT');
   if (responseTimeMs > 8000) flags.push('SLOW_RESPONSE');
@@ -277,7 +277,7 @@ function logUsage(ip, category, inputTokens, outputTokens, responseTimeMs) {
     ip: ip.split(',')[0].trim(), category,
     tokens: { input: inputTokens, output: outputTokens, total: totalTokens },
     cost_usd: estimatedCostUSD.toFixed(6), response_ms: responseTimeMs,
-    model: 'claude-haiku-4-5', flags: flags.length > 0 ? flags : null,
+    model: 'claude-sonnet-4-6', flags: flags.length > 0 ? flags : null,
   }));
 }
 
@@ -369,7 +369,7 @@ exports.handler = async function(event, context) {
         'anthropic-version': '2023-06-01',
       },
       body: JSON.stringify({
-        model: 'claude-haiku-4-5-20251001',
+        model: 'claude-sonnet-4-6',
         max_tokens: 1200,
         system: enrichedSystem,
         messages: cleanMessages,
