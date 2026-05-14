@@ -2,44 +2,112 @@
 <html lang="km">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>K'Helper — ជំនួយការខ្មែរនៅកូរ៉េ</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Khmer:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Newsreader:ital,wght@0,400;0,500;1,400&family=Noto+Sans+Khmer:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;600&family=Noto+Serif+Khmer:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #fdf6f2;
-      --sidebar-bg: #f5ebe4;
-      --sidebar-hover: #ecddd5;
-      --border: #e8d5cb;
-      --accent: #d94e1f;
-      --accent-hover: #c44018;
-      --accent-light: #fce8df;
-      --text: #2d1f1a;
-      --text-muted: #8c6b5e;
-      --text-light: #b8907e;
-      --user-bubble: #3d1506;
-      --user-text: #fff8f5;
-      --bot-bg: #fffaf8;
-      --card-bg: #ffffff;
-      --card-border: #f0ddd5;
-      --card-hover: #fff3ee;
-      --input-bg: #ffffff;
-      --shadow: 0 1px 3px rgba(180,100,60,0.08);
-      --shadow-md: 0 4px 12px rgba(180,100,60,0.12);
-      --radius: 14px;
-      --radius-sm: 10px;
-      --radius-lg: 20px;
-      --font: 'Noto Sans Khmer', 'Inter', sans-serif;
+      /* Warm clay text */
+      --clay-900: #1f0d09;
+      --clay-800: #2f1611;
+      --clay-700: #4a2419;
+      --clay-500: #7d4c3b;
+      --clay-400: #a87863;
+
+      /* Terracotta — primary */
+      --terra-700: #8f2e10;
+      --terra-600: #b53d18;
+      --terra-500: #d94e1f;
+      --terra-400: #e0714b;
+      --terra-200: #f3c7b6;
+      --terra-100: #f8dccd;
+
+      /* Warm cream */
+      --cream:   #fdf6f2;
+      --cream-2: #f7ebe0;
+      --cream-3: #f0dccb;
+      --paper:   #ebd5c0;
+
+      /* Ember glow accent */
+      --ember-500: #e8a83a;
+      --ember-400: #efbf63;
+      --ember-200: #f8e2b1;
+
+      /* Calm sage — informational */
+      --sage-700: #4b5a3c;
+      --sage-500: #6b7a5a;
+      --sage-200: #c8d2bb;
+
+      /* Charcoal hint */
+      --ink-900: #14100d;
+      --ink-800: #1d1814;
+
+      /* Strokes & shadows */
+      --hairline: rgba(74, 36, 25, 0.12);
+      --hairline-strong: rgba(74, 36, 25, 0.22);
+      --soft-shadow: 0 1px 0 rgba(74,36,25,0.04), 0 8px 24px rgba(74,36,25,0.06);
+      --warm-shadow: 0 20px 50px -20px rgba(143,46,16,0.35);
+
+      /* Type stacks */
+      --font-display: "Newsreader", "Noto Serif Khmer", Georgia, serif;
+      --font-body:    "Geist", "Noto Sans Khmer", "Noto Sans KR", system-ui, sans-serif;
+      --font-mono:    "JetBrains Mono", ui-monospace, monospace;
+      --font-khmer:   "Noto Sans Khmer", "Geist", system-ui, sans-serif;
+      --font-khmer-d: "Noto Serif Khmer", "Newsreader", serif;
+      --font-korean:  "Noto Sans KR", "Geist", system-ui, sans-serif;
+
+      /* Aliases for compatibility */
+      --bg:           var(--cream);
+      --sidebar-bg:   var(--cream-2);
+      --sidebar-hover:#eddece;
+      --border:       var(--paper);
+      --accent:       var(--terra-500);
+      --accent-hover: var(--terra-600);
+      --accent-light: var(--terra-100);
+      --text:         var(--clay-800);
+      --text-muted:   var(--clay-500);
+      --text-light:   var(--clay-400);
+      --font:         var(--font-khmer);
+      --radius:       16px;
+      --radius-sm:    12px;
+      --radius-lg:    22px;
+    }
+
+    /* ── Type utility classes ── */
+    .disp    { font-family: var(--font-display); font-weight: 400; letter-spacing: -0.01em; }
+    .kh      { font-family: var(--font-khmer); }
+    .kh-d    { font-family: var(--font-khmer-d); }
+    .kr      { font-family: var(--font-korean); }
+    .mono    { font-family: var(--font-mono); }
+    .eyebrow { font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--clay-400); }
+    .tabular { font-variant-numeric: tabular-nums; }
+
+    /* ── Animations ── */
+    @keyframes lanternGlow {
+      0%, 100% { opacity: 0.8; transform: scale(1); }
+      50%      { opacity: 1;   transform: scale(1.06); }
+    }
+    @keyframes lanternSway {
+      0%, 100% { transform: rotate(-2.5deg); }
+      50%      { transform: rotate(2.5deg); }
+    }
+    @keyframes dotBounce {
+      0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+      30%            { transform: translateY(-7px); opacity: 1; }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
 
     body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: var(--font);
+      background: var(--cream);
+      color: var(--clay-800);
+      font-family: var(--font-body);
       height: 100dvh;
       display: flex;
       overflow: hidden;
@@ -49,10 +117,10 @@
        SIDEBAR
     ══════════════════════════════ */
     #sidebar {
-      width: 260px;
-      min-width: 260px;
-      background: var(--sidebar-bg);
-      border-right: 1px solid var(--border);
+      width: 264px;
+      min-width: 264px;
+      background: var(--cream-2);
+      border-right: 1px solid var(--paper);
       display: flex;
       flex-direction: column;
       overflow: hidden;
@@ -61,35 +129,24 @@
     .sidebar-logo {
       display: flex;
       align-items: center;
-      gap: 10px;
-      padding: 18px 16px 14px;
-    }
-
-    .logo-icon {
-      width: 40px;
-      height: 40px;
-      background: var(--accent);
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 22px;
-      flex-shrink: 0;
-      box-shadow: 0 2px 8px rgba(217,78,31,0.3);
+      gap: 11px;
+      padding: 20px 18px 16px;
     }
 
     .logo-name {
-      font-size: 17px;
-      font-weight: 700;
-      color: var(--accent);
-      letter-spacing: -0.2px;
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 400;
+      color: var(--clay-800);
+      letter-spacing: -0.02em;
     }
+    .logo-name em { font-style: italic; }
 
     .logo-sub {
       font-size: 10px;
-      color: var(--text-light);
+      color: var(--clay-400);
       font-weight: 400;
-      letter-spacing: 0;
+      font-family: var(--font-khmer);
       display: block;
       margin-top: 1px;
     }
@@ -98,30 +155,30 @@
       margin: 0 12px 16px;
       display: flex;
       align-items: center;
+      justify-content: center;
       gap: 8px;
-      padding: 10px 14px;
-      background: var(--accent);
+      padding: 11px 16px;
+      background: var(--terra-500);
       border: none;
-      border-radius: var(--radius-sm);
+      border-radius: 999px;
       cursor: pointer;
-      font-family: var(--font);
+      font-family: var(--font-khmer);
       font-size: 13px;
-      color: white;
+      color: var(--cream);
       font-weight: 600;
       transition: all 0.15s;
+      box-shadow: 0 6px 16px -6px rgba(143,46,16,0.4);
     }
 
-    .new-chat-btn:hover {
-      background: var(--accent-hover);
-    }
+    .new-chat-btn:hover { background: var(--terra-600); }
 
     .sidebar-section-label {
-      font-size: 10px;
+      font-size: 9.5px;
       font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 0.8px;
-      color: var(--text-light);
-      padding: 0 16px 8px;
+      letter-spacing: 0.12em;
+      color: var(--clay-400);
+      padding: 0 18px 8px;
     }
 
     .sidebar-nav {
@@ -131,69 +188,43 @@
     }
 
     .sidebar-nav::-webkit-scrollbar { width: 3px; }
-    .sidebar-nav::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+    .sidebar-nav::-webkit-scrollbar-thumb { background: var(--paper); border-radius: 4px; }
 
     .nav-item {
       display: flex;
       align-items: center;
       gap: 10px;
-      padding: 9px 10px;
-      border-radius: var(--radius-sm);
+      padding: 9px 11px;
+      border-radius: 12px;
       cursor: pointer;
       font-size: 13px;
-      color: var(--text-muted);
+      color: var(--clay-500);
+      font-family: var(--font-khmer);
       transition: all 0.15s;
       margin-bottom: 2px;
     }
 
-    .nav-item:hover {
-      background: var(--sidebar-hover);
-      color: var(--text);
-    }
-
+    .nav-item:hover { background: var(--sidebar-hover); color: var(--clay-800); }
     .nav-item.active {
-      background: var(--accent-light);
-      color: var(--accent);
+      background: var(--terra-100);
+      color: var(--terra-600);
       font-weight: 600;
     }
 
-    .nav-icon { font-size: 16px; flex-shrink: 0; }
+    .nav-icon { font-size: 16px; flex-shrink: 0; width: 22px; text-align: center; }
 
-    /* ── SIDEBAR bottom brand strip ── */
-    .sidebar-brand-strip {
-      padding: 10px 16px 16px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      border-top: 1px solid var(--border);
-      margin-top: 4px;
-    }
-    .brand-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--accent);
-      opacity: 0.5;
-    }
-    .brand-tagline {
-      font-size: 10px;
-      color: var(--text-light);
-      letter-spacing: 0.3px;
-    }
-
-    /* ── MAP PANEL ── */
+    /* MAP PANEL */
     #map-panel {
       display: none;
       position: fixed;
       top: 0; right: 0; bottom: 0;
       width: 360px;
-      background: var(--bg);
-      border-left: 1.5px solid var(--border);
+      background: var(--cream);
+      border-left: 1.5px solid var(--paper);
       z-index: 100;
       flex-direction: column;
-      box-shadow: -4px 0 20px rgba(180,100,60,0.1);
+      box-shadow: -4px 0 24px rgba(74,36,25,0.1);
     }
-
     #map-panel.open { display: flex; }
 
     .map-panel-header {
@@ -201,36 +232,19 @@
       align-items: center;
       justify-content: space-between;
       padding: 16px 18px;
-      border-bottom: 1px solid var(--border);
-      background: var(--sidebar-bg);
+      border-bottom: 1px solid var(--paper);
+      background: var(--cream-2);
     }
-
-    .map-panel-title {
-      font-size: 15px;
-      font-weight: 700;
-      color: var(--text);
-    }
-
-    .map-close-btn {
-      background: none;
-      border: none;
-      font-size: 20px;
-      cursor: pointer;
-      color: var(--text-muted);
-      padding: 2px 6px;
-      border-radius: 6px;
-      line-height: 1;
-    }
-
-    .map-close-btn:hover { background: var(--sidebar-hover); }
+    .map-panel-title { font-size: 15px; font-weight: 700; color: var(--clay-800); }
+    .map-close-btn { background: none; border: none; font-size: 20px; cursor: pointer; color: var(--clay-500); padding: 2px 6px; border-radius: 6px; line-height: 1; }
+    .map-close-btn:hover { background: var(--cream-3); }
 
     .map-tabs {
       display: flex;
-      border-bottom: 1px solid var(--border);
-      background: var(--sidebar-bg);
+      border-bottom: 1px solid var(--paper);
+      background: var(--cream-2);
       overflow-x: auto;
     }
-
     .map-tab {
       flex: 1;
       padding: 10px 6px;
@@ -238,229 +252,142 @@
       font-weight: 600;
       text-align: center;
       cursor: pointer;
-      color: var(--text-muted);
+      color: var(--clay-400);
       border-bottom: 2px solid transparent;
       transition: all 0.15s;
       white-space: nowrap;
-      font-family: var(--font);
+      font-family: var(--font-body);
       background: none;
-      border-top: none;
-      border-left: none;
-      border-right: none;
+      border-top: none; border-left: none; border-right: none;
     }
-
-    .map-tab:hover { color: var(--accent); }
-    .map-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+    .map-tab:hover { color: var(--terra-500); }
+    .map-tab.active { color: var(--terra-500); border-bottom-color: var(--terra-500); }
 
     .map-search-row {
       padding: 12px 14px;
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1px solid var(--paper);
       display: flex;
       gap: 8px;
     }
-
     .map-search-input {
       flex: 1;
-      padding: 8px 12px;
-      border: 1.5px solid var(--border);
-      border-radius: var(--radius-sm);
-      font-family: var(--font);
+      padding: 9px 14px;
+      border: 1.5px solid var(--paper);
+      border-radius: 999px;
+      font-family: var(--font-khmer);
       font-size: 13px;
-      background: var(--input-bg);
-      color: var(--text);
+      background: var(--cream);
+      color: var(--clay-800);
       outline: none;
     }
-
-    .map-search-input:focus { border-color: var(--accent); }
-
+    .map-search-input:focus { border-color: var(--terra-500); }
     .map-search-btn {
-      padding: 8px 14px;
-      background: var(--accent);
-      color: white;
+      padding: 9px 16px;
+      background: var(--terra-500);
+      color: var(--cream);
       border: none;
-      border-radius: var(--radius-sm);
+      border-radius: 999px;
       font-size: 12px;
       font-weight: 600;
       cursor: pointer;
-      font-family: var(--font);
+      font-family: var(--font-body);
       transition: background 0.15s;
     }
+    .map-search-btn:hover { background: var(--terra-600); }
 
-    .map-search-btn:hover { background: var(--accent-hover); }
-
-    .map-locations-list {
-      flex: 1;
-      overflow-y: auto;
-      padding: 12px;
-    }
-
+    .map-locations-list { flex: 1; overflow-y: auto; padding: 12px; }
     .map-locations-list::-webkit-scrollbar { width: 3px; }
-    .map-locations-list::-webkit-scrollbar-thumb { background: var(--border); }
+    .map-locations-list::-webkit-scrollbar-thumb { background: var(--paper); }
 
     .map-location-card {
-      background: var(--card-bg);
-      border: 1.5px solid var(--card-border);
-      border-radius: var(--radius);
-      padding: 14px;
+      background: var(--cream);
+      border: 1px solid var(--hairline);
+      border-radius: 18px;
+      padding: 16px;
       margin-bottom: 10px;
-      box-shadow: var(--shadow);
+      box-shadow: var(--soft-shadow);
     }
-
-    .map-loc-name {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text);
-      margin-bottom: 3px;
-    }
-
-    .map-loc-kr {
-      font-size: 12px;
-      color: var(--text-muted);
-      margin-bottom: 2px;
-    }
-
-    .map-loc-note {
-      font-size: 11px;
-      color: var(--text-light);
-      margin-bottom: 10px;
-      line-height: 1.4;
-    }
-
-    .map-buttons {
-      display: flex;
-      gap: 6px;
-    }
-
+    .map-loc-name { font-size: 13px; font-weight: 600; color: var(--clay-800); margin-bottom: 3px; }
+    .map-loc-kr { font-size: 12px; color: var(--clay-500); margin-bottom: 3px; font-family: var(--font-korean); }
+    .map-loc-note { font-size: 11.5px; color: var(--clay-400); font-family: var(--font-khmer); margin-bottom: 12px; line-height: 1.45; }
+    .map-buttons { display: flex; gap: 6px; }
     .map-btn {
-      flex: 1;
-      padding: 7px 6px;
-      border-radius: var(--radius-sm);
-      font-size: 11px;
-      font-weight: 600;
-      cursor: pointer;
-      text-decoration: none;
-      text-align: center;
-      transition: all 0.15s;
-      display: block;
+      flex: 1; padding: 7px 6px; border-radius: 10px;
+      font-size: 11px; font-weight: 600; cursor: pointer;
+      text-decoration: none; text-align: center;
+      transition: all 0.15s; display: block;
     }
-
-    .map-btn.kakao {
-      background: #FEE500;
-      color: #3C1E1E;
-      border: none;
-    }
-
+    .map-btn.kakao  { background: #FEE500; color: #3C1E1E; border: none; }
     .map-btn.kakao:hover { background: #f5dc00; }
-
-    .map-btn.naver {
-      background: #03C75A;
-      color: white;
-      border: none;
-    }
-
+    .map-btn.naver  { background: #03C75A; color: white; border: none; }
     .map-btn.naver:hover { background: #02b350; }
+    .map-btn.google { background: var(--terra-100); color: var(--terra-600); border: 1px solid var(--paper); }
+    .map-btn.google:hover { background: var(--terra-200); }
 
-    .map-btn.google {
-      background: var(--accent-light);
-      color: var(--accent);
-      border: 1px solid var(--card-border);
-    }
-
-    .map-btn.google:hover { background: #fde0d4; }
-
-    /* Map link in chat bubble */
-    .map-link-row {
-      margin-top: 10px;
-      padding-top: 10px;
-      border-top: 1px solid var(--card-border);
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-    }
-
+    .map-link-row { margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--hairline-strong); display: flex; gap: 6px; flex-wrap: wrap; }
     .inline-map-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      padding: 5px 10px;
-      border-radius: 20px;
-      font-size: 11px;
-      font-weight: 600;
-      text-decoration: none;
-      cursor: pointer;
-      transition: all 0.15s;
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 6px 12px; border-radius: 999px;
+      font-size: 11px; font-weight: 600;
+      text-decoration: none; cursor: pointer; transition: all 0.15s;
     }
-
-    .inline-map-btn.kakao { background: #FEE500; color: #3C1E1E; }
-    .inline-map-btn.naver { background: #03C75A; color: white; }
-    .inline-map-btn.panel { background: var(--accent-light); color: var(--accent); border: none; font-family: var(--font); }
-    .inline-map-btn.panel:hover { background: #fde0d4; }
+    .inline-map-btn.panel {
+      background: var(--terra-100); color: var(--terra-600);
+      border: 1px solid var(--terra-200); font-family: var(--font-body);
+    }
+    .inline-map-btn.panel:hover { background: var(--terra-200); }
 
     /* Language switcher */
-    .lang-section {
-      padding: 14px 12px;
-      border-top: 1px solid var(--border);
-    }
-
-    .lang-label {
-      font-size: 10px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-      color: var(--text-light);
-      margin-bottom: 8px;
-    }
-
-    .lang-buttons {
-      display: flex;
-      gap: 6px;
-    }
-
+    .lang-section { padding: 14px 12px; border-top: 1px solid var(--paper); }
+    .lang-label { font-size: 9.5px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--clay-400); margin-bottom: 8px; }
+    .lang-buttons { display: flex; gap: 6px; }
     .lang-btn {
       flex: 1;
-      padding: 6px 4px;
-      border: 1.5px solid var(--border);
-      border-radius: var(--radius-sm);
+      padding: 7px 4px;
+      border: 1.5px solid var(--paper);
+      border-radius: 999px;
       background: transparent;
-      font-family: var(--font);
+      font-family: var(--font-body);
       font-size: 11px;
       cursor: pointer;
-      color: var(--text-muted);
+      color: var(--clay-500);
       transition: all 0.15s;
       text-align: center;
     }
-
-    .lang-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .lang-btn:hover { border-color: var(--terra-400); color: var(--terra-500); }
     .lang-btn.active {
-      background: var(--accent);
-      border-color: var(--accent);
-      color: white;
+      background: var(--terra-500);
+      border-color: var(--terra-500);
+      color: var(--cream);
       font-weight: 600;
     }
+
+    .sidebar-brand-strip {
+      padding: 10px 18px 16px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      border-top: 1px solid var(--paper);
+    }
+    .brand-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--terra-400); opacity: 0.6; }
+    .brand-tagline { font-size: 10px; color: var(--clay-400); letter-spacing: 0.05em; }
 
     /* ══════════════════════════════
        MAIN AREA
     ══════════════════════════════ */
-    #main {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      background: var(--bg);
-    }
+    #main { flex: 1; display: flex; flex-direction: column; overflow: hidden; background: var(--cream); }
 
-    /* ── CHAT MESSAGES ── */
+    /* ── CHAT ── */
     #chat {
       flex: 1;
       overflow-y: auto;
-      padding: 24px 32px;
+      padding: 24px 28px 16px;
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: 22px;
     }
-
     #chat::-webkit-scrollbar { width: 4px; }
-    #chat::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+    #chat::-webkit-scrollbar-thumb { background: var(--paper); border-radius: 4px; }
 
     /* ── WELCOME SCREEN ── */
     .welcome {
@@ -472,232 +399,292 @@
       padding: 32px 16px;
       text-align: center;
       min-height: 60vh;
+      animation: fadeIn 0.4s ease;
     }
 
-    .welcome-logo {
-      width: 84px;
-      height: 84px;
-      background: var(--accent);
-      border-radius: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 42px;
-      margin-bottom: 20px;
-      box-shadow: 0 0 0 8px var(--accent-light), 0 0 0 16px #fde8d4;
+    .welcome-lantern-wrap {
+      position: relative;
+      margin-bottom: 28px;
+    }
+    .welcome-lantern-glow {
+      position: absolute;
+      inset: 5% -20% -10% -20%;
+      background: radial-gradient(ellipse at center, rgba(232,168,58,0.45) 0%, rgba(217,78,31,0.18) 45%, transparent 70%);
+      animation: lanternGlow 3.2s ease-in-out infinite;
+      pointer-events: none;
     }
 
     .welcome-tagline {
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 600;
-      letter-spacing: 2px;
+      letter-spacing: 0.14em;
       text-transform: uppercase;
-      color: var(--accent);
-      opacity: 0.75;
+      color: var(--clay-400);
       margin-bottom: 10px;
     }
 
     .welcome h2 {
-      font-size: 23px;
-      font-weight: 700;
-      color: var(--text);
-      margin-bottom: 10px;
-      line-height: 1.35;
+      font-family: var(--font-display);
+      font-size: 28px;
+      font-weight: 400;
+      color: var(--clay-800);
+      margin-bottom: 6px;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
     }
+    .welcome h2 em { font-style: italic; }
 
     .welcome-sub {
       font-size: 14px;
-      color: var(--text-muted);
-      margin-bottom: 32px;
-      line-height: 1.7;
-      max-width: 400px;
+      color: var(--clay-500);
+      font-family: var(--font-khmer);
+      margin-bottom: 30px;
+      line-height: 1.65;
+      max-width: 380px;
     }
 
     .cards-grid {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
       gap: 10px;
-      max-width: 620px;
+      max-width: 580px;
       width: 100%;
     }
 
     @media (max-width: 900px) {
-      .cards-grid { grid-template-columns: 1fr 1fr; max-width: 460px; }
+      .cards-grid { grid-template-columns: 1fr 1fr; max-width: 440px; }
     }
 
     .topic-card {
-      background: var(--card-bg);
-      border: 1.5px solid var(--card-border);
-      border-radius: var(--radius-lg);
-      padding: 18px 16px 16px;
+      background: var(--cream);
+      border: 1px solid var(--hairline);
+      border-radius: 18px;
+      padding: 16px 14px 14px;
       cursor: pointer;
       text-align: left;
       transition: all 0.2s;
-      box-shadow: var(--shadow);
+      box-shadow: var(--soft-shadow);
     }
-
     .topic-card:hover {
-      background: var(--card-hover);
-      border-color: var(--accent);
+      background: var(--cream-2);
+      border-color: var(--terra-400);
       transform: translateY(-2px);
-      box-shadow: var(--shadow-md);
+      box-shadow: 0 12px 28px -12px rgba(143,46,16,0.2);
     }
-
     .topic-card:active { transform: translateY(0); }
 
     .card-icon-wrap {
-      width: 44px;
-      height: 44px;
-      background: var(--accent-light);
+      width: 40px; height: 40px;
+      background: var(--terra-100);
       border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 22px;
-      margin-bottom: 12px;
-      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+      margin-bottom: 11px;
     }
+    .card-title { font-size: 13px; font-weight: 600; color: var(--clay-800); margin-bottom: 3px; line-height: 1.3; font-family: var(--font-khmer); }
+    .card-sub { font-size: 11px; color: var(--clay-500); line-height: 1.4; font-family: var(--font-body); }
 
-    .card-icon { font-size: 22px; }
-    .card-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 3px; line-height: 1.3; }
-    .card-sub { font-size: 11px; color: var(--text-muted); line-height: 1.4; }
-
-    /* ── MESSAGE ROWS ── */
+    /* ── MESSAGE ROWS — letter-from-a-friend layout ── */
     .msg-row {
       display: flex;
-      gap: 12px;
-      max-width: 700px;
+      flex-direction: column;
       width: 100%;
+      max-width: 680px;
+      animation: fadeIn 0.3s ease;
     }
 
-    .msg-row.user {
-      flex-direction: row-reverse;
-      align-self: flex-end;
-    }
-
-    .msg-row.bot { align-self: flex-start; }
-
-    .msg-avatar {
-      width: 34px;
-      height: 34px;
-      border-radius: 10px;
+    /* ── User message ── */
+    .msg-meta {
       display: flex;
       align-items: center;
-      justify-content: center;
-      font-size: 18px;
-      flex-shrink: 0;
-      margin-top: 2px;
+      gap: 8px;
+      margin-bottom: 6px;
+      font-size: 10.5px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--clay-500);
     }
-
-    .msg-avatar.bot-av {
-      background: var(--accent);
+    .msg-meta.user { flex-direction: row-reverse; align-self: flex-end; }
+    .meta-dot {
+      width: 13px; height: 13px; border-radius: 50%;
+      background: var(--terra-500); flex-shrink: 0;
     }
+    .meta-lantern { flex-shrink: 0; }
 
-    .msg-avatar.user-av {
-      background: var(--user-bubble);
-      font-size: 14px;
-    }
-
-    .bubble {
-      padding: 13px 17px;
-      border-radius: var(--radius);
-      font-size: 14px;
-      line-height: 1.75;
-      max-width: calc(100% - 46px);
+    .user-bubble {
+      align-self: flex-end;
+      max-width: 88%;
+      background: var(--cream-2);
+      color: var(--clay-800);
+      padding: 13px 18px;
+      border-radius: 18px 18px 4px 18px;
+      font-size: 14.5px;
+      line-height: 1.6;
       word-break: break-word;
+      border: 1px solid var(--paper);
+      font-family: var(--font-khmer);
     }
 
-    .bubble.bot {
-      background: var(--bot-bg);
-      border: 1.5px solid var(--card-border);
-      border-top-left-radius: 4px;
-      color: var(--text);
-      box-shadow: var(--shadow);
+    /* ── Bot message — paper card ── */
+    .bot-card {
+      background: var(--cream);
+      border: 1px solid var(--hairline);
+      border-radius: 4px 18px 18px 18px;
+      padding: 18px 20px 16px;
+      font-size: 14.5px;
+      line-height: 1.65;
+      word-break: break-word;
+      box-shadow: var(--soft-shadow);
+      background-image:
+        radial-gradient(circle at 15% 20%, rgba(143,46,16,0.03) 0, transparent 40%),
+        radial-gradient(circle at 85% 80%, rgba(232,168,58,0.04) 0, transparent 45%);
+      font-family: var(--font-khmer);
+      color: var(--clay-800);
     }
 
-    .bubble.user {
-      background: var(--user-bubble);
-      color: var(--user-text);
-      border-top-right-radius: 4px;
-      box-shadow: 0 2px 8px rgba(61,21,6,0.25);
+    .bot-card.crisis {
+      background: #fff5f5;
+      border-color: rgba(217,78,31,0.3);
     }
 
-    .bubble.crisis {
-      background: #fff0f0;
-      border-color: #f87171;
+    /* Markdown in bot card */
+    .bot-card strong { font-weight: 600; color: var(--clay-800); }
+    .bot-card em { font-style: italic; color: var(--clay-500); }
+    .bot-card .msg-step {
+      display: flex;
+      gap: 10px;
+      padding: 5px 0;
+      align-items: flex-start;
     }
-
-    /* Markdown rendering */
-    .bubble strong { font-weight: 600; color: var(--accent); }
-    .bubble.user strong { color: #fbbf24; }
-    .bubble em { font-style: italic; color: var(--text-muted); }
-    .bubble .msg-step {
-      display: block;
-      padding: 5px 0 5px 12px;
-      border-left: 2px solid var(--accent);
-      margin: 5px 0;
+    .bot-card .msg-step-num {
+      flex-shrink: 0;
+      width: 22px; height: 22px; border-radius: 50%;
+      background: var(--terra-500); color: var(--cream);
+      font-size: 11px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      margin-top: 1px;
     }
-    .bubble .warning-block {
-      background: #fff7ed;
-      border: 1px solid #fed7aa;
-      border-radius: 8px;
-      padding: 10px 14px;
-      margin: 6px 0;
+    .bot-card .warning-block {
+      background: linear-gradient(135deg, #fff1d6 0%, #f8dccd 100%);
+      border: 1px solid var(--ember-200);
+      border-radius: 12px;
+      padding: 12px 16px;
+      margin: 8px 0;
       font-weight: 500;
-      color: #92400e;
+      color: var(--clay-700);
+    }
+
+    /* Source line at bottom of bot card */
+    .bot-source {
+      margin-top: 14px;
+      padding-top: 10px;
+      border-top: 1px dashed var(--hairline-strong);
+      font-size: 11px;
+      color: var(--clay-500);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-style: italic;
+    }
+
+    /* Suggested follow-ups */
+    .followups {
+      margin-top: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+    .followup-chip {
+      background: var(--cream);
+      border: 1px solid var(--hairline);
+      border-radius: 12px;
+      padding: 10px 14px;
+      font-size: 13px;
+      font-family: var(--font-khmer);
+      color: var(--clay-800);
+      cursor: pointer;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      transition: all 0.15s;
+    }
+    .followup-chip:hover {
+      background: var(--terra-100);
+      border-color: var(--terra-300);
+    }
+    .followup-arrow { color: var(--terra-500); flex-shrink: 0; font-size: 14px; }
+
+    /* Hotline action card inside bot response */
+    .hotline-card {
+      margin-top: 16px;
+      padding: 14px 16px;
+      background: linear-gradient(135deg, #fff1d6 0%, #f8dccd 100%);
+      border-radius: 14px;
+      border: 1px solid var(--ember-200);
+      display: flex;
+      align-items: center;
+      gap: 13px;
+    }
+    .hotline-icon-wrap {
+      width: 40px; height: 40px; border-radius: 11px;
+      background: var(--terra-500); color: var(--cream);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; font-size: 18px;
+    }
+    .hotline-number { font-family: var(--font-mono); font-size: 18px; color: var(--clay-800); margin-top: 2px; }
+    .hotline-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--clay-400); }
+    .hotline-call-btn {
+      background: var(--clay-800);
+      color: var(--cream);
+      border: none;
+      border-radius: 999px;
+      padding: 8px 16px;
+      font-size: 12px;
+      font-family: var(--font-body);
+      cursor: pointer;
+      white-space: nowrap;
     }
 
     /* ── TYPING INDICATOR ── */
-    .typing-dots {
-      display: flex;
-      gap: 5px;
-      align-items: center;
-      padding: 6px 2px;
-    }
-
+    .typing-dots { display: flex; gap: 5px; align-items: center; padding: 6px 2px; }
     .typing-dots span {
-      width: 7px;
-      height: 7px;
-      background: var(--accent);
+      width: 7px; height: 7px;
+      background: var(--terra-400);
       border-radius: 50%;
-      opacity: 0.4;
-      animation: dot-bounce 1.3s infinite;
+      opacity: 0.5;
+      animation: dotBounce 1.3s infinite;
     }
-
     .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
     .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
-
-    @keyframes dot-bounce {
-      0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
-      30% { transform: translateY(-7px); opacity: 1; }
-    }
 
     /* ══════════════════════════════
        INPUT AREA
     ══════════════════════════════ */
     #input-area {
-      border-top: 1px solid var(--border);
-      padding: 14px 32px 12px;
-      background: var(--bg);
+      border-top: 1px solid var(--hairline);
+      padding: 12px 28px 14px;
+      background: linear-gradient(to top, var(--cream) 80%, rgba(253,246,242,0));
       flex-shrink: 0;
+      padding-bottom: calc(14px + env(safe-area-inset-bottom, 0px));
     }
 
-    .input-row {
+    .input-pill {
       display: flex;
-      gap: 10px;
-      align-items: flex-end;
-      max-width: 700px;
-      background: var(--input-bg);
-      border: 1.5px solid var(--border);
-      border-radius: var(--radius);
-      padding: 8px 8px 8px 16px;
+      align-items: center;
+      gap: 8px;
+      max-width: 680px;
+      background: var(--cream);
+      border: 1.5px solid var(--hairline-strong);
+      border-radius: 999px;
+      padding: 9px 9px 9px 20px;
       transition: border-color 0.2s, box-shadow 0.2s;
-      box-shadow: var(--shadow);
+      box-shadow: var(--soft-shadow);
     }
-
-    .input-row:focus-within {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(217,78,31,0.12);
+    .input-pill:focus-within {
+      border-color: var(--terra-400);
+      box-shadow: 0 0 0 3px rgba(217,78,31,0.1);
     }
 
     #user-input {
@@ -705,119 +692,93 @@
       background: transparent;
       border: none;
       outline: none;
-      font-family: var(--font);
+      font-family: var(--font-khmer);
       font-size: 14px;
-      color: var(--text);
+      color: var(--clay-800);
       resize: none;
       min-height: 24px;
       max-height: 120px;
       line-height: 1.5;
-      padding: 4px 0;
+      padding: 2px 0;
     }
-
-    #user-input::placeholder { color: var(--text-light); }
+    #user-input::placeholder { color: var(--clay-400); }
 
     #send-btn {
-      width: 40px;
-      height: 40px;
-      background: var(--accent);
+      width: 38px; height: 38px;
+      background: var(--terra-500);
       border: none;
-      border-radius: var(--radius-sm);
-      color: white;
-      font-size: 17px;
+      border-radius: 50%;
+      color: var(--cream);
+      font-size: 15px;
       cursor: pointer;
       transition: all 0.15s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       flex-shrink: 0;
-      box-shadow: 0 2px 6px rgba(217,78,31,0.35);
+      box-shadow: 0 4px 10px -4px rgba(143,46,16,0.5);
     }
-
-    #send-btn:hover { background: var(--accent-hover); box-shadow: 0 4px 10px rgba(217,78,31,0.4); }
-    #send-btn:active { transform: scale(0.95); }
-    #send-btn:disabled { background: var(--border); cursor: not-allowed; box-shadow: none; }
+    #send-btn:hover { background: var(--terra-600); }
+    #send-btn:active { transform: scale(0.93); }
+    #send-btn:disabled { background: var(--paper); cursor: not-allowed; box-shadow: none; }
 
     .input-footer {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-top: 8px;
-      max-width: 700px;
+      max-width: 680px;
     }
-
-    .emergency-line {
-      font-size: 11px;
-      color: var(--text-light);
-    }
-
-    .emergency-line strong { color: var(--accent); font-weight: 600; }
-
-    #msg-counter {
-      font-size: 11px;
-      color: var(--text-light);
-    }
+    .emergency-line { font-size: 11px; color: var(--clay-400); }
+    .emergency-line strong { color: var(--terra-500); font-weight: 600; }
+    #msg-counter { font-size: 11px; color: var(--clay-400); }
 
     /* ══════════════════════════════
        MOBILE
     ══════════════════════════════ */
-
     #mobile-header {
       display: none;
       align-items: center;
       gap: 12px;
       padding: 12px 16px;
-      background: var(--sidebar-bg);
-      border-bottom: 2px solid var(--accent);
+      background: var(--cream-2);
+      border-bottom: 1px solid var(--paper);
       flex-shrink: 0;
+      padding-top: calc(12px + env(safe-area-inset-top, 0px));
     }
 
     #hamburger-btn {
       background: none;
       border: none;
       cursor: pointer;
-      font-size: 24px;
-      color: var(--text);
-      padding: 2px 6px;
+      font-size: 22px;
+      color: var(--clay-800);
+      padding: 4px 8px;
       line-height: 1;
-      border-radius: 6px;
+      border-radius: 8px;
     }
-    #hamburger-btn:active { background: var(--border); }
+    #hamburger-btn:active { background: var(--paper); }
 
     #mobile-logo {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 9px;
       flex: 1;
     }
-
-    .logo-icon-sm {
-      width: 32px;
-      height: 32px;
-      background: var(--accent);
-      border-radius: 9px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
-      box-shadow: 0 2px 6px rgba(217,78,31,0.3);
+    .mobile-logo-name {
+      font-family: var(--font-display);
+      font-size: 17px;
+      font-weight: 400;
+      color: var(--clay-800);
+      letter-spacing: -0.02em;
     }
-
-    .logo-name-sm {
-      font-size: 16px;
-      font-weight: 700;
-      color: var(--accent);
-      letter-spacing: -0.2px;
-    }
+    .mobile-logo-name em { font-style: italic; }
 
     #sidebar-overlay {
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.45);
+      background: rgba(31,13,9,0.45);
       z-index: 100;
     }
-
     #sidebar-overlay.open { display: block; }
 
     @media (max-width: 700px) {
@@ -826,34 +787,27 @@
       #sidebar {
         position: fixed;
         left: -280px;
-        top: 0;
-        bottom: 0;
+        top: 0; bottom: 0;
         z-index: 200;
-        width: 260px;
-        min-width: 260px;
+        width: 264px;
+        min-width: 264px;
         transition: left 0.25s ease;
-        box-shadow: 4px 0 20px rgba(0,0,0,0.15);
+        box-shadow: 4px 0 24px rgba(31,13,9,0.18);
       }
-
       #sidebar.open { left: 0; }
 
-      #chat { padding: 14px 12px; }
-      #input-area {
-        padding: 10px 12px;
-        padding-bottom: calc(10px + env(safe-area-inset-bottom, 0px));
-      }
+      #chat { padding: 14px 14px 10px; }
+      #input-area { padding: 10px 14px calc(12px + env(safe-area-inset-bottom, 0px)); }
       .cards-grid { grid-template-columns: 1fr 1fr; max-width: 100%; gap: 8px; }
-      .welcome h2 { font-size: 17px; }
+      .welcome h2 { font-size: 22px; }
       .welcome { padding: 16px 8px; min-height: auto; }
-      .welcome-sub { font-size: 13px; margin-bottom: 20px; }
-      .welcome-logo { width: 56px; height: 56px; font-size: 28px; margin-bottom: 14px; }
-      .input-row { max-width: 100%; }
+      .welcome-sub { font-size: 13px; margin-bottom: 22px; }
+      .input-pill { max-width: 100%; }
       .input-footer { max-width: 100%; font-size: 10px; }
       .msg-row { max-width: 100%; }
       .topic-card { padding: 12px 11px 11px; }
       .card-title { font-size: 12px; }
-      .card-sub { font-size: 11px; }
-      .card-icon-wrap { width: 38px; height: 38px; font-size: 18px; border-radius: 10px; margin-bottom: 9px; }
+      .card-icon-wrap { width: 36px; height: 36px; font-size: 18px; border-radius: 10px; margin-bottom: 9px; }
     }
   </style>
 </head>
@@ -862,18 +816,25 @@
 <!-- ══ SIDEBAR ══ -->
 <aside id="sidebar">
   <div class="sidebar-logo">
-    <div class="logo-icon">🏮</div>
+    <!-- Inline lantern SVG mark -->
+    <svg viewBox="0 0 100 135" width="28" height="38" style="flex-shrink:0">
+      <rect x="32" y="14" width="36" height="9" rx="1.5" fill="#2a1810"/>
+      <ellipse cx="50" cy="63" rx="36" ry="38" fill="#d94e1f"/>
+      <ellipse cx="50" cy="63" rx="22" ry="28" fill="#e8a83a" opacity="0.7"/>
+      <rect x="34" y="99" width="32" height="7" rx="1.5" fill="#2a1810"/>
+      <path d="M 46 106 L 50 130 L 54 106 Z" fill="#d94e1f"/>
+    </svg>
     <div>
-      <span class="logo-name">K'Helper</span>
-      <span class="logo-sub">ជំនួយការ AI ខ្មែរ</span>
+      <span class="logo-name">K'<em>helper</em></span>
+      <span class="logo-sub kh">ជំនួយការ AI ខ្មែរ</span>
     </div>
   </div>
 
   <button class="new-chat-btn" onclick="resetChat()">
-    <span>＋</span> <span id="new-chat-label">ការសន្ទនាថ្មី</span>
+    <span>＋</span> <span id="new-chat-label" class="kh">ការសន្ទនាថ្មី</span>
   </button>
 
-  <div class="sidebar-section-label" id="topics-label">ប្រធានបទរហ័ស</div>
+  <div class="sidebar-section-label eyebrow" id="topics-label">ប្រធានបទរហ័ស</div>
 
   <nav class="sidebar-nav">
     <div class="nav-item" onclick="quickTopic('visa')">
@@ -923,7 +884,7 @@
   </nav>
 
   <div class="lang-section">
-    <div class="lang-label" id="lang-label">ភាសា</div>
+    <div class="lang-label eyebrow" id="lang-label">ភាសា</div>
     <div class="lang-buttons">
       <button class="lang-btn" id="btn-en" onclick="setLang('en')">🇺🇸 EN</button>
       <button class="lang-btn" id="btn-kr" onclick="setLang('kr')">🇰🇷 한국어</button>
@@ -951,7 +912,7 @@
     <button class="map-tab" onclick="switchMapTab('labor')" id="tab-labor">💼 ការងារ</button>
   </div>
   <div class="map-search-row">
-    <input type="text" class="map-search-input" id="map-search-input" placeholder="ស្វែងរកទីតាំង...">
+    <input type="text" class="map-search-input kh" id="map-search-input" placeholder="ស្វែងរកទីតាំង...">
     <button class="map-search-btn" onclick="doMapSearch()">🔍</button>
   </div>
   <div class="map-locations-list" id="map-locations-list"></div>
@@ -962,12 +923,18 @@
 
 <!-- ══ MAIN ══ -->
 <div id="main">
-  <!-- Mobile header — only visible on small screens -->
+  <!-- Mobile header -->
   <div id="mobile-header">
     <button id="hamburger-btn" onclick="toggleSidebar()" aria-label="Menu">☰</button>
     <div id="mobile-logo">
-      <div class="logo-icon-sm">🏮</div>
-      <span class="logo-name-sm">K'Helper</span>
+      <svg viewBox="0 0 100 135" width="20" height="27">
+        <rect x="32" y="14" width="36" height="9" rx="1.5" fill="#2a1810"/>
+        <ellipse cx="50" cy="63" rx="36" ry="38" fill="#d94e1f"/>
+        <ellipse cx="50" cy="63" rx="22" ry="28" fill="#e8a83a" opacity="0.7"/>
+        <rect x="34" y="99" width="32" height="7" rx="1.5" fill="#2a1810"/>
+        <path d="M 46 106 L 50 130 L 54 106 Z" fill="#d94e1f"/>
+      </svg>
+      <span class="mobile-logo-name">K'<em>helper</em></span>
     </div>
   </div>
 
@@ -976,14 +943,19 @@
   </div>
 
   <div id="input-area">
-    <div class="input-row">
+    <div class="input-pill">
       <textarea
         id="user-input"
         rows="1"
         maxlength="2000"
+        class="kh"
         placeholder="សារទៅ K'Helper..."
       ></textarea>
-      <button id="send-btn" onclick="sendMessage()">➤</button>
+      <button id="send-btn" onclick="sendMessage()" title="Send">
+        <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 12l14-7-5 16-3-7-6-2z"/>
+        </svg>
+      </button>
     </div>
     <div class="input-footer">
       <span class="emergency-line" id="emergency-line">
@@ -996,16 +968,32 @@
 
 <script>
 // ══════════════════════════════════════════════════
+// LANTERN MARK SVG helper (inline, reusable)
+// ══════════════════════════════════════════════════
+function lanternMarkSVG(size) {
+  size = size || 16;
+  const h = Math.round(size * 1.35);
+  return `<svg viewBox="0 0 100 135" width="${size}" height="${h}" style="flex-shrink:0;display:inline-block;vertical-align:middle">
+    <rect x="32" y="14" width="36" height="9" rx="1.5" fill="#2a1810"/>
+    <ellipse cx="50" cy="63" rx="36" ry="38" fill="#d94e1f"/>
+    <ellipse cx="50" cy="63" rx="22" ry="28" fill="#e8a83a" opacity="0.7"/>
+    <rect x="34" y="99" width="32" height="7" rx="1.5" fill="#2a1810"/>
+    <path d="M 46 106 L 50 130 L 54 106 Z" fill="#d94e1f"/>
+  </svg>`;
+}
+
+// ══════════════════════════════════════════════════
 // TRANSLATIONS
 // ══════════════════════════════════════════════════
 const T = {
   km: {
     newChat: 'ការសន្ទនាថ្មី',
-
     topicsLabel: 'ប្រធានបទរហ័ស',
     langLabel: 'ភាសា',
     placeholder: 'សារទៅ K\'Helper...',
-    welcomeTitle: 'តើខ្ញុំអាចជួយអ្នកដោយរបៀបណា?',
+    welcomeTagline: 'A lantern in the dark',
+    welcomeTitle: 'K\'<em>helper</em>',
+    welcomeQuestion: 'តើខ្ញុំជួយអ្នក<br>អ្វីបាន?',
     welcomeSub: 'សួរខ្ញុំអ្វីក៏បានអំពីការរស់នៅ ឬ ទស្សនាកូរ៉េ — ជាភាសាខ្មែរ, កូរ៉េ ឬអង់គ្លេស។',
     emergency: 'ជំនួយបន្ទាន់: <strong>ចំណាកស្រុក 1345</strong> · <strong>បន្ទាន់ 119</strong>',
     mapPanelTitle: 'ទីតាំង & ផែនទី',
@@ -1043,7 +1031,9 @@ const T = {
     topicsLabel: 'Quick Topics',
     langLabel: 'Language',
     placeholder: 'Message K\'Helper...',
-    welcomeTitle: 'How can I help you today?',
+    welcomeTagline: 'A lantern in the dark',
+    welcomeTitle: 'K\'<em>helper</em>',
+    welcomeQuestion: 'How can I<br>help you?',
     welcomeSub: 'Ask me anything about living or visiting Korea — in Khmer, Korean, or English.',
     emergency: 'Emergency: <strong>Immigration 1345</strong> · <strong>Emergency 119</strong>',
     mapPanelTitle: 'Locations & Maps',
@@ -1081,7 +1071,9 @@ const T = {
     topicsLabel: '빠른 주제',
     langLabel: '언어',
     placeholder: 'K\'Helper에게 메시지...',
-    welcomeTitle: '어떻게 도와드릴까요?',
+    welcomeTagline: '어둠 속의 등불',
+    welcomeTitle: 'K\'<em>helper</em>',
+    welcomeQuestion: '어떻게<br>도와드릴까요?',
     welcomeSub: '한국 생활이나 관광에 대해 무엇이든 물어보세요 — 크메르어, 한국어, 영어로.',
     emergency: '긴급: <strong>외국인 1345</strong> · <strong>응급 119</strong>',
     mapPanelTitle: '위치 & 지도',
@@ -1157,7 +1149,7 @@ function updateCounter() {
   const el = document.getElementById('msg-counter');
   if (el) {
     el.textContent = t.msgLeft(n);
-    el.style.color = n < 5 ? '#ef4444' : n < 10 ? '#f59e0b' : '';
+    el.style.color = n < 5 ? '#b53d18' : n < 10 ? '#e8a83a' : '';
   }
 }
 
@@ -1171,20 +1163,18 @@ function setLang(lang) {
   document.getElementById('topics-label').textContent = t.topicsLabel;
   document.getElementById('lang-label').textContent = t.langLabel;
   document.getElementById('user-input').placeholder = t.placeholder;
+  document.getElementById('user-input').className = lang === 'kr' ? 'kr' : lang === 'en' ? '' : 'kh';
   document.getElementById('emergency-line').innerHTML = t.emergency;
 
-  // Update nav items
   Object.keys(t.navItems).forEach(key => {
     const el = document.getElementById('nav-' + key);
     if (el) el.textContent = t.navItems[key];
   });
 
-  // Update map panel heading
   const mapHeading = document.getElementById('map-panel-heading');
   if (mapHeading) mapHeading.textContent = t.mapPanelTitle;
 
   updateCounter();
-
   if (!chatStarted) renderWelcome();
 }
 
@@ -1200,16 +1190,50 @@ function renderWelcome() {
   w.className = 'welcome';
   w.id = 'welcome-screen';
 
-  const taglines = { km: 'ជំនួយការ AI ខ្មែរ', en: 'Your AI Community Guide', kr: '캄보디아 AI 도우미' };
   w.innerHTML = `
-    <div class="welcome-logo">🏮</div>
-    <div class="welcome-tagline">${taglines[currentLang] || taglines.km}</div>
-    <h2>${t.welcomeTitle}</h2>
+    <div class="welcome-lantern-wrap">
+      <div class="welcome-lantern-glow"></div>
+      <svg viewBox="0 0 100 135" width="110" height="149" style="position:relative;animation:lanternSway 4.5s ease-in-out infinite;transform-origin:50% 0%">
+        <defs>
+          <linearGradient id="lb" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#e0581f"/><stop offset="50%" stop-color="#d94e1f"/><stop offset="100%" stop-color="#a8350f"/>
+          </linearGradient>
+          <radialGradient id="li" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#ffd58a" stop-opacity="0.95"/><stop offset="60%" stop-color="#e8a83a" stop-opacity="0.4"/><stop offset="100%" stop-color="#d94e1f" stop-opacity="0"/>
+          </radialGradient>
+          <linearGradient id="lc" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#3a2410"/><stop offset="100%" stop-color="#1f130a"/>
+          </linearGradient>
+        </defs>
+        <line x1="50" y1="0" x2="50" y2="14" stroke="#3a2410" stroke-width="1.2"/>
+        <rect x="32" y="14" width="36" height="9" rx="1.5" fill="url(#lc)"/>
+        <rect x="36" y="11" width="28" height="4" rx="1" fill="#2a1810"/>
+        <ellipse cx="50" cy="63" rx="36" ry="38" fill="url(#lb)"/>
+        <ellipse cx="50" cy="63" rx="26" ry="32" fill="url(#li)" opacity="0.65"/>
+        <line x1="20" y1="28" x2="20" y2="98" stroke="#7a1f08" stroke-opacity="0.35" stroke-width="0.6"/>
+        <line x1="32" y1="28" x2="32" y2="98" stroke="#7a1f08" stroke-opacity="0.35" stroke-width="0.6"/>
+        <line x1="50" y1="28" x2="50" y2="98" stroke="#7a1f08" stroke-opacity="0.35" stroke-width="0.6"/>
+        <line x1="68" y1="28" x2="68" y2="98" stroke="#7a1f08" stroke-opacity="0.35" stroke-width="0.6"/>
+        <line x1="80" y1="28" x2="80" y2="98" stroke="#7a1f08" stroke-opacity="0.35" stroke-width="0.6"/>
+        <path d="M 14 50 Q 50 56 86 50" stroke="#7a1f08" stroke-opacity="0.4" stroke-width="0.7" fill="none"/>
+        <path d="M 14 76 Q 50 70 86 76" stroke="#7a1f08" stroke-opacity="0.4" stroke-width="0.7" fill="none"/>
+        <ellipse cx="36" cy="48" rx="6" ry="14" fill="#ffd58a" opacity="0.18"/>
+        <rect x="34" y="99" width="32" height="7" rx="1.5" fill="url(#lc)"/>
+        <rect x="38" y="106" width="24" height="3" rx="0.5" fill="#2a1810"/>
+        <line x1="50" y1="109" x2="50" y2="118" stroke="#3a2410" stroke-width="0.8"/>
+        <path d="M 46 118 L 50 132 L 54 118 Z" fill="#d94e1f"/>
+        <line x1="48" y1="120" x2="48" y2="130" stroke="#a8350f" stroke-width="0.5"/>
+        <line x1="52" y1="120" x2="52" y2="130" stroke="#a8350f" stroke-width="0.5"/>
+      </svg>
+    </div>
+    <div class="welcome-tagline eyebrow">${t.welcomeTagline}</div>
+    <h2 class="disp">${t.welcomeTitle}</h2>
+    <div class="disp kh-d" style="font-size:26px;color:#2f1611;line-height:1.1;margin-bottom:8px;font-weight:400;letter-spacing:-0.01em">${t.welcomeQuestion}</div>
     <p class="welcome-sub">${t.welcomeSub}</p>
     <div class="cards-grid">
       ${t.cards.map(c => `
         <div class="topic-card" onclick="quickTopic('${c.topic}')">
-          <div class="card-icon-wrap"><span class="card-icon">${c.icon}</span></div>
+          <div class="card-icon-wrap"><span>${c.icon}</span></div>
           <div class="card-title">${c.title}</div>
           <div class="card-sub">${c.sub}</div>
         </div>
@@ -1224,69 +1248,86 @@ function renderWelcome() {
 // MARKDOWN RENDERER
 // ══════════════════════════════════════════════════
 function renderMarkdown(text) {
-  return text
+  let html = text
     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
     .replace(/(⚠️[^\n]+)/g, '<div class="warning-block">$1</div>')
     .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
     .replace(/\*(.*?)\*/g, '<em>$1</em>')
-    .replace(/^(\d+)\.\s(.+)$/gm, '<span class="msg-step"><strong>$1.</strong> $2</span>')
-    .replace(/^#{1,3}\s(.+)$/gm, '<strong>$1</strong>')
+    .replace(/^(\d+)\.\s(.+)$/gm, (_, n, content) =>
+      `<div class="msg-step"><span class="msg-step-num">${n}</span><span>${content}</span></div>`)
+    .replace(/^#{1,3}\s(.+)$/gm, '<strong style="display:block;margin-top:8px">$1</strong>')
     .replace(/\n/g, '<br>');
+  return html;
 }
 
 // ══════════════════════════════════════════════════
-// MESSAGES
+// MESSAGES — letter-from-a-friend layout
 // ══════════════════════════════════════════════════
 function appendMessage(role, content) {
   const chat = document.getElementById('chat');
 
-  // Remove welcome screen
   const welcome = document.getElementById('welcome-screen');
   if (welcome) welcome.remove();
   chatStarted = true;
 
   const row = document.createElement('div');
-  row.className = `msg-row ${role}`;
-
-  const avatar = document.createElement('div');
-  avatar.className = `msg-avatar ${role === 'user' ? 'user-av' : 'bot-av'}`;
-  avatar.textContent = role === 'user' ? '🧑' : '🏮';
-
-  const bubble = document.createElement('div');
-  bubble.className = `bubble ${role === 'user' ? 'user' : 'bot'}`;
-
-  const isCrisis = role !== 'user' && (content.includes('🆘') || content.includes('1393'));
-  if (isCrisis) bubble.classList.add('crisis');
+  row.className = 'msg-row';
 
   if (role === 'user') {
+    // User: right-aligned, cream bubble
+    const meta = document.createElement('div');
+    meta.className = 'msg-meta user';
+    meta.innerHTML = `You <div class="meta-dot"></div>`;
+    row.appendChild(meta);
+
+    const bubble = document.createElement('div');
+    bubble.className = 'user-bubble';
     bubble.textContent = content;
+    row.appendChild(bubble);
+
   } else {
-    bubble.innerHTML = renderMarkdown(content);
+    // Bot: left-aligned paper card
+    const meta = document.createElement('div');
+    meta.className = 'msg-meta';
+    meta.innerHTML = `<span class="meta-lantern">${lanternMarkSVG(13)}</span> K'helper`;
+    row.appendChild(meta);
+
+    const card = document.createElement('div');
+    card.className = 'bot-card';
+
+    const isCrisis = content.includes('🆘') || content.includes('1393');
+    if (isCrisis) card.classList.add('crisis');
+
+    card.innerHTML = renderMarkdown(content);
+    row.appendChild(card);
+
+    // Return card ref for map button injection
+    chat.appendChild(row);
+    chat.scrollTop = chat.scrollHeight;
+    return card;
   }
 
-  row.appendChild(avatar);
-  row.appendChild(bubble);
   chat.appendChild(row);
   chat.scrollTop = chat.scrollHeight;
-  return bubble;
+  return row;
 }
 
 function showTyping() {
   const chat = document.getElementById('chat');
   const row = document.createElement('div');
-  row.className = 'msg-row bot';
+  row.className = 'msg-row';
   row.id = 'typing-row';
 
-  const avatar = document.createElement('div');
-  avatar.className = 'msg-avatar bot-av';
-  avatar.textContent = '🏮';
+  const meta = document.createElement('div');
+  meta.className = 'msg-meta';
+  meta.innerHTML = `<span>${lanternMarkSVG(13)}</span> K'helper`;
+  row.appendChild(meta);
 
-  const bubble = document.createElement('div');
-  bubble.className = 'bubble bot';
-  bubble.innerHTML = '<div class="typing-dots"><span></span><span></span><span></span></div>';
+  const card = document.createElement('div');
+  card.className = 'bot-card';
+  card.innerHTML = '<div class="typing-dots"><span></span><span></span><span></span></div>';
+  row.appendChild(card);
 
-  row.appendChild(avatar);
-  row.appendChild(bubble);
   chat.appendChild(row);
   chat.scrollTop = chat.scrollHeight;
 }
@@ -1325,13 +1366,13 @@ const MAP_DATA = {
     { name: 'Pojangmacha Euljiro', kr: '을지로 포장마차', note: '🍺 Night outdoor tent stalls — makgeolli & Korean snacks', query: '을지로 포장마차' },
     { name: 'Tongin Market', kr: '통인시장', note: 'Pay with old coins, build your own banchan tray', query: '통인시장' },
     { name: 'Dongdaemun Night Market', kr: '동대문 야시장', note: '🌙 Open till 5am — street food + shopping', query: '동대문 야시장' },
-    { name: 'Busan Jagalchi Fish Market', kr: '부산 자갈치시장', note: "Korea's biggest seafood market — famous for raw fish", query: '부산 자갈치시장' },
+    { name: 'Busan Jagalchi Fish Market', kr: '부산 자갈치시장', note: "Korea's biggest seafood market", query: '부산 자갈치시장' },
   ],
   cafe: [
     { name: 'Bukchon Hanok Cafes', kr: '북촌한옥마을 카페', note: '🏯 Traditional house cafes — stunning architecture + matcha', query: '북촌한옥마을 카페' },
     { name: 'Insadong Cafe Street', kr: '인사동 카페거리', note: 'Unique themed cafes, tea houses, craft galleries', query: '인사동 카페' },
     { name: 'Hongdae Cafes', kr: '홍대 카페', note: '🎨 24hr cafes, cheap eats, young creative energy', query: '홍대 카페' },
-    { name: 'Seongsu Coffee Street', kr: '성수동 카페거리', note: "서울의 브루클린 — specialty coffee, industrial-chic vibes", query: '성수동 카페' },
+    { name: 'Seongsu Coffee Street', kr: '성수동 카페거리', note: "Seoul's Brooklyn — specialty coffee, industrial-chic vibes", query: '성수동 카페' },
     { name: 'Yeonnam-dong Cafes', kr: '연남동 카페', note: 'Quiet, charming street — great for solo or couple visits', query: '연남동 카페' },
     { name: 'Gangnam Cafe District', kr: '강남 카페거리', note: 'Upscale cafes, K-beauty desserts, high-end vibes', query: '강남 카페' },
     { name: 'Ikseon-dong Cafe Alley', kr: '익선동 카페골목', note: '📸 Hanok-turned-cafes — most photogenic in Seoul', query: '익선동 카페' },
@@ -1345,9 +1386,9 @@ const MAP_DATA = {
     { name: 'Nami Island', kr: '남이섬', note: '🌿 K-drama filming location · Seasonal trees · Peaceful ferry', query: '남이섬' },
     { name: 'Lotte World & Theme Park', kr: '롯데월드', note: '🎢 Indoor/outdoor amusement park — family favorite', query: '롯데월드' },
     { name: 'DMZ (Korean Border)', kr: '비무장지대(DMZ)', note: '🔭 Historic Korean War border — book tour in advance', query: 'DMZ 투어' },
-    { name: 'Jeju Island', kr: '제주도', note: '🌊 Korea\'s #1 getaway — Hallasan, black lava beaches, waterfalls', query: '제주도 관광' },
+    { name: 'Jeju Island', kr: '제주도', note: "🌊 Korea's #1 getaway — Hallasan, black lava beaches, waterfalls", query: '제주도 관광' },
     { name: 'Busan Gamcheon Culture Village', kr: '부산 감천문화마을', note: '🎨 Colorful hillside village — art installations, cafes', query: '감천문화마을' },
-    { name: 'Seoraksan National Park', kr: '설악산 국립공원', note: '🏔️ Korea\'s most beautiful mountain — hiking, cable car', query: '설악산 국립공원' },
+    { name: 'Seoraksan National Park', kr: '설악산 국립공원', note: "🏔️ Korea's most beautiful mountain — hiking, cable car", query: '설악산 국립공원' },
   ],
 };
 
@@ -1377,13 +1418,13 @@ function switchMapTab(tab) {
 function renderMapLocations(locs) {
   const list = document.getElementById('map-locations-list');
   if (!locs.length) {
-    list.innerHTML = '<p style="padding:24px;color:var(--text-muted);text-align:center;font-size:13px">No locations found</p>';
+    list.innerHTML = '<p style="padding:24px;color:var(--clay-400);text-align:center;font-size:13px">No locations found</p>';
     return;
   }
   list.innerHTML = locs.map(loc => `
     <div class="map-location-card">
       <div class="map-loc-name">${loc.name}</div>
-      <div class="map-loc-kr">${loc.kr}</div>
+      <div class="map-loc-kr kr">${loc.kr}</div>
       <div class="map-loc-note">${loc.note}</div>
       <div class="map-buttons">
         <a href="https://map.kakao.com/?q=${encodeURIComponent(loc.query)}" target="_blank" rel="noopener" class="map-btn kakao">🗺️ Kakao</a>
@@ -1401,7 +1442,7 @@ function doMapSearch() {
 }
 
 // ══════════════════════════════════════════════════
-// QUICK TOPICS
+// SIDEBAR
 // ══════════════════════════════════════════════════
 function toggleSidebar() {
   document.getElementById('sidebar').classList.toggle('open');
@@ -1426,9 +1467,6 @@ function quickTopic(topic) {
   }
 }
 
-// ══════════════════════════════════════════════════
-// RESET
-// ══════════════════════════════════════════════════
 function resetChat() {
   closeSidebar();
   conversationHistory = [];
@@ -1445,7 +1483,7 @@ async function sendMessage() {
   if (!text) return;
 
   if (getRemainingMsgs() <= 0) {
-    appendMessage('assistant', T[currentLang].langLabel === 'ភាសា'
+    appendMessage('assistant', currentLang === 'km'
       ? '⚠️ អ្នកបានផ្ញើសារច្រើនពេក។ សូមមកម្តងទៀតក្នុង ១ ម៉ោង។ ប្រសិនបើបន្ទាន់ ទូរស័ព្ទ 1345 ឬ 112។'
       : '⚠️ Message limit reached for this hour. Please wait 60 minutes. For urgent help call 1345 or 112.');
     return;
@@ -1479,19 +1517,19 @@ async function sendMessage() {
     } else {
       const data = await res.json();
       const reply = data.choices?.[0]?.message?.content || 'Sorry, please try again.';
-      const bubble = appendMessage('assistant', reply);
+      const card = appendMessage('assistant', reply);
       conversationHistory.push({ role: 'assistant', content: reply });
       if (conversationHistory.length > 40) conversationHistory.splice(0, 2);
 
-      // Inject map shortcut button based on AI triage category
+      // Map shortcut button based on AI triage category
       const meta = data._meta;
-      if (meta && meta.category) {
+      if (meta && meta.category && card) {
         const tabMap = {
           VISA: 'immigration', HEALTH: 'health', WORK: 'labor',
           COMMUNITY: 'labor', TOURIST: 'places', HOUSING: null, DAILY: null, SCHOOL: null
         };
         const tab = tabMap[meta.category];
-        if (tab && bubble) {
+        if (tab) {
           const labels = {
             km: { VISA: '📍 ការិ​យាល័យ​ចំណាកស្រុក', HEALTH: '📍 ស្វែងរកមន្ទីរពេទ្យ', WORK: '📍 ការងារ & ជំនួយ', COMMUNITY: '📍 ស្ថានទូត & សហគមន៍', TOURIST: '📍 ស្វែងរកទីកន្លែង' },
             en: { VISA: '📍 Find Immigration Office', HEALTH: '📍 Find Hospital', WORK: '📍 Labor Support', COMMUNITY: '📍 Embassy & Community', TOURIST: '📍 Explore Places' },
@@ -1502,7 +1540,7 @@ async function sendMessage() {
           const mapRow = document.createElement('div');
           mapRow.className = 'map-link-row';
           mapRow.innerHTML = `<button class="inline-map-btn panel" onclick="openMapPanel('${tab}')">${btnLabel}</button>`;
-          bubble.appendChild(mapRow);
+          card.appendChild(mapRow);
         }
       }
     }
