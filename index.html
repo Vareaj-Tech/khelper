@@ -3,122 +3,273 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>K'Helper — ជំនួយការខ្មែរនៅកូរ៉េ</title>
+  <title>K'Helper</title>
+
+  <!-- Netlify Identity — enable at: Netlify Dashboard → Site → Identity → Enable -->
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Newsreader:ital,wght@0,400;0,500;1,400&family=Noto+Sans+Khmer:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;600&family=Noto+Serif+Khmer:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&family=Geist:wght@300;400;500;600&family=Noto+Sans+Khmer:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      /* Warm clay text */
-      --clay-900: #1f0d09;
-      --clay-800: #2f1611;
-      --clay-700: #4a2419;
-      --clay-500: #7d4c3b;
-      --clay-400: #a87863;
-
-      /* Terracotta — primary */
-      --terra-700: #8f2e10;
-      --terra-600: #b53d18;
-      --terra-500: #d94e1f;
-      --terra-400: #e0714b;
-      --terra-200: #f3c7b6;
-      --terra-100: #f8dccd;
-
-      /* Warm cream */
-      --cream:   #fdf6f2;
-      --cream-2: #f7ebe0;
-      --cream-3: #f0dccb;
-      --paper:   #ebd5c0;
-
-      /* Ember glow accent */
-      --ember-500: #e8a83a;
-      --ember-400: #efbf63;
-      --ember-200: #f8e2b1;
-
-      /* Calm sage — informational */
-      --sage-700: #4b5a3c;
-      --sage-500: #6b7a5a;
-      --sage-200: #c8d2bb;
-
-      /* Charcoal hint */
-      --ink-900: #14100d;
-      --ink-800: #1d1814;
-
-      /* Strokes & shadows */
-      --hairline: rgba(74, 36, 25, 0.12);
-      --hairline-strong: rgba(74, 36, 25, 0.22);
+      --clay-900: #1f0d09; --clay-800: #2f1611; --clay-700: #4a2419;
+      --clay-500: #7d4c3b; --clay-400: #a87863;
+      --terra-700: #8f2e10; --terra-600: #b53d18; --terra-500: #d94e1f;
+      --terra-400: #e0714b; --terra-200: #f3c7b6; --terra-100: #f8dccd;
+      --cream: #fdf6f2; --cream-2: #f7ebe0; --cream-3: #f0dccb; --paper: #ebd5c0;
+      --ember-500: #e8a83a; --ember-200: #f8e2b1;
+      --sage-500: #6b7a5a; --sage-200: #c8d2bb; --sage-700: #4b5a3c;
+      --hairline: rgba(74,36,25,0.12); --hairline-strong: rgba(74,36,25,0.22);
       --soft-shadow: 0 1px 0 rgba(74,36,25,0.04), 0 8px 24px rgba(74,36,25,0.06);
-      --warm-shadow: 0 20px 50px -20px rgba(143,46,16,0.35);
-
-      /* Type stacks */
-      --font-display: "Newsreader", "Noto Serif Khmer", Georgia, serif;
-      --font-body:    "Geist", "Noto Sans Khmer", "Noto Sans KR", system-ui, sans-serif;
-      --font-mono:    "JetBrains Mono", ui-monospace, monospace;
-      --font-khmer:   "Noto Sans Khmer", "Geist", system-ui, sans-serif;
-      --font-khmer-d: "Noto Serif Khmer", "Newsreader", serif;
-      --font-korean:  "Noto Sans KR", "Geist", system-ui, sans-serif;
-
-      /* Aliases for compatibility */
-      --bg:           var(--cream);
-      --sidebar-bg:   var(--cream-2);
-      --sidebar-hover:#eddece;
-      --border:       var(--paper);
-      --accent:       var(--terra-500);
-      --accent-hover: var(--terra-600);
-      --accent-light: var(--terra-100);
-      --text:         var(--clay-800);
-      --text-muted:   var(--clay-500);
-      --text-light:   var(--clay-400);
-      --font:         var(--font-khmer);
-      --radius:       16px;
-      --radius-sm:    12px;
-      --radius-lg:    22px;
+      --font-display: "Newsreader", Georgia, serif;
+      --font-body: "Geist", "Noto Sans Khmer", system-ui, sans-serif;
+      --font-khmer: "Noto Sans Khmer", "Geist", sans-serif;
+      --font-korean: "Noto Sans KR", "Geist", sans-serif;
+      --font-mono: "JetBrains Mono", monospace;
     }
 
-    /* ── Type utility classes ── */
-    .disp    { font-family: var(--font-display); font-weight: 400; letter-spacing: -0.01em; }
+    /* Utilities */
+    .disp    { font-family: var(--font-display); font-weight: 400; letter-spacing: -0.02em; }
     .kh      { font-family: var(--font-khmer); }
-    .kh-d    { font-family: var(--font-khmer-d); }
     .kr      { font-family: var(--font-korean); }
     .mono    { font-family: var(--font-mono); }
     .eyebrow { font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--clay-400); }
-    .tabular { font-variant-numeric: tabular-nums; }
 
-    /* ── Animations ── */
-    @keyframes lanternGlow {
-      0%, 100% { opacity: 0.8; transform: scale(1); }
-      50%      { opacity: 1;   transform: scale(1.06); }
-    }
-    @keyframes lanternSway {
-      0%, 100% { transform: rotate(-2.5deg); }
-      50%      { transform: rotate(2.5deg); }
-    }
-    @keyframes dotBounce {
-      0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
-      30%            { transform: translateY(-7px); opacity: 1; }
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(6px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
+    @keyframes sway  { 0%,100%{transform:rotate(-3deg)} 50%{transform:rotate(3deg)} }
+    @keyframes glow  { 0%,100%{opacity:0.7;transform:scale(1)} 50%{opacity:1;transform:scale(1.08)} }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes dotBounce { 0%,60%,100%{transform:translateY(0);opacity:.4} 30%{transform:translateY(-7px);opacity:1} }
 
-    body {
+    body { background: var(--cream); color: var(--clay-800); font-family: var(--font-body); min-height: 100dvh; }
+
+    /* ═══════════════════════════════════════════
+       SCREEN SYSTEM
+    ═══════════════════════════════════════════ */
+    .screen { display: none; min-height: 100dvh; }
+    .screen.active { display: flex; }
+
+    /* ═══════════════════════════════════════════
+       SCREEN 1 — AUTH / SPLASH
+    ═══════════════════════════════════════════ */
+    #screen-auth {
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       background: var(--cream);
+      padding: 40px 24px 48px;
+      text-align: center;
+      gap: 0;
+    }
+
+    .auth-lantern-wrap {
+      position: relative;
+      margin-bottom: 32px;
+    }
+    .auth-lantern-glow {
+      position: absolute;
+      inset: -20% -40%;
+      background: radial-gradient(ellipse at center,
+        rgba(232,168,58,0.5) 0%, rgba(217,78,31,0.2) 40%, transparent 70%);
+      animation: glow 3.5s ease-in-out infinite;
+      pointer-events: none;
+    }
+    .auth-lantern-svg {
+      position: relative;
+      animation: sway 4.5s ease-in-out infinite;
+      transform-origin: 50% 0%;
+    }
+
+    .auth-wordmark {
+      font-family: var(--font-display);
+      font-size: 64px;
+      font-weight: 400;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      margin-bottom: 14px;
       color: var(--clay-800);
-      font-family: var(--font-body);
-      height: 100dvh;
+    }
+    .auth-wordmark em { font-style: italic; color: var(--terra-500); }
+
+    .auth-tagline {
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-style: italic;
+      color: var(--clay-500);
+      margin-bottom: 4px;
+      font-weight: 400;
+    }
+    .auth-tagline-kh {
+      font-family: var(--font-khmer);
+      font-size: 14px;
+      color: var(--terra-400);
+      margin-bottom: 36px;
+    }
+
+    .auth-badges {
       display: flex;
+      gap: 28px;
+      justify-content: center;
+      margin-bottom: 28px;
+    }
+    .auth-badge { text-align: center; }
+    .auth-badge-title { font-size: 14px; font-weight: 600; color: var(--clay-800); }
+    .auth-badge-sub { font-family: var(--font-khmer); font-size: 11px; color: var(--clay-400); margin-top: 1px; }
+
+    .lang-pill {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      background: var(--cream-2);
+      border: 1.5px solid var(--paper);
+      border-radius: 999px;
+      overflow: hidden;
+      margin-bottom: 32px;
+    }
+    .lang-pill-btn {
+      padding: 10px 20px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--clay-500);
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: var(--font-body);
+      transition: all 0.15s;
+    }
+    .lang-pill-btn:hover { color: var(--clay-800); }
+    .lang-pill-btn.active { background: var(--terra-500); color: var(--cream); border-radius: 999px; }
+    .lang-pill-sep { color: var(--paper); font-size: 14px; }
+
+    .auth-cta {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 100%;
+      max-width: 320px;
+      margin-bottom: 16px;
+    }
+    .btn-primary {
+      width: 100%;
+      padding: 15px 24px;
+      background: var(--terra-500);
+      color: var(--cream);
+      border: none;
+      border-radius: 999px;
+      font-size: 16px;
+      font-weight: 600;
+      font-family: var(--font-khmer);
+      cursor: pointer;
+      transition: all 0.15s;
+      box-shadow: 0 8px 20px -8px rgba(143,46,16,0.5);
+    }
+    .btn-primary:hover { background: var(--terra-600); }
+    .btn-secondary {
+      width: 100%;
+      padding: 13px 24px;
+      background: transparent;
+      color: var(--clay-500);
+      border: 1.5px solid var(--paper);
+      border-radius: 999px;
+      font-size: 14px;
+      font-family: var(--font-body);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-secondary:hover { border-color: var(--terra-300); color: var(--clay-800); }
+
+    .auth-footer {
+      font-size: 11px;
+      color: var(--clay-400);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    /* ═══════════════════════════════════════════
+       SCREEN 2 — PROFILE SETUP
+    ═══════════════════════════════════════════ */
+    #screen-setup {
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: var(--cream);
+      padding: 40px 24px 60px;
+    }
+
+    .setup-card {
+      width: 100%;
+      max-width: 400px;
+      animation: fadeUp 0.4s ease;
+    }
+    .setup-header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    .setup-title {
+      font-family: var(--font-display);
+      font-size: 28px;
+      color: var(--clay-800);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      margin-bottom: 6px;
+    }
+    .setup-title em { font-style: italic; color: var(--terra-500); }
+    .setup-sub { font-family: var(--font-khmer); font-size: 14px; color: var(--clay-500); line-height: 1.6; }
+
+    .setup-form { display: flex; flex-direction: column; gap: 16px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-label { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--clay-400); }
+    .form-input, .form-select {
+      width: 100%;
+      padding: 13px 16px;
+      background: var(--cream);
+      border: 1.5px solid var(--paper);
+      border-radius: 14px;
+      font-family: var(--font-khmer);
+      font-size: 15px;
+      color: var(--clay-800);
+      outline: none;
+      transition: border-color 0.15s;
+      appearance: none;
+    }
+    .form-input:focus, .form-select:focus { border-color: var(--terra-400); }
+    .form-input::placeholder { color: var(--clay-400); }
+    .form-select { cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23a87863' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 16px center; padding-right: 40px; }
+    .form-note { font-size: 11px; color: var(--clay-400); line-height: 1.4; font-family: var(--font-khmer); }
+
+    .setup-submit {
+      margin-top: 8px;
+      padding: 15px;
+      background: var(--terra-500);
+      color: var(--cream);
+      border: none;
+      border-radius: 999px;
+      font-size: 15px;
+      font-weight: 600;
+      font-family: var(--font-khmer);
+      cursor: pointer;
+      box-shadow: 0 8px 20px -8px rgba(143,46,16,0.45);
+      transition: all 0.15s;
+    }
+    .setup-submit:hover { background: var(--terra-600); }
+
+    /* ═══════════════════════════════════════════
+       SCREEN 3 — MAIN APP
+    ═══════════════════════════════════════════ */
+    #screen-app {
+      flex-direction: row;
+      height: 100dvh;
       overflow: hidden;
     }
 
-    /* ══════════════════════════════
-       SIDEBAR
-    ══════════════════════════════ */
+    /* ── Sidebar ── */
     #sidebar {
-      width: 264px;
-      min-width: 264px;
+      width: 260px;
+      min-width: 260px;
       background: var(--cream-2);
       border-right: 1px solid var(--paper);
       display: flex;
@@ -129,35 +280,65 @@
     .sidebar-logo {
       display: flex;
       align-items: center;
-      gap: 11px;
-      padding: 20px 18px 16px;
+      gap: 10px;
+      padding: 18px 16px 14px;
     }
-
-    .logo-name {
+    .sidebar-wordmark {
       font-family: var(--font-display);
-      font-size: 18px;
+      font-size: 17px;
       font-weight: 400;
       color: var(--clay-800);
       letter-spacing: -0.02em;
     }
-    .logo-name em { font-style: italic; }
+    .sidebar-wordmark em { font-style: italic; color: var(--terra-500); }
 
-    .logo-sub {
-      font-size: 10px;
-      color: var(--clay-400);
-      font-weight: 400;
-      font-family: var(--font-khmer);
-      display: block;
-      margin-top: 1px;
+    /* Visa expiry card in sidebar */
+    .visa-card {
+      margin: 0 12px 14px;
+      background: linear-gradient(135deg, var(--cream) 0%, var(--cream-2) 100%);
+      border: 1px solid var(--paper);
+      border-radius: 18px;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      position: relative;
+      overflow: hidden;
     }
+    .visa-card::before {
+      content: '';
+      position: absolute;
+      top: -20px; right: -20px;
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(232,168,58,0.2) 0%, transparent 70%);
+    }
+    .visa-ring { flex-shrink: 0; position: relative; }
+    .visa-info { flex: 1; min-width: 0; position: relative; }
+    .visa-label { font-size: 9px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--clay-400); }
+    .visa-date { font-family: var(--font-display); font-size: 18px; color: var(--clay-800); line-height: 1.1; margin-top: 3px; }
+    .visa-remaining { font-family: var(--font-khmer); font-size: 11.5px; color: var(--clay-500); margin-top: 3px; }
+    .visa-renew {
+      display: inline-block;
+      margin-top: 8px;
+      padding: 5px 12px;
+      background: var(--terra-500);
+      color: var(--cream);
+      border: none;
+      border-radius: 999px;
+      font-size: 11px;
+      font-family: var(--font-body);
+      cursor: pointer;
+    }
+    .visa-warning .visa-card { border-color: rgba(217,78,31,0.35); background: linear-gradient(135deg, #fff5f2 0%, #fde8df 100%); }
 
     .new-chat-btn {
-      margin: 0 12px 16px;
+      margin: 0 12px 14px;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
-      padding: 11px 16px;
+      padding: 10px 16px;
       background: var(--terra-500);
       border: none;
       border-radius: 999px;
@@ -167,183 +348,46 @@
       color: var(--cream);
       font-weight: 600;
       transition: all 0.15s;
-      box-shadow: 0 6px 16px -6px rgba(143,46,16,0.4);
+      box-shadow: 0 4px 12px -4px rgba(143,46,16,0.4);
     }
-
     .new-chat-btn:hover { background: var(--terra-600); }
 
     .sidebar-section-label {
-      font-size: 9.5px;
-      font-weight: 600;
+      font-size: 9px;
+      font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.14em;
       color: var(--clay-400);
-      padding: 0 18px 8px;
+      padding: 0 16px 8px;
     }
 
-    .sidebar-nav {
-      flex: 1;
-      overflow-y: auto;
-      padding: 0 8px;
-    }
-
-    .sidebar-nav::-webkit-scrollbar { width: 3px; }
-    .sidebar-nav::-webkit-scrollbar-thumb { background: var(--paper); border-radius: 4px; }
+    .sidebar-nav { flex: 1; overflow-y: auto; padding: 0 8px; }
+    .sidebar-nav::-webkit-scrollbar { width: 2px; }
+    .sidebar-nav::-webkit-scrollbar-thumb { background: var(--paper); }
 
     .nav-item {
       display: flex;
       align-items: center;
       gap: 10px;
-      padding: 9px 11px;
-      border-radius: 12px;
+      padding: 8px 10px;
+      border-radius: 10px;
       cursor: pointer;
       font-size: 13px;
       color: var(--clay-500);
       font-family: var(--font-khmer);
-      transition: all 0.15s;
-      margin-bottom: 2px;
+      transition: all 0.12s;
+      margin-bottom: 1px;
     }
+    .nav-item:hover { background: var(--cream-3); color: var(--clay-800); }
+    .nav-item.active { background: var(--terra-100); color: var(--terra-600); font-weight: 600; }
+    .nav-icon { font-size: 15px; width: 20px; text-align: center; flex-shrink: 0; }
 
-    .nav-item:hover { background: var(--sidebar-hover); color: var(--clay-800); }
-    .nav-item.active {
-      background: var(--terra-100);
-      color: var(--terra-600);
-      font-weight: 600;
-    }
-
-    .nav-icon { font-size: 16px; flex-shrink: 0; width: 22px; text-align: center; }
-
-    /* MAP PANEL */
-    #map-panel {
-      display: none;
-      position: fixed;
-      top: 0; right: 0; bottom: 0;
-      width: 360px;
-      background: var(--cream);
-      border-left: 1.5px solid var(--paper);
-      z-index: 100;
-      flex-direction: column;
-      box-shadow: -4px 0 24px rgba(74,36,25,0.1);
-    }
-    #map-panel.open { display: flex; }
-
-    .map-panel-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 16px 18px;
-      border-bottom: 1px solid var(--paper);
-      background: var(--cream-2);
-    }
-    .map-panel-title { font-size: 15px; font-weight: 700; color: var(--clay-800); }
-    .map-close-btn { background: none; border: none; font-size: 20px; cursor: pointer; color: var(--clay-500); padding: 2px 6px; border-radius: 6px; line-height: 1; }
-    .map-close-btn:hover { background: var(--cream-3); }
-
-    .map-tabs {
-      display: flex;
-      border-bottom: 1px solid var(--paper);
-      background: var(--cream-2);
-      overflow-x: auto;
-    }
-    .map-tab {
-      flex: 1;
-      padding: 10px 6px;
-      font-size: 11px;
-      font-weight: 600;
-      text-align: center;
-      cursor: pointer;
-      color: var(--clay-400);
-      border-bottom: 2px solid transparent;
-      transition: all 0.15s;
-      white-space: nowrap;
-      font-family: var(--font-body);
-      background: none;
-      border-top: none; border-left: none; border-right: none;
-    }
-    .map-tab:hover { color: var(--terra-500); }
-    .map-tab.active { color: var(--terra-500); border-bottom-color: var(--terra-500); }
-
-    .map-search-row {
-      padding: 12px 14px;
-      border-bottom: 1px solid var(--paper);
-      display: flex;
-      gap: 8px;
-    }
-    .map-search-input {
-      flex: 1;
-      padding: 9px 14px;
-      border: 1.5px solid var(--paper);
-      border-radius: 999px;
-      font-family: var(--font-khmer);
-      font-size: 13px;
-      background: var(--cream);
-      color: var(--clay-800);
-      outline: none;
-    }
-    .map-search-input:focus { border-color: var(--terra-500); }
-    .map-search-btn {
-      padding: 9px 16px;
-      background: var(--terra-500);
-      color: var(--cream);
-      border: none;
-      border-radius: 999px;
-      font-size: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      font-family: var(--font-body);
-      transition: background 0.15s;
-    }
-    .map-search-btn:hover { background: var(--terra-600); }
-
-    .map-locations-list { flex: 1; overflow-y: auto; padding: 12px; }
-    .map-locations-list::-webkit-scrollbar { width: 3px; }
-    .map-locations-list::-webkit-scrollbar-thumb { background: var(--paper); }
-
-    .map-location-card {
-      background: var(--cream);
-      border: 1px solid var(--hairline);
-      border-radius: 18px;
-      padding: 16px;
-      margin-bottom: 10px;
-      box-shadow: var(--soft-shadow);
-    }
-    .map-loc-name { font-size: 13px; font-weight: 600; color: var(--clay-800); margin-bottom: 3px; }
-    .map-loc-kr { font-size: 12px; color: var(--clay-500); margin-bottom: 3px; font-family: var(--font-korean); }
-    .map-loc-note { font-size: 11.5px; color: var(--clay-400); font-family: var(--font-khmer); margin-bottom: 12px; line-height: 1.45; }
-    .map-buttons { display: flex; gap: 6px; }
-    .map-btn {
-      flex: 1; padding: 7px 6px; border-radius: 10px;
-      font-size: 11px; font-weight: 600; cursor: pointer;
-      text-decoration: none; text-align: center;
-      transition: all 0.15s; display: block;
-    }
-    .map-btn.kakao  { background: #FEE500; color: #3C1E1E; border: none; }
-    .map-btn.kakao:hover { background: #f5dc00; }
-    .map-btn.naver  { background: #03C75A; color: white; border: none; }
-    .map-btn.naver:hover { background: #02b350; }
-    .map-btn.google { background: var(--terra-100); color: var(--terra-600); border: 1px solid var(--paper); }
-    .map-btn.google:hover { background: var(--terra-200); }
-
-    .map-link-row { margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--hairline-strong); display: flex; gap: 6px; flex-wrap: wrap; }
-    .inline-map-btn {
-      display: inline-flex; align-items: center; gap: 4px;
-      padding: 6px 12px; border-radius: 999px;
-      font-size: 11px; font-weight: 600;
-      text-decoration: none; cursor: pointer; transition: all 0.15s;
-    }
-    .inline-map-btn.panel {
-      background: var(--terra-100); color: var(--terra-600);
-      border: 1px solid var(--terra-200); font-family: var(--font-body);
-    }
-    .inline-map-btn.panel:hover { background: var(--terra-200); }
-
-    /* Language switcher */
-    .lang-section { padding: 14px 12px; border-top: 1px solid var(--paper); }
-    .lang-label { font-size: 9.5px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--clay-400); margin-bottom: 8px; }
-    .lang-buttons { display: flex; gap: 6px; }
+    .lang-section { padding: 12px 12px; border-top: 1px solid var(--paper); }
+    .lang-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--clay-400); margin-bottom: 8px; }
+    .lang-buttons { display: flex; gap: 5px; }
     .lang-btn {
       flex: 1;
-      padding: 7px 4px;
+      padding: 6px 4px;
       border: 1.5px solid var(--paper);
       border-radius: 999px;
       background: transparent;
@@ -351,272 +395,232 @@
       font-size: 11px;
       cursor: pointer;
       color: var(--clay-500);
-      transition: all 0.15s;
+      transition: all 0.12s;
       text-align: center;
     }
-    .lang-btn:hover { border-color: var(--terra-400); color: var(--terra-500); }
-    .lang-btn.active {
-      background: var(--terra-500);
-      border-color: var(--terra-500);
-      color: var(--cream);
-      font-weight: 600;
-    }
+    .lang-btn:hover { border-color: var(--terra-300); color: var(--terra-500); }
+    .lang-btn.active { background: var(--terra-500); border-color: var(--terra-500); color: var(--cream); font-weight: 600; }
 
-    .sidebar-brand-strip {
-      padding: 10px 18px 16px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
+    .sidebar-footer {
+      padding: 10px 16px 14px;
       border-top: 1px solid var(--paper);
-    }
-    .brand-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--terra-400); opacity: 0.6; }
-    .brand-tagline { font-size: 10px; color: var(--clay-400); letter-spacing: 0.05em; }
-
-    /* ══════════════════════════════
-       MAIN AREA
-    ══════════════════════════════ */
-    #main { flex: 1; display: flex; flex-direction: column; overflow: hidden; background: var(--cream); }
-
-    /* ── CHAT ── */
-    #chat {
-      flex: 1;
-      overflow-y: auto;
-      padding: 24px 28px 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 22px;
-    }
-    #chat::-webkit-scrollbar { width: 4px; }
-    #chat::-webkit-scrollbar-thumb { background: var(--paper); border-radius: 4px; }
-
-    /* ── WELCOME SCREEN ── */
-    .welcome {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      flex: 1;
-      padding: 32px 16px;
-      text-align: center;
-      min-height: 60vh;
-      animation: fadeIn 0.4s ease;
-    }
-
-    .welcome-lantern-wrap {
-      position: relative;
-      margin-bottom: 28px;
-    }
-    .welcome-lantern-glow {
-      position: absolute;
-      inset: 5% -20% -10% -20%;
-      background: radial-gradient(ellipse at center, rgba(232,168,58,0.45) 0%, rgba(217,78,31,0.18) 45%, transparent 70%);
-      animation: lanternGlow 3.2s ease-in-out infinite;
-      pointer-events: none;
-    }
-
-    .welcome-tagline {
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--clay-400);
-      margin-bottom: 10px;
-    }
-
-    .welcome h2 {
-      font-family: var(--font-display);
-      font-size: 28px;
-      font-weight: 400;
-      color: var(--clay-800);
-      margin-bottom: 6px;
-      line-height: 1.2;
-      letter-spacing: -0.02em;
-    }
-    .welcome h2 em { font-style: italic; }
-
-    .welcome-sub {
-      font-size: 14px;
-      color: var(--clay-500);
-      font-family: var(--font-khmer);
-      margin-bottom: 30px;
-      line-height: 1.65;
-      max-width: 380px;
-    }
-
-    .cards-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 10px;
-      max-width: 580px;
-      width: 100%;
-    }
-
-    @media (max-width: 900px) {
-      .cards-grid { grid-template-columns: 1fr 1fr; max-width: 440px; }
-    }
-
-    .topic-card {
-      background: var(--cream);
-      border: 1px solid var(--hairline);
-      border-radius: 18px;
-      padding: 16px 14px 14px;
-      cursor: pointer;
-      text-align: left;
-      transition: all 0.2s;
-      box-shadow: var(--soft-shadow);
-    }
-    .topic-card:hover {
-      background: var(--cream-2);
-      border-color: var(--terra-400);
-      transform: translateY(-2px);
-      box-shadow: 0 12px 28px -12px rgba(143,46,16,0.2);
-    }
-    .topic-card:active { transform: translateY(0); }
-
-    .card-icon-wrap {
-      width: 40px; height: 40px;
-      background: var(--terra-100);
-      border-radius: 12px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 20px;
-      margin-bottom: 11px;
-    }
-    .card-title { font-size: 13px; font-weight: 600; color: var(--clay-800); margin-bottom: 3px; line-height: 1.3; font-family: var(--font-khmer); }
-    .card-sub { font-size: 11px; color: var(--clay-500); line-height: 1.4; font-family: var(--font-body); }
-
-    /* ── MESSAGE ROWS — letter-from-a-friend layout ── */
-    .msg-row {
-      display: flex;
-      flex-direction: column;
-      width: 100%;
-      max-width: 680px;
-      animation: fadeIn 0.3s ease;
-    }
-
-    /* ── User message ── */
-    .msg-meta {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 6px;
-      font-size: 10.5px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--clay-500);
-    }
-    .msg-meta.user { flex-direction: row-reverse; align-self: flex-end; }
-    .meta-dot {
-      width: 13px; height: 13px; border-radius: 50%;
-      background: var(--terra-500); flex-shrink: 0;
-    }
-    .meta-lantern { flex-shrink: 0; }
-
-    .user-bubble {
-      align-self: flex-end;
-      max-width: 88%;
-      background: var(--cream-2);
-      color: var(--clay-800);
-      padding: 13px 18px;
-      border-radius: 18px 18px 4px 18px;
-      font-size: 14.5px;
-      line-height: 1.6;
-      word-break: break-word;
-      border: 1px solid var(--paper);
-      font-family: var(--font-khmer);
-    }
-
-    /* ── Bot message — paper card ── */
-    .bot-card {
-      background: var(--cream);
-      border: 1px solid var(--hairline);
-      border-radius: 4px 18px 18px 18px;
-      padding: 18px 20px 16px;
-      font-size: 14.5px;
-      line-height: 1.65;
-      word-break: break-word;
-      box-shadow: var(--soft-shadow);
-      background-image:
-        radial-gradient(circle at 15% 20%, rgba(143,46,16,0.03) 0, transparent 40%),
-        radial-gradient(circle at 85% 80%, rgba(232,168,58,0.04) 0, transparent 45%);
-      font-family: var(--font-khmer);
-      color: var(--clay-800);
-    }
-
-    .bot-card.crisis {
-      background: #fff5f5;
-      border-color: rgba(217,78,31,0.3);
-    }
-
-    /* Markdown in bot card */
-    .bot-card strong { font-weight: 600; color: var(--clay-800); }
-    .bot-card em { font-style: italic; color: var(--clay-500); }
-    .bot-card .msg-step {
-      display: flex;
-      gap: 10px;
-      padding: 5px 0;
-      align-items: flex-start;
-    }
-    .bot-card .msg-step-num {
-      flex-shrink: 0;
-      width: 22px; height: 22px; border-radius: 50%;
-      background: var(--terra-500); color: var(--cream);
-      font-size: 11px; font-weight: 700;
-      display: flex; align-items: center; justify-content: center;
-      margin-top: 1px;
-    }
-    .bot-card .warning-block {
-      background: linear-gradient(135deg, #fff1d6 0%, #f8dccd 100%);
-      border: 1px solid var(--ember-200);
-      border-radius: 12px;
-      padding: 12px 16px;
-      margin: 8px 0;
-      font-weight: 500;
-      color: var(--clay-700);
-    }
-
-    /* Source line at bottom of bot card */
-    .bot-source {
-      margin-top: 14px;
-      padding-top: 10px;
-      border-top: 1px dashed var(--hairline-strong);
-      font-size: 11px;
-      color: var(--clay-500);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-style: italic;
-    }
-
-    /* Suggested follow-ups */
-    .followups {
-      margin-top: 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 7px;
-    }
-    .followup-chip {
-      background: var(--cream);
-      border: 1px solid var(--hairline);
-      border-radius: 12px;
-      padding: 10px 14px;
-      font-size: 13px;
-      font-family: var(--font-khmer);
-      color: var(--clay-800);
-      cursor: pointer;
-      text-align: left;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 8px;
-      transition: all 0.15s;
     }
-    .followup-chip:hover {
-      background: var(--terra-100);
-      border-color: var(--terra-300);
+    .sidebar-user {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
     }
-    .followup-arrow { color: var(--terra-500); flex-shrink: 0; font-size: 14px; }
+    .sidebar-user-name { font-size: 12px; color: var(--clay-800); font-weight: 500; }
+    .sidebar-user-email { font-size: 10px; color: var(--clay-400); }
+    .logout-btn {
+      background: none;
+      border: none;
+      font-size: 11px;
+      color: var(--clay-400);
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-family: var(--font-body);
+    }
+    .logout-btn:hover { background: var(--cream-3); color: var(--clay-700); }
 
-    /* Hotline action card inside bot response */
+    /* ── Main chat area ── */
+    #main { flex: 1; display: flex; flex-direction: column; overflow: hidden; background: var(--cream); }
+
+    /* Chat header */
+    #chat-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 13px 20px;
+      border-bottom: 1px solid var(--hairline);
+      flex-shrink: 0;
+      background: var(--cream);
+    }
+    .ch-lantern { flex-shrink: 0; }
+    .ch-user-info { flex: 1; min-width: 0; }
+    .ch-name {
+      font-family: var(--font-khmer);
+      font-size: 15px;
+      color: var(--clay-800);
+      font-weight: 500;
+      line-height: 1.2;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .ch-sub {
+      font-size: 11px;
+      color: var(--clay-400);
+      font-family: var(--font-body);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 1px;
+    }
+    .live-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--sage-500); }
+    .ch-actions { display: flex; gap: 4px; }
+    .ch-action-btn {
+      width: 34px; height: 34px;
+      background: none;
+      border: none;
+      border-radius: 8px;
+      color: var(--clay-400);
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+      transition: all 0.12s;
+    }
+    .ch-action-btn:hover { background: var(--cream-2); color: var(--clay-800); }
+
+    /* Chat feed */
+    #chat {
+      flex: 1;
+      overflow-y: auto;
+      padding: 22px 20px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    #chat::-webkit-scrollbar { width: 3px; }
+    #chat::-webkit-scrollbar-thumb { background: var(--paper); border-radius: 4px; }
+
+    /* Home card (visa + topics, shown when no chat) */
+    #home-card {
+      animation: fadeUp 0.35s ease;
+    }
+    .home-visa-banner {
+      background: linear-gradient(135deg, var(--cream) 0%, var(--cream-2) 100%);
+      border: 1px solid var(--paper);
+      border-radius: 20px;
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+    .home-visa-banner::before {
+      content: '';
+      position: absolute;
+      top: -30px; right: -30px;
+      width: 120px; height: 120px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(232,168,58,0.25) 0%, transparent 70%);
+    }
+    .home-topics-label { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--clay-400); margin-bottom: 12px; }
+    .home-topics-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+    }
+    .topic-card {
+      background: var(--cream);
+      border: 1px solid var(--hairline);
+      border-radius: 16px;
+      padding: 14px 12px;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.15s;
+      box-shadow: var(--soft-shadow);
+    }
+    .topic-card:hover { background: var(--cream-2); border-color: var(--terra-300); transform: translateY(-2px); }
+    .topic-card:active { transform: translateY(0); }
+    .topic-icon { font-size: 20px; margin-bottom: 9px; display: block; }
+    .topic-title { font-size: 12px; font-weight: 600; color: var(--clay-800); font-family: var(--font-khmer); line-height: 1.3; }
+    .topic-sub { font-size: 10px; color: var(--clay-400); margin-top: 2px; }
+
+    /* Messages */
+    .msg-row { display: flex; flex-direction: column; width: 100%; animation: fadeUp 0.25s ease; }
+
+    .msg-meta {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 6px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--clay-400);
+    }
+    .msg-meta.user-meta { flex-direction: row-reverse; }
+    .user-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--terra-500); flex-shrink: 0; }
+
+    /* User bubble */
+    .user-bubble {
+      align-self: flex-end;
+      max-width: 80%;
+      background: var(--cream-2);
+      color: var(--clay-800);
+      padding: 12px 16px;
+      border-radius: 18px 18px 4px 18px;
+      font-family: var(--font-khmer);
+      font-size: 15px;
+      line-height: 1.6;
+      word-break: break-word;
+      border: 1px solid var(--paper);
+    }
+
+    /* Bot card */
+    .bot-card {
+      background: #fff;
+      border: 1px solid var(--hairline);
+      border-radius: 4px 18px 18px 18px;
+      padding: 18px 20px 16px;
+      font-family: var(--font-khmer);
+      font-size: 15px;
+      line-height: 1.65;
+      word-break: break-word;
+      box-shadow: var(--soft-shadow);
+      color: var(--clay-800);
+    }
+    .bot-card.crisis { background: #fff5f5; border-color: rgba(217,78,31,0.25); }
+
+    .bot-card strong { font-weight: 700; color: var(--clay-800); }
+    .bot-card em { font-style: italic; color: var(--clay-500); }
+
+    /* Bullet points in bot card */
+    .bot-bullet {
+      display: flex;
+      gap: 10px;
+      padding: 4px 0;
+      align-items: flex-start;
+    }
+    .bot-bullet-dot {
+      flex-shrink: 0;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--terra-500);
+      margin-top: 7px;
+    }
+    .bot-bullet-text { flex: 1; }
+    .bot-bullet-en { font-size: 12px; font-style: italic; color: var(--clay-500); font-family: var(--font-body); margin-top: 1px; }
+
+    /* Step lines */
+    .bot-step {
+      display: flex;
+      gap: 10px;
+      padding: 4px 0;
+      align-items: flex-start;
+    }
+    .bot-step-num {
+      flex-shrink: 0;
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      background: var(--terra-500);
+      color: var(--cream);
+      font-size: 11px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      margin-top: 1px;
+      font-family: var(--font-body);
+    }
+
+    /* Hotline action card */
     .hotline-card {
       margin-top: 16px;
       padding: 14px 16px;
@@ -627,66 +631,98 @@
       align-items: center;
       gap: 13px;
     }
-    .hotline-icon-wrap {
-      width: 40px; height: 40px; border-radius: 11px;
-      background: var(--terra-500); color: var(--cream);
+    .hotline-icon {
+      width: 40px; height: 40px;
+      border-radius: 11px;
+      background: var(--terra-500);
+      color: var(--cream);
       display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0; font-size: 18px;
+      flex-shrink: 0;
+      font-size: 17px;
     }
-    .hotline-number { font-family: var(--font-mono); font-size: 18px; color: var(--clay-800); margin-top: 2px; }
-    .hotline-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--clay-400); }
-    .hotline-call-btn {
+    .hotline-label-text { font-size: 9px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--clay-500); }
+    .hotline-number { font-family: var(--font-mono); font-size: 19px; color: var(--clay-800); margin-top: 1px; letter-spacing: 0.02em; }
+    .hotline-call {
+      margin-left: auto;
+      padding: 8px 16px;
       background: var(--clay-800);
       color: var(--cream);
       border: none;
       border-radius: 999px;
-      padding: 8px 16px;
       font-size: 12px;
       font-family: var(--font-body);
       cursor: pointer;
-      white-space: nowrap;
+      font-weight: 600;
+      text-decoration: none;
     }
 
-    /* ── TYPING INDICATOR ── */
-    .typing-dots { display: flex; gap: 5px; align-items: center; padding: 6px 2px; }
-    .typing-dots span {
-      width: 7px; height: 7px;
-      background: var(--terra-400);
-      border-radius: 50%;
-      opacity: 0.5;
-      animation: dotBounce 1.3s infinite;
+    /* Source citation */
+    .bot-source {
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px dashed var(--hairline-strong);
+      font-size: 11.5px;
+      color: var(--clay-500);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-style: italic;
     }
+
+    /* Warning block */
+    .bot-warning {
+      background: linear-gradient(135deg, #fff1d6 0%, #f8dccd 100%);
+      border: 1px solid var(--ember-200);
+      border-radius: 12px;
+      padding: 12px 16px;
+      margin: 8px 0;
+      color: var(--clay-700);
+    }
+
+    /* Map shortcut chip */
+    .map-chip-row { margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--hairline); display: flex; flex-wrap: wrap; gap: 6px; }
+    .map-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 6px 12px;
+      background: var(--terra-100);
+      color: var(--terra-600);
+      border: 1px solid var(--terra-200);
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: var(--font-body);
+      transition: all 0.12s;
+    }
+    .map-chip:hover { background: var(--terra-200); }
+
+    /* Typing indicator */
+    .typing-dots { display: flex; gap: 5px; align-items: center; padding: 4px 0; }
+    .typing-dots span { width: 7px; height: 7px; background: var(--terra-400); border-radius: 50%; opacity: 0.5; animation: dotBounce 1.3s infinite; }
     .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
     .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
 
-    /* ══════════════════════════════
-       INPUT AREA
-    ══════════════════════════════ */
+    /* ── Input area ── */
     #input-area {
-      border-top: 1px solid var(--hairline);
-      padding: 12px 28px 14px;
-      background: linear-gradient(to top, var(--cream) 80%, rgba(253,246,242,0));
       flex-shrink: 0;
-      padding-bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+      padding: 10px 16px calc(14px + env(safe-area-inset-bottom, 0px));
+      background: linear-gradient(to top, var(--cream) 70%, transparent);
+      border-top: 1px solid var(--hairline);
     }
-
     .input-pill {
       display: flex;
       align-items: center;
       gap: 8px;
-      max-width: 680px;
       background: var(--cream);
       border: 1.5px solid var(--hairline-strong);
       border-radius: 999px;
-      padding: 9px 9px 9px 20px;
-      transition: border-color 0.2s, box-shadow 0.2s;
+      padding: 9px 9px 9px 18px;
+      transition: border-color 0.15s, box-shadow 0.15s;
       box-shadow: var(--soft-shadow);
     }
-    .input-pill:focus-within {
-      border-color: var(--terra-400);
-      box-shadow: 0 0 0 3px rgba(217,78,31,0.1);
-    }
-
+    .input-pill:focus-within { border-color: var(--terra-400); box-shadow: 0 0 0 3px rgba(217,78,31,0.1); }
     #user-input {
       flex: 1;
       background: transparent;
@@ -702,582 +738,811 @@
       padding: 2px 0;
     }
     #user-input::placeholder { color: var(--clay-400); }
-
     #send-btn {
       width: 38px; height: 38px;
       background: var(--terra-500);
-      border: none;
-      border-radius: 50%;
+      border: none; border-radius: 50%;
       color: var(--cream);
-      font-size: 15px;
       cursor: pointer;
-      transition: all 0.15s;
+      transition: all 0.12s;
       display: flex; align-items: center; justify-content: center;
       flex-shrink: 0;
       box-shadow: 0 4px 10px -4px rgba(143,46,16,0.5);
     }
     #send-btn:hover { background: var(--terra-600); }
-    #send-btn:active { transform: scale(0.93); }
-    #send-btn:disabled { background: var(--paper); cursor: not-allowed; box-shadow: none; }
-
-    .input-footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 8px;
-      max-width: 680px;
-    }
-    .emergency-line { font-size: 11px; color: var(--clay-400); }
+    #send-btn:active { transform: scale(0.92); }
+    #send-btn:disabled { background: var(--paper); box-shadow: none; cursor: not-allowed; }
+    .input-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 7px; padding: 0 4px; }
+    .emergency-line { font-size: 10.5px; color: var(--clay-400); }
     .emergency-line strong { color: var(--terra-500); font-weight: 600; }
-    #msg-counter { font-size: 11px; color: var(--clay-400); }
+    #msg-counter { font-size: 10.5px; color: var(--clay-400); }
 
-    /* ══════════════════════════════
-       MOBILE
-    ══════════════════════════════ */
+    /* ── Map panel ── */
+    #map-panel {
+      display: none;
+      position: fixed;
+      top: 0; right: 0; bottom: 0;
+      width: 340px;
+      background: var(--cream);
+      border-left: 1.5px solid var(--paper);
+      z-index: 200;
+      flex-direction: column;
+      box-shadow: -4px 0 24px rgba(74,36,25,0.1);
+    }
+    #map-panel.open { display: flex; }
+    .map-panel-header { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; border-bottom: 1px solid var(--paper); background: var(--cream-2); }
+    .map-panel-title { font-size: 14px; font-weight: 700; color: var(--clay-800); }
+    .map-close-btn { background: none; border: none; font-size: 18px; cursor: pointer; color: var(--clay-500); padding: 2px 6px; border-radius: 6px; }
+    .map-tabs { display: flex; border-bottom: 1px solid var(--paper); background: var(--cream-2); overflow-x: auto; }
+    .map-tab { flex: 1; padding: 9px 5px; font-size: 10px; font-weight: 600; text-align: center; cursor: pointer; color: var(--clay-400); border-bottom: 2px solid transparent; white-space: nowrap; font-family: var(--font-body); background: none; border-top: none; border-left: none; border-right: none; transition: all 0.12s; }
+    .map-tab.active { color: var(--terra-500); border-bottom-color: var(--terra-500); }
+    .map-search-row { padding: 10px 12px; border-bottom: 1px solid var(--paper); display: flex; gap: 7px; }
+    .map-search-input { flex: 1; padding: 8px 13px; border: 1.5px solid var(--paper); border-radius: 999px; font-family: var(--font-khmer); font-size: 13px; background: var(--cream); color: var(--clay-800); outline: none; }
+    .map-search-input:focus { border-color: var(--terra-400); }
+    .map-search-btn { padding: 8px 14px; background: var(--terra-500); color: var(--cream); border: none; border-radius: 999px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: var(--font-body); }
+    .map-locations-list { flex: 1; overflow-y: auto; padding: 10px; }
+    .map-location-card { background: var(--cream); border: 1px solid var(--hairline); border-radius: 16px; padding: 14px; margin-bottom: 9px; box-shadow: var(--soft-shadow); }
+    .map-loc-name { font-size: 13px; font-weight: 600; color: var(--clay-800); margin-bottom: 2px; }
+    .map-loc-kr { font-size: 12px; color: var(--clay-500); margin-bottom: 3px; font-family: var(--font-korean); }
+    .map-loc-note { font-size: 11.5px; color: var(--clay-400); font-family: var(--font-khmer); margin-bottom: 10px; line-height: 1.4; }
+    .map-buttons { display: flex; gap: 5px; }
+    .map-btn { flex: 1; padding: 7px 5px; border-radius: 9px; font-size: 11px; font-weight: 600; cursor: pointer; text-decoration: none; text-align: center; transition: all 0.12s; display: block; }
+    .map-btn.kakao { background: #FEE500; color: #3C1E1E; border: none; }
+    .map-btn.naver { background: #03C75A; color: white; border: none; }
+    .map-btn.google { background: var(--terra-100); color: var(--terra-600); border: 1px solid var(--paper); }
+
+    /* Mobile header */
     #mobile-header {
       display: none;
       align-items: center;
-      gap: 12px;
-      padding: 12px 16px;
-      background: var(--cream-2);
-      border-bottom: 1px solid var(--paper);
-      flex-shrink: 0;
+      gap: 10px;
+      padding: 12px 14px;
       padding-top: calc(12px + env(safe-area-inset-top, 0px));
+      background: var(--cream);
+      border-bottom: 1px solid var(--hairline);
+      flex-shrink: 0;
     }
-
-    #hamburger-btn {
-      background: none;
-      border: none;
-      cursor: pointer;
-      font-size: 22px;
-      color: var(--clay-800);
-      padding: 4px 8px;
-      line-height: 1;
-      border-radius: 8px;
-    }
-    #hamburger-btn:active { background: var(--paper); }
-
-    #mobile-logo {
-      display: flex;
-      align-items: center;
-      gap: 9px;
-      flex: 1;
-    }
-    .mobile-logo-name {
-      font-family: var(--font-display);
-      font-size: 17px;
-      font-weight: 400;
-      color: var(--clay-800);
-      letter-spacing: -0.02em;
-    }
-    .mobile-logo-name em { font-style: italic; }
-
-    #sidebar-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(31,13,9,0.45);
-      z-index: 100;
-    }
+    #hamburger-btn { background: none; border: none; cursor: pointer; font-size: 20px; color: var(--clay-800); padding: 4px 6px; border-radius: 8px; line-height: 1; }
+    .mobile-header-center { flex: 1; text-align: center; }
+    .mobile-wordmark { font-family: var(--font-display); font-size: 16px; color: var(--clay-800); letter-spacing: -0.02em; }
+    .mobile-wordmark em { font-style: italic; color: var(--terra-500); }
+    #sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(31,13,9,0.5); z-index: 100; }
     #sidebar-overlay.open { display: block; }
 
-    @media (max-width: 700px) {
-      #mobile-header { display: flex; }
+    /* ═══════════════════════════════════════════
+       RESPONSIVE
+    ═══════════════════════════════════════════ */
+    @media (max-width: 720px) {
+      #screen-auth { padding: 32px 20px 44px; }
+      .auth-wordmark { font-size: 52px; }
+      .auth-badges { gap: 20px; }
 
       #sidebar {
         position: fixed;
-        left: -280px;
-        top: 0; bottom: 0;
-        z-index: 200;
-        width: 264px;
-        min-width: 264px;
-        transition: left 0.25s ease;
+        left: -280px; top: 0; bottom: 0;
+        z-index: 150;
+        width: 260px; min-width: 260px;
+        transition: left 0.24s ease;
         box-shadow: 4px 0 24px rgba(31,13,9,0.18);
       }
       #sidebar.open { left: 0; }
-
+      #mobile-header { display: flex; }
+      #chat-header { display: none; }
       #chat { padding: 14px 14px 10px; }
-      #input-area { padding: 10px 14px calc(12px + env(safe-area-inset-bottom, 0px)); }
-      .cards-grid { grid-template-columns: 1fr 1fr; max-width: 100%; gap: 8px; }
-      .welcome h2 { font-size: 22px; }
-      .welcome { padding: 16px 8px; min-height: auto; }
-      .welcome-sub { font-size: 13px; margin-bottom: 22px; }
-      .input-pill { max-width: 100%; }
-      .input-footer { max-width: 100%; font-size: 10px; }
-      .msg-row { max-width: 100%; }
-      .topic-card { padding: 12px 11px 11px; }
-      .card-title { font-size: 12px; }
-      .card-icon-wrap { width: 36px; height: 36px; font-size: 18px; border-radius: 10px; margin-bottom: 9px; }
+      .home-topics-grid { grid-template-columns: 1fr 1fr; }
+      #input-area { padding: 8px 12px calc(12px + env(safe-area-inset-bottom, 0px)); }
+    }
+
+    @media (min-width: 721px) {
+      #screen-auth { padding: 60px 40px 70px; }
     }
   </style>
 </head>
 <body>
 
-<!-- ══ SIDEBAR ══ -->
-<aside id="sidebar">
-  <div class="sidebar-logo">
-    <!-- Inline lantern SVG mark -->
-    <svg viewBox="0 0 100 135" width="28" height="38" style="flex-shrink:0">
-      <rect x="32" y="14" width="36" height="9" rx="1.5" fill="#2a1810"/>
-      <ellipse cx="50" cy="63" rx="36" ry="38" fill="#d94e1f"/>
-      <ellipse cx="50" cy="63" rx="22" ry="28" fill="#e8a83a" opacity="0.7"/>
-      <rect x="34" y="99" width="32" height="7" rx="1.5" fill="#2a1810"/>
-      <path d="M 46 106 L 50 130 L 54 106 Z" fill="#d94e1f"/>
+<!-- ═══════════════════════════════════════════════
+     SCREEN 1: AUTH / SPLASH
+═══════════════════════════════════════════════ -->
+<div id="screen-auth" class="screen active">
+
+  <!-- Lantern -->
+  <div class="auth-lantern-wrap">
+    <div class="auth-lantern-glow"></div>
+    <svg class="auth-lantern-svg" viewBox="0 0 100 140" width="130" height="182">
+      <defs>
+        <linearGradient id="lb" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#e0581f"/><stop offset="50%" stop-color="#d94e1f"/><stop offset="100%" stop-color="#a8350f"/>
+        </linearGradient>
+        <radialGradient id="lg" cx="50%" cy="45%" r="55%">
+          <stop offset="0%" stop-color="#ffd58a" stop-opacity="0.95"/><stop offset="55%" stop-color="#e8a83a" stop-opacity="0.35"/><stop offset="100%" stop-color="#d94e1f" stop-opacity="0"/>
+        </radialGradient>
+        <linearGradient id="lc" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#3a2410"/><stop offset="100%" stop-color="#1f130a"/>
+        </linearGradient>
+      </defs>
+      <!-- String -->
+      <line x1="50" y1="0" x2="50" y2="12" stroke="#3a2410" stroke-width="1"/>
+      <!-- Top cap -->
+      <rect x="30" y="12" width="40" height="10" rx="2" fill="url(#lc)"/>
+      <rect x="34" y="10" width="32" height="4" rx="1" fill="#2a1810"/>
+      <!-- Body -->
+      <ellipse cx="50" cy="66" rx="36" ry="40" fill="url(#lb)"/>
+      <!-- Glow inside -->
+      <ellipse cx="50" cy="60" rx="28" ry="34" fill="url(#lg)" opacity="0.6"/>
+      <!-- Ribs -->
+      <line x1="18" y1="30" x2="18" y2="102" stroke="#7a1f08" stroke-opacity="0.3" stroke-width="0.6"/>
+      <line x1="30" y1="27" x2="30" y2="105" stroke="#7a1f08" stroke-opacity="0.3" stroke-width="0.6"/>
+      <line x1="50" y1="26" x2="50" y2="106" stroke="#7a1f08" stroke-opacity="0.3" stroke-width="0.6"/>
+      <line x1="70" y1="27" x2="70" y2="105" stroke="#7a1f08" stroke-opacity="0.3" stroke-width="0.6"/>
+      <line x1="82" y1="30" x2="82" y2="102" stroke="#7a1f08" stroke-opacity="0.3" stroke-width="0.6"/>
+      <!-- Horizontal bands -->
+      <path d="M14 54 Q50 60 86 54" stroke="#7a1f08" stroke-opacity="0.35" stroke-width="0.7" fill="none"/>
+      <path d="M14 78 Q50 72 86 78" stroke="#7a1f08" stroke-opacity="0.35" stroke-width="0.7" fill="none"/>
+      <!-- Highlight -->
+      <ellipse cx="35" cy="50" rx="7" ry="16" fill="#ffd58a" opacity="0.15"/>
+      <!-- Bottom cap -->
+      <rect x="30" y="104" width="40" height="8" rx="2" fill="url(#lc)"/>
+      <rect x="34" y="112" width="32" height="3" rx="1" fill="#2a1810"/>
+      <!-- Tassel string -->
+      <line x1="50" y1="115" x2="50" y2="125" stroke="#3a2410" stroke-width="0.8"/>
+      <!-- Tassel -->
+      <path d="M44 125 L50 140 L56 125 Z" fill="#d94e1f"/>
     </svg>
-    <div>
-      <span class="logo-name">K'<em>helper</em></span>
-      <span class="logo-sub kh">ជំនួយការ AI ខ្មែរ</span>
+  </div>
+
+  <!-- Wordmark -->
+  <div class="auth-wordmark disp">K'<em>helper</em></div>
+
+  <!-- Taglines -->
+  <div class="auth-tagline">A knowledgeable friend in your pocket.</div>
+  <div class="auth-tagline-kh kh">ជំនួយការដែលគួរឱ្យទុកចិត្ត</div>
+
+  <!-- 3 badges -->
+  <div class="auth-badges">
+    <div class="auth-badge">
+      <div class="auth-badge-title">Free</div>
+      <div class="auth-badge-sub kh">ឥតគិតថ្លៃ</div>
+    </div>
+    <div class="auth-badge">
+      <div class="auth-badge-title">Private</div>
+      <div class="auth-badge-sub kh">ឯកជន</div>
+    </div>
+    <div class="auth-badge">
+      <div class="auth-badge-title">Trusted</div>
+      <div class="auth-badge-sub kh">ទុកចិត្ត</div>
     </div>
   </div>
 
-  <button class="new-chat-btn" onclick="resetChat()">
-    <span>＋</span> <span id="new-chat-label" class="kh">ការសន្ទនាថ្មី</span>
-  </button>
+  <!-- Language pill -->
+  <div class="lang-pill" style="margin-bottom:32px">
+    <button class="lang-pill-btn active" onclick="setAuthLang('km')">ខ្មែរ</button>
+    <span class="lang-pill-sep">·</span>
+    <button class="lang-pill-btn" onclick="setAuthLang('kr')">한국어</button>
+    <span class="lang-pill-sep">·</span>
+    <button class="lang-pill-btn" onclick="setAuthLang('en')">English</button>
+  </div>
 
-  <div class="sidebar-section-label eyebrow" id="topics-label">ប្រធានបទរហ័ស</div>
+  <!-- CTA -->
+  <div class="auth-cta">
+    <button class="btn-primary" id="auth-signup-btn" onclick="openSignup()">ចាប់ផ្ដើម · Get Started</button>
+    <button class="btn-secondary" id="auth-login-btn" onclick="openLogin()">Sign in to existing account</button>
+  </div>
 
-  <nav class="sidebar-nav">
-    <div class="nav-item" onclick="quickTopic('visa')">
-      <span class="nav-icon">🛂</span>
-      <span id="nav-visa">វីសា &amp; អន្តោប្រវេសន៍</span>
-    </div>
-    <div class="nav-item" onclick="quickTopic('work')">
-      <span class="nav-icon">💼</span>
-      <span id="nav-work">ការងារ &amp; សិទ្ធិ</span>
-    </div>
-    <div class="nav-item" onclick="quickTopic('health')">
-      <span class="nav-icon">🏥</span>
-      <span id="nav-health">សុខភាព</span>
-    </div>
-    <div class="nav-item" onclick="quickTopic('daily')">
-      <span class="nav-icon">🌏</span>
-      <span id="nav-daily">ជីវិតប្រចាំ</span>
-    </div>
-    <div class="nav-item" onclick="quickTopic('culture')">
-      <span class="nav-icon">🙏</span>
-      <span id="nav-culture">វប្បធម៌កូរ៉េ</span>
-    </div>
-    <div class="nav-item" onclick="quickTopic('language')">
-      <span class="nav-icon">💬</span>
-      <span id="nav-language">ជំនួយភាសា</span>
-    </div>
-    <div class="nav-item" onclick="quickTopic('money')">
-      <span class="nav-icon">💸</span>
-      <span id="nav-money">ផ្ញើប្រាក់ទៅកម្ពុជា</span>
-    </div>
-    <div class="nav-item" onclick="quickTopic('school')">
-      <span class="nav-icon">🏫</span>
-      <span id="nav-school">ការចុះឈ្មោះសាលា</span>
-    </div>
-    <div class="nav-item" onclick="quickTopic('housing')">
-      <span class="nav-icon">🏠</span>
-      <span id="nav-housing">លំនៅដ្ឋាន &amp; ជួល</span>
-    </div>
-    <div class="nav-item" onclick="quickTopic('tourist')">
-      <span class="nav-icon">🗺️</span>
-      <span id="nav-tourist">ទេសចរណ៍</span>
-    </div>
-    <div class="nav-item" onclick="openMapPanel('places')">
-      <span class="nav-icon">📍</span>
-      <span id="nav-location">ទីតាំង &amp; ផែនទី</span>
-    </div>
-  </nav>
-
-  <div class="lang-section">
-    <div class="lang-label eyebrow" id="lang-label">ភាសា</div>
-    <div class="lang-buttons">
-      <button class="lang-btn" id="btn-en" onclick="setLang('en')">🇺🇸 EN</button>
-      <button class="lang-btn" id="btn-kr" onclick="setLang('kr')">🇰🇷 한국어</button>
-      <button class="lang-btn active" id="btn-km" onclick="setLang('km')">🇰🇭 ខ្មែរ</button>
-    </div>
-  </div>
-  <div class="sidebar-brand-strip">
-    <div class="brand-dot"></div>
-    <span class="brand-tagline">khelper.netlify.app</span>
-  </div>
-</aside>
-
-<!-- ══ MAP PANEL ══ -->
-<div id="map-panel">
-  <div class="map-panel-header">
-    <span class="map-panel-title">📍 <span id="map-panel-heading">ទីតាំង &amp; ផែនទី</span></span>
-    <button class="map-close-btn" onclick="closeMapPanel()">✕</button>
-  </div>
-  <div class="map-tabs">
-    <button class="map-tab active" onclick="switchMapTab('immigration')" id="tab-immigration">🛂 ចំណាកស្រុក</button>
-    <button class="map-tab" onclick="switchMapTab('health')" id="tab-health">🏥 សុខភាព</button>
-    <button class="map-tab" onclick="switchMapTab('food')" id="tab-food">🍜 ម្ហូប</button>
-    <button class="map-tab" onclick="switchMapTab('cafe')" id="tab-cafe">☕ កាហ្វេ</button>
-    <button class="map-tab" onclick="switchMapTab('places')" id="tab-places">🏛️ ទីកន្លែង</button>
-    <button class="map-tab" onclick="switchMapTab('labor')" id="tab-labor">💼 ការងារ</button>
-  </div>
-  <div class="map-search-row">
-    <input type="text" class="map-search-input kh" id="map-search-input" placeholder="ស្វែងរកទីតាំង...">
-    <button class="map-search-btn" onclick="doMapSearch()">🔍</button>
-  </div>
-  <div class="map-locations-list" id="map-locations-list"></div>
+  <div class="auth-footer" style="margin-top:4px">INSTALL FREE · NO APP STORE · khelper.app</div>
 </div>
 
-<!-- ══ SIDEBAR OVERLAY ══ -->
-<div id="sidebar-overlay" onclick="closeSidebar()"></div>
-
-<!-- ══ MAIN ══ -->
-<div id="main">
-  <!-- Mobile header -->
-  <div id="mobile-header">
-    <button id="hamburger-btn" onclick="toggleSidebar()" aria-label="Menu">☰</button>
-    <div id="mobile-logo">
-      <svg viewBox="0 0 100 135" width="20" height="27">
-        <rect x="32" y="14" width="36" height="9" rx="1.5" fill="#2a1810"/>
-        <ellipse cx="50" cy="63" rx="36" ry="38" fill="#d94e1f"/>
-        <ellipse cx="50" cy="63" rx="22" ry="28" fill="#e8a83a" opacity="0.7"/>
-        <rect x="34" y="99" width="32" height="7" rx="1.5" fill="#2a1810"/>
-        <path d="M 46 106 L 50 130 L 54 106 Z" fill="#d94e1f"/>
+<!-- ═══════════════════════════════════════════════
+     SCREEN 2: PROFILE SETUP
+═══════════════════════════════════════════════ -->
+<div id="screen-setup" class="screen">
+  <div class="setup-card">
+    <div class="setup-header">
+      <!-- Small lantern -->
+      <svg viewBox="0 0 100 140" width="48" height="67" style="margin-bottom:16px">
+        <rect x="30" y="12" width="40" height="10" rx="2" fill="#2a1810"/>
+        <ellipse cx="50" cy="66" rx="36" ry="40" fill="#d94e1f"/>
+        <ellipse cx="50" cy="60" rx="28" ry="34" fill="#e8a83a" opacity="0.45"/>
+        <rect x="30" y="104" width="40" height="8" rx="2" fill="#2a1810"/>
+        <path d="M44 112 L50 130 L56 112 Z" fill="#d94e1f"/>
       </svg>
-      <span class="mobile-logo-name">K'<em>helper</em></span>
+      <div class="setup-title disp">Welcome to K'<em>helper</em></div>
+      <div class="setup-sub" style="margin-top:6px">ប្រាប់ខ្ញុំអំពីខ្លួនអ្នក ដើម្បីជួយបានល្អជាងនេះ<br>
+        <span style="font-family:var(--font-body);font-size:12px;color:var(--clay-400)">Tell us a bit about yourself — we'll tailor help to your situation.</span>
+      </div>
     </div>
-  </div>
 
-  <div id="chat">
-    <!-- Welcome screen rendered by JS -->
-  </div>
+    <div class="setup-form" id="setup-form">
+      <div class="form-group">
+        <label class="form-label eyebrow">Full Name · ឈ្មោះ</label>
+        <input type="text" id="setup-name" class="form-input kh" placeholder="ឈ្មោះរបស់អ្នក" autocomplete="name" required />
+      </div>
 
-  <div id="input-area">
-    <div class="input-pill">
-      <textarea
-        id="user-input"
-        rows="1"
-        maxlength="2000"
-        class="kh"
-        placeholder="សារទៅ K'Helper..."
-      ></textarea>
-      <button id="send-btn" onclick="sendMessage()" title="Send">
-        <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M5 12l14-7-5 16-3-7-6-2z"/>
-        </svg>
-      </button>
-    </div>
-    <div class="input-footer">
-      <span class="emergency-line" id="emergency-line">
-        ជំនួយបន្ទាន់: <strong>ចំណាកស្រុក 1345</strong> · <strong>បន្ទាន់ 119</strong>
-      </span>
-      <span id="msg-counter">30 សារ នៅសល់</span>
+      <div class="form-group">
+        <label class="form-label eyebrow">Visa Type · ប្រភេទទិដ្ឋាការ</label>
+        <select id="setup-visa-type" class="form-select">
+          <option value="">-- Select visa type --</option>
+          <option value="E-9">E-9 (Non-Professional Employment)</option>
+          <option value="E-6">E-6 (Arts/Performance)</option>
+          <option value="D-2">D-2 (Student)</option>
+          <option value="D-4">D-4 (General Training)</option>
+          <option value="F-2">F-2 (Resident)</option>
+          <option value="F-4">F-4 (Overseas Korean)</option>
+          <option value="F-6">F-6 (Marriage Migrant)</option>
+          <option value="C-3">C-3 (Short Visit/Tourist)</option>
+          <option value="H-2">H-2 (Working Visit)</option>
+          <option value="other">Other · ផ្សេងៗ</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label eyebrow">Visa Expiry Date · ថ្ងៃផុតសុពលភាព</label>
+        <input type="date" id="setup-visa-expiry" class="form-input" />
+        <span class="form-note">ថ្ងៃដែលភ្ជាប់នៅក្នុងទិដ្ឋាការ ឬ កាតចុះបញ្ជី — K'Helper នឹងជូនដំណឹងអ្នកមុនផុតសុពលភាព</span>
+      </div>
+
+      <button class="setup-submit" onclick="saveProfile()">រក្សាទុក &amp; ចូលប្រើ · Save &amp; Continue</button>
     </div>
   </div>
 </div>
 
+<!-- ═══════════════════════════════════════════════
+     SCREEN 3: MAIN APP
+═══════════════════════════════════════════════ -->
+<div id="screen-app" class="screen">
+
+  <!-- ── Sidebar ── -->
+  <aside id="sidebar">
+    <!-- Logo -->
+    <div class="sidebar-logo">
+      <svg viewBox="0 0 100 140" width="22" height="31">
+        <rect x="30" y="12" width="40" height="10" rx="2" fill="#2a1810"/>
+        <ellipse cx="50" cy="66" rx="36" ry="40" fill="#d94e1f"/>
+        <ellipse cx="50" cy="60" rx="22" ry="28" fill="#e8a83a" opacity="0.5"/>
+        <rect x="30" y="104" width="40" height="8" rx="2" fill="#2a1810"/>
+        <path d="M44 112 L50 128 L56 112 Z" fill="#d94e1f"/>
+      </svg>
+      <span class="sidebar-wordmark disp">K'<em>helper</em></span>
+    </div>
+
+    <!-- Visa expiry card -->
+    <div id="sidebar-visa-card" class="visa-card">
+      <div class="visa-ring">
+        <svg id="visa-ring-svg" viewBox="0 0 84 84" width="84" height="84">
+          <circle cx="42" cy="42" r="34" stroke="var(--paper)" stroke-width="8" fill="none"/>
+          <circle id="visa-ring-arc" cx="42" cy="42" r="34"
+            stroke="var(--terra-500)" stroke-width="8" fill="none"
+            stroke-linecap="round"
+            stroke-dasharray="0 213.6"
+            transform="rotate(-90 42 42)"/>
+          <text id="visa-ring-label" x="42" y="47" text-anchor="middle"
+            font-family="var(--font-display)" font-size="13" fill="var(--clay-800)">E-9</text>
+        </svg>
+      </div>
+      <div class="visa-info">
+        <div class="visa-label eyebrow">Visa expires</div>
+        <div class="visa-date disp" id="visa-date-display">—</div>
+        <div class="visa-remaining kh" id="visa-remaining-display">—</div>
+        <button class="visa-renew" onclick="showRenewInfo()">Renew →</button>
+      </div>
+    </div>
+
+    <!-- New chat -->
+    <button class="new-chat-btn" onclick="resetChat()">
+      <span>＋</span> <span id="new-chat-label" class="kh">ការសន្ទនាថ្មី</span>
+    </button>
+
+    <!-- Nav -->
+    <div class="sidebar-section-label eyebrow" id="topics-label">ប្រធានបទរហ័ស</div>
+    <nav class="sidebar-nav">
+      <div class="nav-item" onclick="quickTopic('visa')"><span class="nav-icon">🛂</span><span id="nav-visa">វីសា &amp; អន្តោប្រវេសន៍</span></div>
+      <div class="nav-item" onclick="quickTopic('work')"><span class="nav-icon">💼</span><span id="nav-work">ការងារ &amp; សិទ្ធិ</span></div>
+      <div class="nav-item" onclick="quickTopic('health')"><span class="nav-icon">🏥</span><span id="nav-health">សុខភាព</span></div>
+      <div class="nav-item" onclick="quickTopic('daily')"><span class="nav-icon">🌏</span><span id="nav-daily">ជីវិតប្រចាំ</span></div>
+      <div class="nav-item" onclick="quickTopic('culture')"><span class="nav-icon">🙏</span><span id="nav-culture">វប្បធម៌កូរ៉េ</span></div>
+      <div class="nav-item" onclick="quickTopic('language')"><span class="nav-icon">💬</span><span id="nav-language">ជំនួយភាសា</span></div>
+      <div class="nav-item" onclick="quickTopic('money')"><span class="nav-icon">💸</span><span id="nav-money">ផ្ញើប្រាក់ទៅកម្ពុជា</span></div>
+      <div class="nav-item" onclick="quickTopic('housing')"><span class="nav-icon">🏠</span><span id="nav-housing">លំនៅដ្ឋាន &amp; ជួល</span></div>
+      <div class="nav-item" onclick="quickTopic('tourist')"><span class="nav-icon">🗺️</span><span id="nav-tourist">ទេសចរណ៍</span></div>
+      <div class="nav-item" onclick="openMapPanel('places')"><span class="nav-icon">📍</span><span id="nav-location">ទីតាំង &amp; ផែនទី</span></div>
+    </nav>
+
+    <!-- Language -->
+    <div class="lang-section">
+      <div class="lang-label eyebrow" id="lang-label">ភាសា</div>
+      <div class="lang-buttons">
+        <button class="lang-btn" id="btn-en" onclick="setLang('en')">🇺🇸 EN</button>
+        <button class="lang-btn" id="btn-kr" onclick="setLang('kr')">🇰🇷 한국어</button>
+        <button class="lang-btn active" id="btn-km" onclick="setLang('km')">🇰🇭 ខ្មែរ</button>
+      </div>
+    </div>
+
+    <!-- User footer -->
+    <div class="sidebar-footer">
+      <div class="sidebar-user">
+        <span class="sidebar-user-name" id="sidebar-user-name">—</span>
+        <span class="sidebar-user-email" id="sidebar-user-email">—</span>
+      </div>
+      <button class="logout-btn" onclick="doLogout()">Sign out</button>
+    </div>
+  </aside>
+
+  <!-- ── Map panel ── -->
+  <div id="map-panel">
+    <div class="map-panel-header">
+      <span class="map-panel-title">📍 <span id="map-panel-heading">ទីតាំង &amp; ផែនទី</span></span>
+      <button class="map-close-btn" onclick="closeMapPanel()">✕</button>
+    </div>
+    <div class="map-tabs">
+      <button class="map-tab active" onclick="switchMapTab('immigration')" id="tab-immigration">🛂 ចំណាកស្រុក</button>
+      <button class="map-tab" onclick="switchMapTab('health')" id="tab-health">🏥 សុខភាព</button>
+      <button class="map-tab" onclick="switchMapTab('food')" id="tab-food">🍜 ម្ហូប</button>
+      <button class="map-tab" onclick="switchMapTab('cafe')" id="tab-cafe">☕ កាហ្វេ</button>
+      <button class="map-tab" onclick="switchMapTab('places')" id="tab-places">🏛️ ទីកន្លែង</button>
+      <button class="map-tab" onclick="switchMapTab('labor')" id="tab-labor">💼 ការងារ</button>
+    </div>
+    <div class="map-search-row">
+      <input type="text" class="map-search-input kh" id="map-search-input" placeholder="ស្វែងរកទីតាំង...">
+      <button class="map-search-btn" onclick="doMapSearch()">🔍</button>
+    </div>
+    <div class="map-locations-list" id="map-locations-list"></div>
+  </div>
+
+  <div id="sidebar-overlay" onclick="closeSidebar()"></div>
+
+  <!-- ── Main ── -->
+  <div id="main">
+    <!-- Mobile header -->
+    <div id="mobile-header">
+      <button id="hamburger-btn" onclick="toggleSidebar()">☰</button>
+      <div class="mobile-header-center">
+        <span class="mobile-wordmark disp">K'<em>helper</em></span>
+      </div>
+      <div style="width:34px"></div><!-- spacer -->
+    </div>
+
+    <!-- Desktop chat header (shows user info) -->
+    <div id="chat-header">
+      <div class="ch-lantern">
+        <svg viewBox="0 0 100 140" width="20" height="28">
+          <rect x="30" y="12" width="40" height="10" rx="2" fill="#2a1810"/>
+          <ellipse cx="50" cy="66" rx="36" ry="40" fill="#d94e1f"/>
+          <ellipse cx="50" cy="60" rx="22" ry="28" fill="#e8a83a" opacity="0.5"/>
+          <rect x="30" y="104" width="40" height="8" rx="2" fill="#2a1810"/>
+        </svg>
+      </div>
+      <div class="ch-user-info">
+        <div class="ch-name" id="ch-user-name">K'helper</div>
+        <div class="ch-sub">
+          <span class="live-dot"></span>
+          <span id="ch-user-sub">ជំនួយការ AI ខ្មែរ</span>
+        </div>
+      </div>
+      <div class="ch-actions">
+        <button class="ch-action-btn" onclick="resetChat()" title="New chat">✏️</button>
+      </div>
+    </div>
+
+    <!-- Chat feed -->
+    <div id="chat"></div>
+
+    <!-- Input -->
+    <div id="input-area">
+      <div class="input-pill">
+        <textarea id="user-input" rows="1" maxlength="2000" class="kh" placeholder="សារទៅ K'Helper..."></textarea>
+        <button id="send-btn" onclick="sendMessage()">
+          <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l14-7-5 16-3-7-6-2z"/></svg>
+        </button>
+      </div>
+      <div class="input-footer">
+        <span class="emergency-line" id="emergency-line">ជំនួយបន្ទាន់: <strong>1345</strong> · <strong>119</strong></span>
+        <span id="msg-counter">30 សារ នៅសល់</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     JAVASCRIPT
+═══════════════════════════════════════════════ -->
 <script>
-// ══════════════════════════════════════════════════
-// LANTERN MARK SVG helper (inline, reusable)
-// ══════════════════════════════════════════════════
-function lanternMarkSVG(size) {
-  size = size || 16;
-  const h = Math.round(size * 1.35);
-  return `<svg viewBox="0 0 100 135" width="${size}" height="${h}" style="flex-shrink:0;display:inline-block;vertical-align:middle">
-    <rect x="32" y="14" width="36" height="9" rx="1.5" fill="#2a1810"/>
-    <ellipse cx="50" cy="63" rx="36" ry="38" fill="#d94e1f"/>
-    <ellipse cx="50" cy="63" rx="22" ry="28" fill="#e8a83a" opacity="0.7"/>
-    <rect x="34" y="99" width="32" height="7" rx="1.5" fill="#2a1810"/>
-    <path d="M 46 106 L 50 130 L 54 106 Z" fill="#d94e1f"/>
-  </svg>`;
+'use strict';
+
+/* ── SVG lantern mark (inline) ── */
+const LANTERN_SM = `<svg viewBox="0 0 100 140" width="13" height="18" style="flex-shrink:0;vertical-align:middle">
+  <rect x="30" y="12" width="40" height="10" rx="2" fill="#2a1810"/>
+  <ellipse cx="50" cy="66" rx="36" ry="40" fill="#d94e1f"/>
+  <ellipse cx="50" cy="60" rx="22" ry="28" fill="#e8a83a" opacity="0.5"/>
+  <rect x="30" y="104" width="40" height="8" rx="2" fill="#2a1810"/>
+</svg>`;
+
+/* ── APP STATE ── */
+let currentLang = 'km';
+let conversationHistory = [];
+let chatStarted = false;
+let currentUser = null;
+let userProfile = null;
+
+/* ── SCREEN MANAGEMENT ── */
+function showScreen(name) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-' + name).classList.add('active');
 }
 
-// ══════════════════════════════════════════════════
-// TRANSLATIONS
-// ══════════════════════════════════════════════════
+/* ── NETLIFY IDENTITY ── */
+// Called once Identity JS loads
+netlifyIdentity.on('init', user => {
+  if (user) {
+    currentUser = user;
+    afterLogin(user);
+  } else {
+    showScreen('auth');
+  }
+});
+
+netlifyIdentity.on('login', user => {
+  currentUser = user;
+  netlifyIdentity.close();
+  afterLogin(user);
+});
+
+netlifyIdentity.on('logout', () => {
+  currentUser = null;
+  userProfile = null;
+  chatStarted = false;
+  showScreen('auth');
+});
+
+function openSignup() { netlifyIdentity.open('signup'); }
+function openLogin()  { netlifyIdentity.open('login'); }
+function doLogout()   { netlifyIdentity.logout(); }
+
+function afterLogin(user) {
+  const profile = loadProfile(user.email);
+  if (!profile) {
+    showScreen('setup');
+  } else {
+    userProfile = profile;
+    initApp();
+  }
+}
+
+/* ── PROFILE ── */
+function profileKey(email) { return 'khelper_profile_' + email; }
+
+function loadProfile(email) {
+  try { return JSON.parse(localStorage.getItem(profileKey(email))); } catch { return null; }
+}
+
+function saveProfile() {
+  const name     = document.getElementById('setup-name').value.trim();
+  const visaType = document.getElementById('setup-visa-type').value;
+  const expiry   = document.getElementById('setup-visa-expiry').value;
+
+  if (!name) { alert('Please enter your name · សូមបញ្ចូលឈ្មោះ'); return; }
+
+  const profile = { name, visaType, visaExpiry: expiry, savedAt: Date.now() };
+  localStorage.setItem(profileKey(currentUser.email), JSON.stringify(profile));
+  userProfile = profile;
+  initApp();
+}
+
+/* ── VISA EXPIRY HELPERS ── */
+function getMonthsLeft(expiryDateStr) {
+  if (!expiryDateStr) return null;
+  const now    = new Date();
+  const expiry = new Date(expiryDateStr);
+  const diff   = (expiry - now) / (1000 * 60 * 60 * 24 * 30.44);
+  return Math.max(0, diff);
+}
+
+function formatExpiryDate(dateStr) {
+  if (!dateStr) return '—';
+  const d = new Date(dateStr);
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+function updateVisaUI(profile) {
+  if (!profile || !profile.visaExpiry) {
+    document.getElementById('visa-date-display').textContent = 'No expiry set';
+    document.getElementById('visa-remaining-display').textContent = 'Tap to add visa date';
+    return;
+  }
+
+  const months  = getMonthsLeft(profile.visaExpiry);
+  const dateStr = formatExpiryDate(profile.visaExpiry);
+
+  document.getElementById('visa-date-display').textContent = dateStr;
+  document.getElementById('visa-ring-label').textContent    = profile.visaType || 'VISA';
+
+  const monthsRounded = Math.ceil(months);
+  const remaining = monthsRounded <= 0
+    ? 'Expired!'
+    : monthsRounded === 1
+      ? 'នៅសល់ 1 ខែ · 1 month left'
+      : `នៅសល់ ${monthsRounded} ខែ · ${monthsRounded} months left`;
+  document.getElementById('visa-remaining-display').textContent = remaining;
+
+  // Ring: assume 12-month visa cycle; show months remaining as fraction
+  const totalMonths = 12;
+  const progress = Math.min(1, Math.max(0, months / totalMonths));
+  const r = 34, circ = 2 * Math.PI * r;
+  const dash = circ * progress;
+  const arc = document.getElementById('visa-ring-arc');
+  arc.setAttribute('stroke-dasharray', `${dash.toFixed(1)} ${(circ - dash).toFixed(1)}`);
+
+  // Color warning if < 2 months
+  if (months < 2) {
+    arc.setAttribute('stroke', '#ef4444');
+    document.getElementById('sidebar-visa-card').classList.add('visa-warning');
+  }
+}
+
+/* ── INIT APP ── */
+function initApp() {
+  showScreen('app');
+  setLang(currentLang);
+
+  // Update header
+  if (userProfile) {
+    const displayName = userProfile.name || currentUser.email.split('@')[0];
+    document.getElementById('ch-user-name').textContent = displayName;
+    const sub = [userProfile.visaType, 'Cambodia'].filter(Boolean).join(' · ');
+    document.getElementById('ch-user-sub').textContent = sub || 'ជំនួយការ AI ខ្មែរ';
+    document.getElementById('sidebar-user-name').textContent = displayName;
+    document.getElementById('sidebar-user-email').textContent = currentUser.email;
+
+    // Visa card
+    updateVisaUI(userProfile);
+  }
+
+  renderHome();
+}
+
+function showRenewInfo() {
+  quickTopic('visa');
+}
+
+/* ── TRANSLATIONS ── */
 const T = {
   km: {
-    newChat: 'ការសន្ទនាថ្មី',
-    topicsLabel: 'ប្រធានបទរហ័ស',
-    langLabel: 'ភាសា',
+    newChat: 'ការសន្ទនាថ្មី', topicsLabel: 'ប្រធានបទរហ័ស', langLabel: 'ភាសា',
     placeholder: 'សារទៅ K\'Helper...',
-    welcomeTagline: 'A lantern in the dark',
-    welcomeTitle: 'K\'<em>helper</em>',
-    welcomeQuestion: 'តើខ្ញុំជួយអ្នក<br>អ្វីបាន?',
-    welcomeSub: 'សួរខ្ញុំអ្វីក៏បានអំពីការរស់នៅ ឬ ទស្សនាកូរ៉េ — ជាភាសាខ្មែរ, កូរ៉េ ឬអង់គ្លេស។',
-    emergency: 'ជំនួយបន្ទាន់: <strong>ចំណាកស្រុក 1345</strong> · <strong>បន្ទាន់ 119</strong>',
+    emergency: 'ជំនួយបន្ទាន់: <strong>1345</strong> · <strong>119</strong>',
     mapPanelTitle: 'ទីតាំង & ផែនទី',
-    msgLeft: (n) => `${n} សារ នៅសល់`,
-    cards: [
-      { icon: '🛂', title: 'វីសា & ឯកសារ', sub: 'ការបន្ត, ចុះឈ្មោះ', topic: 'visa' },
-      { icon: '💼', title: 'សិទ្ធិការងារ', sub: 'កិច្ចសន្យា, ប្រាក់ខែ', topic: 'work' },
-      { icon: '🏥', title: 'ធានារ៉ាប់រងសុខភាព', sub: 'ធានារ៉ាប់រង, មន្ទីរពេទ្យ', topic: 'health' },
-      { icon: '🙏', title: 'វប្បធម៌កូរ៉េ', sub: 'ទំនៀមទម្លាប់, ជីវិត', topic: 'culture' },
-      { icon: '🗺️', title: 'ទេសចរណ៍ & ស្វែងរក', sub: 'ទីកន្លែង, ម្ហូប, កាហ្វេ', topic: 'tourist' },
-      { icon: '📍', title: 'ទីតាំង & ផែនទី', sub: 'Kakao · Naver · Google', topic: 'location' },
+    msgLeft: n => `${n} សារ នៅសល់`,
+    topics: [
+      { icon:'🛂', title:'វីសា & ឯកសារ', sub:'ការបន្ត, ចុះឈ្មោះ', topic:'visa' },
+      { icon:'💼', title:'សិទ្ធិការងារ', sub:'កិច្ចសន្យា, ប្រាក់ខែ', topic:'work' },
+      { icon:'🏥', title:'ធានារ៉ាប់រង', sub:'ធានារ៉ាប់រង, មន្ទីរពេទ្យ', topic:'health' },
+      { icon:'🙏', title:'វប្បធម៌កូរ៉េ', sub:'ទំនៀមទម្លាប់, ជីវិត', topic:'culture' },
+      { icon:'🗺️', title:'ទេសចរណ៍', sub:'ទីកន្លែង, ម្ហូប, កាហ្វេ', topic:'tourist' },
+      { icon:'📍', title:'ទីតាំង & ផែនទី', sub:'Kakao · Naver · Google', topic:'location' },
     ],
-    navItems: {
-      visa: 'វីសា & អន្តោប្រវេសន៍', work: 'ការងារ & សិទ្ធិ', health: 'សុខភាព',
-      daily: 'ជីវិតប្រចាំ', culture: 'វប្បធម៌កូរ៉េ', language: 'ជំនួយភាសា',
-      money: 'ផ្ញើប្រាក់ទៅកម្ពុជា', school: 'ការចុះឈ្មោះសាលា', housing: 'លំនៅដ្ឋាន & ជួល',
-      tourist: 'ទេសចរណ៍', location: 'ទីតាំង & ផែនទី'
-    },
-    topics: {
-      visa: 'ខ្ញុំមានសំណួរអំពីវីសា ឬ កាតចុះបញ្ជីជនបរទេស នៅកូរ៉េ',
-      work: 'ខ្ញុំចង់ដឹងអំពីសិទ្ធិការងារ ឬ បញ្ហាជាមួយថៅកែ',
-      health: 'ខ្ញុំត្រូវការជំនួយអំពីការចូលមន្ទីរពេទ្យ ឬ ធានារ៉ាប់រង',
-      daily: 'ខ្ញុំចង់ដឹងអំពីការរស់នៅប្រចាំថ្ងៃនៅកូរ៉េ',
-      culture: 'ខ្ញុំចង់ដឹងអំពីវប្បធម៌ ឬ ទំនៀមទម្លាប់កូរ៉េ',
-      language: 'ខ្ញុំត្រូវការជំនួយបកប្រែ ឬ ប្រើភាសាកូរ៉េ',
-      money: 'ខ្ញុំចង់ផ្ញើប្រាក់ទៅកម្ពុជា',
-      school: 'ខ្ញុំចង់ចុះឈ្មោះកូននៅសាលារៀន',
-      housing: 'ខ្ញុំមានបញ្ហាអំពីការជួល ឬ លំនៅដ្ឋាន',
-      tourist: 'ខ្ញុំជាភ្ញៀវទេសចរ។ ខ្ញុំចង់ស្វែងរកទីកន្លែងដ៏ស្រស់ស្អាត ម្ហូបឆ្ងាញ់ កាហ្វេ និងភោជនីយដ្ឋានល្អៗ នៅតាមមូលដ្ឋានកូរ៉េ',
-      location: 'ខ្ញុំចង់ស្វែងរកទីតាំងសំខាន់ ដូចជា ការិយាល័យចំណាកស្រុក មន្ទីរពេទ្យ ឬ ស្ថានទូត'
+    navItems: { visa:'វីសា & អន្តោប្រវេសន៍', work:'ការងារ & សិទ្ធិ', health:'សុខភាព', daily:'ជីវិតប្រចាំ', culture:'វប្បធម៌កូរ៉េ', language:'ជំនួយភាសា', money:'ផ្ញើប្រាក់ទៅកម្ពុជា', housing:'លំនៅដ្ឋាន & ជួល', tourist:'ទេសចរណ៍', location:'ទីតាំង & ផែនទី' },
+    topicQueries: {
+      visa:'ខ្ញុំមានសំណួរអំពីវីសា ឬ កាតចុះបញ្ជីជនបរទេស នៅកូរ៉េ',
+      work:'ខ្ញុំចង់ដឹងអំពីសិទ្ធិការងារ ឬ បញ្ហាជាមួយថៅកែ',
+      health:'ខ្ញុំត្រូវការជំនួយអំពីការចូលមន្ទីរពេទ្យ ឬ ធានារ៉ាប់រង',
+      daily:'ខ្ញុំចង់ដឹងអំពីការរស់នៅប្រចាំថ្ងៃនៅកូរ៉េ',
+      culture:'ខ្ញុំចង់ដឹងអំពីវប្បធម៌ ឬ ទំនៀមទម្លាប់កូរ៉េ',
+      language:'ខ្ញុំត្រូវការជំនួយបកប្រែ ឬ ប្រើភាសាកូរ៉េ',
+      money:'ខ្ញុំចង់ផ្ញើប្រាក់ទៅកម្ពុជា',
+      housing:'ខ្ញុំមានបញ្ហាអំពីការជួល ឬ លំនៅដ្ឋាន',
+      tourist:'ខ្ញុំជាភ្ញៀវទេសចរ ចង់ស្វែងរកទីកន្លែង ម្ហូបឆ្ងាញ់ កាហ្វេ',
+      location:'ស្វែងរកទីតាំងសំខាន់'
     }
   },
   en: {
-    newChat: 'New Conversation',
-    topicsLabel: 'Quick Topics',
-    langLabel: 'Language',
+    newChat: 'New Chat', topicsLabel: 'Quick Topics', langLabel: 'Language',
     placeholder: 'Message K\'Helper...',
-    welcomeTagline: 'A lantern in the dark',
-    welcomeTitle: 'K\'<em>helper</em>',
-    welcomeQuestion: 'How can I<br>help you?',
-    welcomeSub: 'Ask me anything about living or visiting Korea — in Khmer, Korean, or English.',
-    emergency: 'Emergency: <strong>Immigration 1345</strong> · <strong>Emergency 119</strong>',
+    emergency: 'Emergency: <strong>Immigration 1345</strong> · <strong>119</strong>',
     mapPanelTitle: 'Locations & Maps',
-    msgLeft: (n) => `${n} messages left`,
-    cards: [
-      { icon: '🛂', title: 'Visa & Documents', sub: 'Renewal, registration', topic: 'visa' },
-      { icon: '💼', title: 'Work Rights', sub: 'Contract, wages', topic: 'work' },
-      { icon: '🏥', title: 'Health Insurance', sub: 'NHIS, hospital', topic: 'health' },
-      { icon: '🙏', title: 'Korean Culture', sub: 'Customs, daily life', topic: 'culture' },
-      { icon: '🗺️', title: 'Tourism & Explore', sub: 'Attractions, food, cafes', topic: 'tourist' },
-      { icon: '📍', title: 'Locations & Maps', sub: 'Kakao · Naver · Google', topic: 'location' },
+    msgLeft: n => `${n} messages left`,
+    topics: [
+      { icon:'🛂', title:'Visa & Documents', sub:'Renewal, registration', topic:'visa' },
+      { icon:'💼', title:'Work Rights', sub:'Contract, wages', topic:'work' },
+      { icon:'🏥', title:'Health Insurance', sub:'NHIS, hospital', topic:'health' },
+      { icon:'🙏', title:'Korean Culture', sub:'Customs, daily life', topic:'culture' },
+      { icon:'🗺️', title:'Tourism & Explore', sub:'Attractions, food', topic:'tourist' },
+      { icon:'📍', title:'Locations & Maps', sub:'Kakao · Naver · Google', topic:'location' },
     ],
-    navItems: {
-      visa: 'Visa & Immigration', work: 'Work & Rights', health: 'Health',
-      daily: 'Daily Life', culture: 'Korean Culture', language: 'Language Help',
-      money: 'Send Money Home', school: 'School Enrollment', housing: 'Housing & Rent',
-      tourist: 'Tourism & Explore', location: 'Locations & Maps'
-    },
-    topics: {
-      visa: 'I have a question about visa, Alien Registration Card (ARC), or immigration in Korea',
-      work: 'I want to know about my work rights or a problem with my employer',
-      health: 'I need help with hospital or health insurance in Korea',
-      daily: 'I want to know about daily life in Korea',
-      culture: 'I want to learn about Korean culture and customs',
-      language: 'I need help with Korean language or translation',
-      money: 'I want to send money back to Cambodia',
-      school: 'I want to enroll my child in school',
-      housing: 'I have a question about rent or housing',
-      tourist: 'I am a tourist in Korea. Help me find famous attractions, great food, restaurants, and cafes to visit.',
-      location: 'I need to find an important location like an immigration office, hospital, or embassy'
+    navItems: { visa:'Visa & Immigration', work:'Work & Rights', health:'Health', daily:'Daily Life', culture:'Korean Culture', language:'Language Help', money:'Send Money Home', housing:'Housing & Rent', tourist:'Tourism & Explore', location:'Locations & Maps' },
+    topicQueries: {
+      visa:'I have a question about my visa or Alien Registration Card in Korea',
+      work:'I want to know about my work rights or a problem with my employer',
+      health:'I need help with hospital or health insurance in Korea',
+      daily:'I want to know about daily life in Korea',
+      culture:'I want to learn about Korean culture and customs',
+      language:'I need help with Korean language or translation',
+      money:'I want to send money back to Cambodia',
+      housing:'I have a question about rent or housing in Korea',
+      tourist:'I am a tourist. Help me find attractions, food, and cafes.',
+      location:'Find an important location like immigration office or hospital'
     }
   },
   kr: {
-    newChat: '새 대화',
-    topicsLabel: '빠른 주제',
-    langLabel: '언어',
+    newChat: '새 대화', topicsLabel: '빠른 주제', langLabel: '언어',
     placeholder: 'K\'Helper에게 메시지...',
-    welcomeTagline: '어둠 속의 등불',
-    welcomeTitle: 'K\'<em>helper</em>',
-    welcomeQuestion: '어떻게<br>도와드릴까요?',
-    welcomeSub: '한국 생활이나 관광에 대해 무엇이든 물어보세요 — 크메르어, 한국어, 영어로.',
-    emergency: '긴급: <strong>외국인 1345</strong> · <strong>응급 119</strong>',
+    emergency: '긴급: <strong>출입국 1345</strong> · <strong>119</strong>',
     mapPanelTitle: '위치 & 지도',
-    msgLeft: (n) => `${n}개 메시지 남음`,
-    cards: [
-      { icon: '🛂', title: '비자 & 서류', sub: '갱신, 등록', topic: 'visa' },
-      { icon: '💼', title: '근로 권리', sub: '계약, 임금', topic: 'work' },
-      { icon: '🏥', title: '건강보험', sub: '건강보험, 병원', topic: 'health' },
-      { icon: '🙏', title: '한국 문화', sub: '관습, 일상', topic: 'culture' },
-      { icon: '🗺️', title: '관광 & 탐방', sub: '관광지, 맛집, 카페', topic: 'tourist' },
-      { icon: '📍', title: '위치 & 지도', sub: 'Kakao · Naver · Google', topic: 'location' },
+    msgLeft: n => `${n}개 메시지 남음`,
+    topics: [
+      { icon:'🛂', title:'비자 & 서류', sub:'갱신, 등록', topic:'visa' },
+      { icon:'💼', title:'근로 권리', sub:'계약, 임금', topic:'work' },
+      { icon:'🏥', title:'건강보험', sub:'건강보험, 병원', topic:'health' },
+      { icon:'🙏', title:'한국 문화', sub:'관습, 일상', topic:'culture' },
+      { icon:'🗺️', title:'관광 & 탐방', sub:'관광지, 맛집', topic:'tourist' },
+      { icon:'📍', title:'위치 & 지도', sub:'Kakao · Naver · Google', topic:'location' },
     ],
-    navItems: {
-      visa: '비자 & 출입국', work: '근로 & 권리', health: '건강',
-      daily: '일상생활', culture: '한국 문화', language: '언어 도움',
-      money: '캄보디아 송금', school: '학교 등록', housing: '주거 & 임대',
-      tourist: '관광 & 탐방', location: '위치 & 지도'
-    },
-    topics: {
-      visa: '한국에서 비자, 외국인등록증 또는 출입국에 대해 질문이 있어요',
-      work: '근로 권리나 고용주 문제에 대해 알고 싶어요',
-      health: '병원이나 건강보험에 대해 도움이 필요해요',
-      daily: '한국에서의 일상생활에 대해 알고 싶어요',
-      culture: '한국 문화와 관습에 대해 알고 싶어요',
-      language: '한국어 번역이나 언어 도움이 필요해요',
-      money: '캄보디아로 송금하고 싶어요',
-      school: '자녀를 학교에 등록하고 싶어요',
-      housing: '임대나 주거에 대해 질문이 있어요',
-      tourist: '한국 관광객입니다. 유명한 관광지, 맛집, 카페, 레스토랑을 추천해 주세요.',
-      location: '출입국사무소, 병원, 대사관 같은 중요한 위치를 찾고 싶어요'
+    navItems: { visa:'비자 & 출입국', work:'근로 & 권리', health:'건강', daily:'일상생활', culture:'한국 문화', language:'언어 도움', money:'캄보디아 송금', housing:'주거 & 임대', tourist:'관광 & 탐방', location:'위치 & 지도' },
+    topicQueries: {
+      visa:'한국에서 비자나 외국인등록증에 대해 질문이 있어요',
+      work:'근로 권리나 고용주 문제에 대해 알고 싶어요',
+      health:'병원이나 건강보험에 대해 도움이 필요해요',
+      daily:'한국에서의 일상생활에 대해 알고 싶어요',
+      culture:'한국 문화와 관습에 대해 알고 싶어요',
+      language:'한국어 번역이나 언어 도움이 필요해요',
+      money:'캄보디아로 송금하고 싶어요',
+      housing:'임대나 주거에 대해 질문이 있어요',
+      tourist:'한국 관광객입니다. 관광지, 맛집, 카페를 추천해 주세요.',
+      location:'출입국사무소나 병원 같은 중요한 위치를 찾고 싶어요'
     }
   }
 };
 
-// ══════════════════════════════════════════════════
-// STATE
-// ══════════════════════════════════════════════════
-let currentLang = 'km';
-let conversationHistory = [];
-let chatStarted = false;
+/* ── AUTH LANG TOGGLE ── */
+function setAuthLang(lang) {
+  currentLang = lang;
+  document.querySelectorAll('.lang-pill-btn').forEach(b => {
+    b.classList.toggle('active',
+      (lang === 'km' && b.textContent === 'ខ្មែរ') ||
+      (lang === 'kr' && b.textContent === '한국어') ||
+      (lang === 'en' && b.textContent === 'English')
+    );
+  });
+}
 
-// ══════════════════════════════════════════════════
-// RATE LIMITER
-// ══════════════════════════════════════════════════
+/* ── RATE LIMITER ── */
 const RATE_LIMIT = 30;
 const RATE_WINDOW = 60 * 60 * 1000;
-const STORAGE_KEY = 'khelper_msg_log';
 
-function getRateData() {
-  try {
-    const data = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-    return data.filter(t => Date.now() - t < RATE_WINDOW);
-  } catch { return []; }
+function rateKey() {
+  return 'khelper_rate_' + (currentUser ? currentUser.email : 'anon');
 }
+function getRateData()    { try { return JSON.parse(localStorage.getItem(rateKey()) || '[]').filter(t => Date.now() - t < RATE_WINDOW); } catch { return []; } }
+function recordMsg()      { const d = getRateData(); d.push(Date.now()); try { localStorage.setItem(rateKey(), JSON.stringify(d)); } catch {} }
+function getRemainingMsgs(){ return Math.max(0, RATE_LIMIT - getRateData().length); }
 
-function recordMsg() {
-  const data = getRateData();
-  data.push(Date.now());
-  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch {}
-  return data.length;
-}
-
-function getRemainingMsgs() {
-  return Math.max(0, RATE_LIMIT - getRateData().length);
-}
-
-// ══════════════════════════════════════════════════
-// UI UPDATES
-// ══════════════════════════════════════════════════
 function updateCounter() {
   const n = getRemainingMsgs();
-  const t = T[currentLang];
   const el = document.getElementById('msg-counter');
-  if (el) {
-    el.textContent = t.msgLeft(n);
-    el.style.color = n < 5 ? '#b53d18' : n < 10 ? '#e8a83a' : '';
-  }
+  if (!el) return;
+  el.textContent = T[currentLang].msgLeft(n);
+  el.style.color = n < 5 ? '#b53d18' : n < 10 ? '#e8a83a' : '';
 }
 
+/* ── LANGUAGE ── */
 function setLang(lang) {
   currentLang = lang;
   ['en','kr','km'].forEach(l => {
     document.getElementById('btn-' + l)?.classList.toggle('active', l === lang);
   });
   const t = T[lang];
-  document.getElementById('new-chat-label').textContent = t.newChat;
-  document.getElementById('topics-label').textContent = t.topicsLabel;
-  document.getElementById('lang-label').textContent = t.langLabel;
-  document.getElementById('user-input').placeholder = t.placeholder;
-  document.getElementById('user-input').className = lang === 'kr' ? 'kr' : lang === 'en' ? '' : 'kh';
+  const inp = document.getElementById('user-input');
+  if (inp) {
+    inp.placeholder = t.placeholder;
+    inp.className = lang === 'kr' ? 'kr' : lang === 'en' ? '' : 'kh';
+  }
   document.getElementById('emergency-line').innerHTML = t.emergency;
-
-  Object.keys(t.navItems).forEach(key => {
-    const el = document.getElementById('nav-' + key);
-    if (el) el.textContent = t.navItems[key];
+  document.getElementById('new-chat-label').textContent = t.newChat;
+  document.getElementById('topics-label').textContent   = t.topicsLabel;
+  document.getElementById('lang-label').textContent     = t.langLabel;
+  Object.entries(t.navItems).forEach(([k, v]) => {
+    const el = document.getElementById('nav-' + k);
+    if (el) el.textContent = v;
   });
-
-  const mapHeading = document.getElementById('map-panel-heading');
-  if (mapHeading) mapHeading.textContent = t.mapPanelTitle;
-
+  const mpH = document.getElementById('map-panel-heading');
+  if (mpH) mpH.textContent = t.mapPanelTitle;
   updateCounter();
-  if (!chatStarted) renderWelcome();
+  if (!chatStarted) renderHome();
 }
 
-// ══════════════════════════════════════════════════
-// WELCOME SCREEN
-// ══════════════════════════════════════════════════
-function renderWelcome() {
+/* ── HOME / WELCOME RENDER ── */
+function renderHome() {
   const chat = document.getElementById('chat');
   chat.innerHTML = '';
   const t = T[currentLang];
 
-  const w = document.createElement('div');
-  w.className = 'welcome';
-  w.id = 'welcome-screen';
+  const home = document.createElement('div');
+  home.id = 'home-card';
 
-  w.innerHTML = `
-    <div class="welcome-lantern-wrap">
-      <div class="welcome-lantern-glow"></div>
-      <svg viewBox="0 0 100 135" width="110" height="149" style="position:relative;animation:lanternSway 4.5s ease-in-out infinite;transform-origin:50% 0%">
-        <defs>
-          <linearGradient id="lb" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#e0581f"/><stop offset="50%" stop-color="#d94e1f"/><stop offset="100%" stop-color="#a8350f"/>
-          </linearGradient>
-          <radialGradient id="li" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stop-color="#ffd58a" stop-opacity="0.95"/><stop offset="60%" stop-color="#e8a83a" stop-opacity="0.4"/><stop offset="100%" stop-color="#d94e1f" stop-opacity="0"/>
-          </radialGradient>
-          <linearGradient id="lc" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#3a2410"/><stop offset="100%" stop-color="#1f130a"/>
-          </linearGradient>
-        </defs>
-        <line x1="50" y1="0" x2="50" y2="14" stroke="#3a2410" stroke-width="1.2"/>
-        <rect x="32" y="14" width="36" height="9" rx="1.5" fill="url(#lc)"/>
-        <rect x="36" y="11" width="28" height="4" rx="1" fill="#2a1810"/>
-        <ellipse cx="50" cy="63" rx="36" ry="38" fill="url(#lb)"/>
-        <ellipse cx="50" cy="63" rx="26" ry="32" fill="url(#li)" opacity="0.65"/>
-        <line x1="20" y1="28" x2="20" y2="98" stroke="#7a1f08" stroke-opacity="0.35" stroke-width="0.6"/>
-        <line x1="32" y1="28" x2="32" y2="98" stroke="#7a1f08" stroke-opacity="0.35" stroke-width="0.6"/>
-        <line x1="50" y1="28" x2="50" y2="98" stroke="#7a1f08" stroke-opacity="0.35" stroke-width="0.6"/>
-        <line x1="68" y1="28" x2="68" y2="98" stroke="#7a1f08" stroke-opacity="0.35" stroke-width="0.6"/>
-        <line x1="80" y1="28" x2="80" y2="98" stroke="#7a1f08" stroke-opacity="0.35" stroke-width="0.6"/>
-        <path d="M 14 50 Q 50 56 86 50" stroke="#7a1f08" stroke-opacity="0.4" stroke-width="0.7" fill="none"/>
-        <path d="M 14 76 Q 50 70 86 76" stroke="#7a1f08" stroke-opacity="0.4" stroke-width="0.7" fill="none"/>
-        <ellipse cx="36" cy="48" rx="6" ry="14" fill="#ffd58a" opacity="0.18"/>
-        <rect x="34" y="99" width="32" height="7" rx="1.5" fill="url(#lc)"/>
-        <rect x="38" y="106" width="24" height="3" rx="0.5" fill="#2a1810"/>
-        <line x1="50" y1="109" x2="50" y2="118" stroke="#3a2410" stroke-width="0.8"/>
-        <path d="M 46 118 L 50 132 L 54 118 Z" fill="#d94e1f"/>
-        <line x1="48" y1="120" x2="48" y2="130" stroke="#a8350f" stroke-width="0.5"/>
-        <line x1="52" y1="120" x2="52" y2="130" stroke="#a8350f" stroke-width="0.5"/>
-      </svg>
-    </div>
-    <div class="welcome-tagline eyebrow">${t.welcomeTagline}</div>
-    <h2 class="disp">${t.welcomeTitle}</h2>
-    <div class="disp kh-d" style="font-size:26px;color:#2f1611;line-height:1.1;margin-bottom:8px;font-weight:400;letter-spacing:-0.01em">${t.welcomeQuestion}</div>
-    <p class="welcome-sub">${t.welcomeSub}</p>
-    <div class="cards-grid">
-      ${t.cards.map(c => `
-        <div class="topic-card" onclick="quickTopic('${c.topic}')">
-          <div class="card-icon-wrap"><span>${c.icon}</span></div>
-          <div class="card-title">${c.title}</div>
-          <div class="card-sub">${c.sub}</div>
+  // Visa banner (mobile — sidebar handles desktop)
+  let visaBanner = '';
+  if (userProfile && userProfile.visaExpiry) {
+    const months = getMonthsLeft(userProfile.visaExpiry);
+    const mRound = Math.ceil(months);
+    const r = 34, circ = 2 * Math.PI * r;
+    const progress = Math.min(1, Math.max(0, months / 12));
+    const dash = circ * progress;
+    const isWarning = months < 2;
+    visaBanner = `
+      <div class="home-visa-banner" style="${isWarning ? 'border-color:rgba(217,78,31,.35);background:linear-gradient(135deg,#fff5f2,#fde8df)' : ''}">
+        <svg viewBox="0 0 84 84" width="72" height="72" style="flex-shrink:0">
+          <circle cx="42" cy="42" r="${r}" stroke="var(--paper)" stroke-width="8" fill="none"/>
+          <circle cx="42" cy="42" r="${r}"
+            stroke="${isWarning ? '#ef4444' : 'var(--terra-500)'}" stroke-width="8" fill="none"
+            stroke-linecap="round"
+            stroke-dasharray="${dash.toFixed(1)} ${(circ-dash).toFixed(1)}"
+            transform="rotate(-90 42 42)"/>
+          <text x="42" y="47" text-anchor="middle" font-family="var(--font-display)" font-size="12" fill="var(--clay-800)">${userProfile.visaType||'VISA'}</text>
+        </svg>
+        <div style="flex:1;min-width:0;position:relative">
+          <div class="eyebrow" style="margin-bottom:3px">Your visa expires</div>
+          <div class="disp" style="font-size:17px;color:var(--clay-800)">${formatExpiryDate(userProfile.visaExpiry)}</div>
+          <div class="kh" style="font-size:12px;color:var(--clay-500);margin-top:3px">${mRound <= 0 ? 'Expired!' : `នៅសល់ ${mRound} ខែ · ${mRound} months left`}</div>
+          <button onclick="quickTopic('visa')" style="margin-top:8px;padding:5px 12px;background:var(--terra-500);color:var(--cream);border:none;border-radius:999px;font-size:11px;font-family:var(--font-body);cursor:pointer">Renew →</button>
         </div>
-      `).join('')}
-    </div>
-  `;
+      </div>`;
+  }
 
-  chat.appendChild(w);
+  home.innerHTML = `
+    ${visaBanner}
+    <div class="home-topics-label eyebrow">${t.topicsLabel}</div>
+    <div class="home-topics-grid">
+      ${t.topics.map(c => `
+        <div class="topic-card" onclick="quickTopic('${c.topic}')">
+          <span class="topic-icon">${c.icon}</span>
+          <div class="topic-title">${c.title}</div>
+          <div class="topic-sub">${c.sub}</div>
+        </div>`).join('')}
+    </div>`;
+
+  chat.appendChild(home);
 }
 
-// ══════════════════════════════════════════════════
-// MARKDOWN RENDERER
-// ══════════════════════════════════════════════════
+/* ── MARKDOWN RENDERER ── */
 function renderMarkdown(text) {
-  let html = text
-    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-    .replace(/(⚠️[^\n]+)/g, '<div class="warning-block">$1</div>')
-    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-    .replace(/\*(.*?)\*/g, '<em>$1</em>')
-    .replace(/^(\d+)\.\s(.+)$/gm, (_, n, content) =>
-      `<div class="msg-step"><span class="msg-step-num">${n}</span><span>${content}</span></div>`)
-    .replace(/^#{1,3}\s(.+)$/gm, '<strong style="display:block;margin-top:8px">$1</strong>')
-    .replace(/\n/g, '<br>');
-  return html;
+  // Escape HTML
+  let s = text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+  // Warning blocks (lines starting with ⚠️)
+  s = s.replace(/(⚠️[^\n]+)/g, '<div class="bot-warning">$1</div>');
+
+  // Bold / italic
+  s = s.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  s = s.replace(/\*(.*?)\*/g, '<em>$1</em>');
+
+  // Numbered steps → styled
+  s = s.replace(/^(\d+)\.\s(.+)$/gm, (_, n, content) =>
+    `<div class="bot-step"><span class="bot-step-num">${n}</span><span>${content}</span></div>`);
+
+  // Bullet points → styled with terracotta dot
+  s = s.replace(/^[-•]\s(.+)$/gm, (_, content) =>
+    `<div class="bot-bullet"><span class="bot-bullet-dot"></span><span class="bot-bullet-text">${content}</span></div>`);
+
+  // Headers → bold
+  s = s.replace(/^#{1,3}\s(.+)$/gm, '<strong style="display:block;margin-top:8px;margin-bottom:4px">$1</strong>');
+
+  // Newlines
+  s = s.replace(/\n/g, '<br>');
+
+  return s;
 }
 
-// ══════════════════════════════════════════════════
-// MESSAGES — letter-from-a-friend layout
-// ══════════════════════════════════════════════════
+/* ── MESSAGES ── */
 function appendMessage(role, content) {
   const chat = document.getElementById('chat');
-
-  const welcome = document.getElementById('welcome-screen');
-  if (welcome) welcome.remove();
+  const homeCard = document.getElementById('home-card');
+  if (homeCard) homeCard.remove();
   chatStarted = true;
 
   const row = document.createElement('div');
   row.className = 'msg-row';
 
   if (role === 'user') {
-    // User: right-aligned, cream bubble
     const meta = document.createElement('div');
-    meta.className = 'msg-meta user';
-    meta.innerHTML = `You <div class="meta-dot"></div>`;
+    meta.className = 'msg-meta user-meta';
+    meta.innerHTML = `You <div class="user-dot"></div>`;
     row.appendChild(meta);
 
     const bubble = document.createElement('div');
@@ -1286,219 +1551,156 @@ function appendMessage(role, content) {
     row.appendChild(bubble);
 
   } else {
-    // Bot: left-aligned paper card
     const meta = document.createElement('div');
     meta.className = 'msg-meta';
-    meta.innerHTML = `<span class="meta-lantern">${lanternMarkSVG(13)}</span> K'helper`;
+    meta.innerHTML = `${LANTERN_SM} <span style="letter-spacing:.1em">K'HELPER</span>`;
     row.appendChild(meta);
 
     const card = document.createElement('div');
     card.className = 'bot-card';
-
-    const isCrisis = content.includes('🆘') || content.includes('1393');
-    if (isCrisis) card.classList.add('crisis');
-
+    if (content.includes('🆘') || content.includes('1393')) card.classList.add('crisis');
     card.innerHTML = renderMarkdown(content);
     row.appendChild(card);
-
-    // Return card ref for map button injection
     chat.appendChild(row);
     chat.scrollTop = chat.scrollHeight;
-    return card;
+    return card; // return card ref for map chip injection
   }
 
   chat.appendChild(row);
   chat.scrollTop = chat.scrollHeight;
-  return row;
 }
 
 function showTyping() {
   const chat = document.getElementById('chat');
-  const row = document.createElement('div');
-  row.className = 'msg-row';
-  row.id = 'typing-row';
-
+  const row  = document.createElement('div');
+  row.className = 'msg-row'; row.id = 'typing-row';
   const meta = document.createElement('div');
   meta.className = 'msg-meta';
-  meta.innerHTML = `<span>${lanternMarkSVG(13)}</span> K'helper`;
-  row.appendChild(meta);
-
+  meta.innerHTML = `${LANTERN_SM} <span style="letter-spacing:.1em">K'HELPER</span>`;
   const card = document.createElement('div');
   card.className = 'bot-card';
   card.innerHTML = '<div class="typing-dots"><span></span><span></span><span></span></div>';
+  row.appendChild(meta);
   row.appendChild(card);
-
   chat.appendChild(row);
   chat.scrollTop = chat.scrollHeight;
 }
+function hideTyping() { document.getElementById('typing-row')?.remove(); }
 
-function hideTyping() {
-  document.getElementById('typing-row')?.remove();
-}
-
-// ══════════════════════════════════════════════════
-// MAP LOCATIONS DATA
-// ══════════════════════════════════════════════════
+/* ── MAP DATA ── */
 const MAP_DATA = {
-  immigration: [
-    { name: 'ការិយាល័យចំណាកស្រុក សេអ៊ូល', kr: '서울출입국외국인청', note: 'បន្តកាតចុះបញ្ជី · បន្តវីសា · ការអនុញ្ញាតការងារ', query: '서울출입국외국인청' },
-    { name: 'ការិយាល័យចំណាកស្រុក អានសាន', kr: '안산출입국외국인사무소', note: 'ច្រើនកម្មករ — ភូមិពហុវប្បធម៌ [다문화마을] នៅជិត', query: '안산출입국외국인사무소' },
-    { name: 'ការិយាល័យចំណាកស្រុក អាំងឆ័ន', kr: '인천출입국외국인청', note: 'ជិតអាកាសយានដ្ឋានអាំងឆ័ន — ល្អសម្រាប់អ្នកទើបមកដល់', query: '인천출입국외국인청' },
-    { name: 'ការិយាល័យចំណាកស្រុក ស្វូវ៉ន', kr: '수원출입국외국인사무소', note: 'ទទួលបម្រើខេត្ត Gyeonggi-do ទាំងមូល', query: '수원출입국외국인사무소' },
+  immigration:[
+    {name:'ការិយាល័យចំណាកស្រុក សេអ៊ូល',kr:'서울출입국외국인청',note:'បន្តកាតចុះបញ្ជី · បន្តវីសា · ការអនុញ្ញាតការងារ',query:'서울출입국외국인청'},
+    {name:'ការិយាល័យចំណាកស្រុក អានសាន',kr:'안산출입국외국인사무소',note:'ច្រើនកម្មករ — ភូមិពហុវប្បធម៌ [다문화마을] នៅជិត',query:'안산출입국외국인사무소'},
+    {name:'ការិយាល័យចំណាកស្រុក អាំងឆ័ន',kr:'인천출입국외국인청',note:'ជិតអាកាសយានដ្ឋានអាំងឆ័ន',query:'인천출입국외국인청'},
+    {name:'ការិយាល័យចំណាកស្រុក ស្វូវ៉ន',kr:'수원출입국외국인사무소',note:'ទទួលបម្រើខេត្ត Gyeonggi-do',query:'수원출입국외국인사무소'},
   ],
-  health: [
-    { name: 'មន្ទីរពេទ្យជនបរទេស គូរ៉ូ', kr: '이주민병원 구로', note: '📞 02-2677-4071 · ថ្លៃថោក ឬ ឥតគិតថ្លៃ សម្រាប់ជនបរទេស', query: '이주민병원 구로' },
-    { name: 'មន្ទីរពេទ្យសាធារណៈ សេអ៊ូល', kr: '서울의료원', note: 'មន្ទីរពេទ្យរដ្ឋ — មានសេវាបកប្រែ', query: '서울의료원' },
-    { name: 'មជ្ឈមណ្ឌលសុខភាព អានសាន', kr: '안산시외국인복지센터', note: 'ពិនិត្យសុខភាពឥតគិតថ្លៃ សម្រាប់កម្មករបរទេស', query: '안산시외국인복지센터' },
-    { name: 'ការិយាល័យសុខភាពស្រុក [보건소]', kr: '보건소', note: 'មាននៅគ្រប់ស្រុក — ចាក់វ៉ាក់សាំ, ព្យាបាលជំងឺ, ថ្លៃថោក', query: '보건소' },
+  health:[
+    {name:'មន្ទីរពេទ្យជនបរទេស គូរ៉ូ',kr:'이주민병원 구로',note:'📞 02-2677-4071 · ថ្លៃថោក ឬ ឥតគិតថ្លៃ',query:'이주민병원 구로'},
+    {name:'មន្ទីរពេទ្យសាធារណៈ សេអ៊ូល',kr:'서울의료원',note:'មន្ទីរពេទ្យរដ្ឋ — មានសេវាបកប្រែ',query:'서울의료원'},
+    {name:'មជ្ឈមណ្ឌលសុខភាព អានសាន',kr:'안산시외국인복지센터',note:'ពិនិត្យឥតគិតថ្លៃ សម្រាប់កម្មករបរទេស',query:'안산시외국인복지센터'},
+    {name:'ការិយាល័យសុខភាពស្រុក',kr:'보건소',note:'ចាក់វ៉ាក់សាំ, ព្យាបាលជំងឺ, ថ្លៃថោក',query:'보건소'},
   ],
-  labor: [
-    { name: 'ការិយាល័យការងារ សេអ៊ូល', kr: '서울지방고용노동청', note: 'ដាក់ពាក្យបណ្ដឹង: ប្រាក់ខែមិនបង់, ចាកចេញការងារមិនស្មោះ', query: '서울지방고용노동청' },
-    { name: 'មជ្ឈមណ្ឌលការងារ [고용센터]', kr: '고용센터', note: 'រកការងារ · ជំនួយវីសាការងារ E-9 (ការអនុញ្ញាតការងារ)', query: '고용센터' },
-    { name: 'មជ្ឈមណ្ឌលជំនួយកម្មករ សេអ៊ូល', kr: '외국인노동자지원센터 서울', note: 'ជំនួយច្បាប់ ឥតគិតថ្លៃ — ទូរស័ព្ទ 1350 ក្នុងករណីបន្ទាន់', query: '외국인노동자지원센터 서울' },
-    { name: 'ស្ថានទូតកម្ពុជា នៅកូរ៉េ', kr: '주한 캄보디아대사관', note: '📞 02-3785-1041 · យ៉ុងសានគូ, ហានណាមដុង', query: '주한캄보디아대사관' },
+  labor:[
+    {name:'ការិយាល័យការងារ សេអ៊ូល',kr:'서울지방고용노동청',note:'ដាក់ពាក្យបណ្ដឹង: ប្រាក់ខែមិនបង់',query:'서울지방고용노동청'},
+    {name:'មជ្ឈមណ្ឌលការងារ',kr:'고용센터',note:'រកការងារ · ជំនួយវីសាការងារ E-9',query:'고용센터'},
+    {name:'មជ្ឈមណ្ឌលជំនួយកម្មករ',kr:'외국인노동자지원센터 서울',note:'ជំនួយច្បាប់ ឥតគិតថ្លៃ — ទូរស័ព្ទ 1350',query:'외국인노동자지원센터 서울'},
+    {name:'ស្ថានទូតកម្ពុជា នៅកូរ៉េ',kr:'주한 캄보디아대사관',note:'📞 02-3785-1041',query:'주한캄보디아대사관'},
   ],
-  food: [
-    { name: 'Gwangjang Market', kr: '광장시장', note: '🔥 Best Korean street food — bindaetteok, fresh kimbap, yukhoe', query: '광장시장' },
-    { name: 'Myeongdong Street Food', kr: '명동 길거리 음식', note: 'Tteokbokki, corn dogs, tornado potatoes — tourist classic', query: '명동 길거리 음식' },
-    { name: 'Noryangjin Fish Market', kr: '노량진수산시장', note: '🦞 24hr fresh seafood — buy & eat sashimi on-site', query: '노량진수산시장' },
-    { name: 'Itaewon Halal Food Street', kr: '이태원 할랄음식', note: 'Halal restaurants, international cuisine', query: '이태원 할랄음식' },
-    { name: 'Pojangmacha Euljiro', kr: '을지로 포장마차', note: '🍺 Night outdoor tent stalls — makgeolli & Korean snacks', query: '을지로 포장마차' },
-    { name: 'Tongin Market', kr: '통인시장', note: 'Pay with old coins, build your own banchan tray', query: '통인시장' },
-    { name: 'Dongdaemun Night Market', kr: '동대문 야시장', note: '🌙 Open till 5am — street food + shopping', query: '동대문 야시장' },
-    { name: 'Busan Jagalchi Fish Market', kr: '부산 자갈치시장', note: "Korea's biggest seafood market", query: '부산 자갈치시장' },
+  food:[
+    {name:'Gwangjang Market',kr:'광장시장',note:'🔥 Best Korean street food',query:'광장시장'},
+    {name:'Myeongdong Street Food',kr:'명동 길거리 음식',note:'Tteokbokki, corn dogs',query:'명동 길거리 음식'},
+    {name:'Noryangjin Fish Market',kr:'노량진수산시장',note:'🦞 24hr fresh seafood',query:'노량진수산시장'},
+    {name:'Itaewon Halal Food',kr:'이태원 할랄음식',note:'Halal restaurants',query:'이태원 할랄음식'},
+    {name:'Pojangmacha Euljiro',kr:'을지로 포장마차',note:'🍺 Night outdoor stalls',query:'을지로 포장마차'},
   ],
-  cafe: [
-    { name: 'Bukchon Hanok Cafes', kr: '북촌한옥마을 카페', note: '🏯 Traditional house cafes — stunning architecture + matcha', query: '북촌한옥마을 카페' },
-    { name: 'Insadong Cafe Street', kr: '인사동 카페거리', note: 'Unique themed cafes, tea houses, craft galleries', query: '인사동 카페' },
-    { name: 'Hongdae Cafes', kr: '홍대 카페', note: '🎨 24hr cafes, cheap eats, young creative energy', query: '홍대 카페' },
-    { name: 'Seongsu Coffee Street', kr: '성수동 카페거리', note: "Seoul's Brooklyn — specialty coffee, industrial-chic vibes", query: '성수동 카페' },
-    { name: 'Yeonnam-dong Cafes', kr: '연남동 카페', note: 'Quiet, charming street — great for solo or couple visits', query: '연남동 카페' },
-    { name: 'Gangnam Cafe District', kr: '강남 카페거리', note: 'Upscale cafes, K-beauty desserts, high-end vibes', query: '강남 카페' },
-    { name: 'Ikseon-dong Cafe Alley', kr: '익선동 카페골목', note: '📸 Hanok-turned-cafes — most photogenic in Seoul', query: '익선동 카페' },
+  cafe:[
+    {name:'Bukchon Hanok Cafes',kr:'북촌한옥마을 카페',note:'🏯 Traditional house cafes',query:'북촌한옥마을 카페'},
+    {name:'Seongsu Coffee Street',kr:'성수동 카페거리',note:"Seoul's Brooklyn",query:'성수동 카페'},
+    {name:'Hongdae Cafes',kr:'홍대 카페',note:'🎨 24hr cafes',query:'홍대 카페'},
+    {name:'Ikseon-dong Cafe Alley',kr:'익선동 카페골목',note:'📸 Most photogenic',query:'익선동 카페'},
   ],
-  places: [
-    { name: 'Gyeongbokgung Palace', kr: '경복궁', note: '🏰 Royal palace · Wear hanbok = free entry · Guard ceremony', query: '경복궁' },
-    { name: 'Namsan Seoul Tower', kr: '남산서울타워', note: '🗼 Best Seoul panorama · Love locks · Cable car available', query: '남산타워' },
-    { name: 'Myeongdong', kr: '명동', note: '🛍️ K-beauty, skincare, street food — essential tourist stop', query: '명동' },
-    { name: 'Bukchon Hanok Village', kr: '북촌한옥마을', note: '📸 Traditional Korean village — iconic photo destination', query: '북촌한옥마을' },
-    { name: 'Hongdae Street', kr: '홍대', note: '🎨 Street art, buskers, night market, young energy', query: '홍대' },
-    { name: 'Nami Island', kr: '남이섬', note: '🌿 K-drama filming location · Seasonal trees · Peaceful ferry', query: '남이섬' },
-    { name: 'Lotte World & Theme Park', kr: '롯데월드', note: '🎢 Indoor/outdoor amusement park — family favorite', query: '롯데월드' },
-    { name: 'DMZ (Korean Border)', kr: '비무장지대(DMZ)', note: '🔭 Historic Korean War border — book tour in advance', query: 'DMZ 투어' },
-    { name: 'Jeju Island', kr: '제주도', note: "🌊 Korea's #1 getaway — Hallasan, black lava beaches, waterfalls", query: '제주도 관광' },
-    { name: 'Busan Gamcheon Culture Village', kr: '부산 감천문화마을', note: '🎨 Colorful hillside village — art installations, cafes', query: '감천문화마을' },
-    { name: 'Seoraksan National Park', kr: '설악산 국립공원', note: "🏔️ Korea's most beautiful mountain — hiking, cable car", query: '설악산 국립공원' },
+  places:[
+    {name:'Gyeongbokgung Palace',kr:'경복궁',note:'🏰 Royal palace · Hanbok = free entry',query:'경복궁'},
+    {name:'Namsan Seoul Tower',kr:'남산서울타워',note:'🗼 Best Seoul panorama',query:'남산타워'},
+    {name:'Bukchon Hanok Village',kr:'북촌한옥마을',note:'📸 Iconic photo destination',query:'북촌한옥마을'},
+    {name:'Myeongdong',kr:'명동',note:'🛍️ K-beauty, skincare, street food',query:'명동'},
+    {name:'Nami Island',kr:'남이섬',note:'🌿 K-drama filming location',query:'남이섬'},
+    {name:'Jeju Island',kr:'제주도',note:"🌊 Korea's #1 getaway",query:'제주도 관광'},
+    {name:'Lotte World',kr:'롯데월드',note:'🎢 Amusement park',query:'롯데월드'},
+    {name:'Seoraksan National Park',kr:'설악산 국립공원',note:'🏔️ Most beautiful mountain',query:'설악산 국립공원'},
   ],
 };
 
-// ══════════════════════════════════════════════════
-// MAP PANEL FUNCTIONS
-// ══════════════════════════════════════════════════
+/* ── MAP PANEL ── */
 let currentMapTab = 'immigration';
-
-function openMapPanel(tab) {
-  currentMapTab = tab || currentMapTab;
-  document.getElementById('map-panel').classList.add('open');
-  switchMapTab(currentMapTab);
-}
-
-function closeMapPanel() {
-  document.getElementById('map-panel').classList.remove('open');
-}
-
+function openMapPanel(tab) { currentMapTab = tab||currentMapTab; document.getElementById('map-panel').classList.add('open'); switchMapTab(currentMapTab); }
+function closeMapPanel()   { document.getElementById('map-panel').classList.remove('open'); }
 function switchMapTab(tab) {
   currentMapTab = tab;
-  document.querySelectorAll('.map-tab').forEach(btn => {
-    btn.classList.toggle('active', btn.id === 'tab-' + tab);
-  });
-  renderMapLocations(MAP_DATA[tab] || []);
-}
-
-function renderMapLocations(locs) {
+  document.querySelectorAll('.map-tab').forEach(b => b.classList.toggle('active', b.id === 'tab-' + tab));
+  const locs = MAP_DATA[tab] || [];
   const list = document.getElementById('map-locations-list');
-  if (!locs.length) {
-    list.innerHTML = '<p style="padding:24px;color:var(--clay-400);text-align:center;font-size:13px">No locations found</p>';
-    return;
-  }
+  if (!locs.length) { list.innerHTML = '<p style="padding:20px;text-align:center;color:var(--clay-400);font-size:13px">No locations</p>'; return; }
   list.innerHTML = locs.map(loc => `
     <div class="map-location-card">
       <div class="map-loc-name">${loc.name}</div>
       <div class="map-loc-kr kr">${loc.kr}</div>
-      <div class="map-loc-note">${loc.note}</div>
+      <div class="map-loc-note kh">${loc.note}</div>
       <div class="map-buttons">
         <a href="https://map.kakao.com/?q=${encodeURIComponent(loc.query)}" target="_blank" rel="noopener" class="map-btn kakao">🗺️ Kakao</a>
         <a href="https://map.naver.com/v5/search/${encodeURIComponent(loc.query)}" target="_blank" rel="noopener" class="map-btn naver">N Naver</a>
-        <a href="https://www.google.com/maps/search/${encodeURIComponent(loc.query + ' Korea')}" target="_blank" rel="noopener" class="map-btn google">G Google</a>
+        <a href="https://www.google.com/maps/search/${encodeURIComponent(loc.query+' Korea')}" target="_blank" rel="noopener" class="map-btn google">G Google</a>
       </div>
-    </div>
-  `).join('');
+    </div>`).join('');
 }
-
 function doMapSearch() {
   const q = document.getElementById('map-search-input').value.trim();
-  if (!q) return;
-  window.open('https://map.kakao.com/?q=' + encodeURIComponent(q), '_blank');
+  if (q) window.open('https://map.kakao.com/?q=' + encodeURIComponent(q), '_blank');
 }
 
-// ══════════════════════════════════════════════════
-// SIDEBAR
-// ══════════════════════════════════════════════════
-function toggleSidebar() {
-  document.getElementById('sidebar').classList.toggle('open');
-  document.getElementById('sidebar-overlay').classList.toggle('open');
-}
+/* ── SIDEBAR ── */
+function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); document.getElementById('sidebar-overlay').classList.toggle('open'); }
+function closeSidebar()  { document.getElementById('sidebar').classList.remove('open'); document.getElementById('sidebar-overlay').classList.remove('open'); }
 
-function closeSidebar() {
-  document.getElementById('sidebar').classList.remove('open');
-  document.getElementById('sidebar-overlay').classList.remove('open');
-}
-
+/* ── QUICK TOPICS ── */
 function quickTopic(topic) {
   closeSidebar();
-  if (topic === 'location') {
-    openMapPanel('places');
-    return;
-  }
-  const msg = T[currentLang].topics[topic];
-  if (msg) {
-    document.getElementById('user-input').value = msg;
-    sendMessage();
-  }
+  if (topic === 'location') { openMapPanel('places'); return; }
+  const q = T[currentLang].topicQueries[topic];
+  if (q) { document.getElementById('user-input').value = q; sendMessage(); }
 }
 
+/* ── RESET ── */
 function resetChat() {
   closeSidebar();
   conversationHistory = [];
   chatStarted = false;
-  renderWelcome();
+  renderHome();
 }
 
-// ══════════════════════════════════════════════════
-// SEND MESSAGE
-// ══════════════════════════════════════════════════
+/* ── SEND MESSAGE ── */
 async function sendMessage() {
   const input = document.getElementById('user-input');
-  const text = input.value.trim();
+  const text  = input.value.trim();
   if (!text) return;
 
   if (getRemainingMsgs() <= 0) {
-    appendMessage('assistant', currentLang === 'km'
-      ? '⚠️ អ្នកបានផ្ញើសារច្រើនពេក។ សូមមកម្តងទៀតក្នុង ១ ម៉ោង។ ប្រសិនបើបន្ទាន់ ទូរស័ព្ទ 1345 ឬ 112។'
-      : '⚠️ Message limit reached for this hour. Please wait 60 minutes. For urgent help call 1345 or 112.');
+    appendMessage('assistant',
+      currentLang === 'km'
+        ? '⚠️ អ្នកបានផ្ញើសារច្រើនពេក។ សូមមកម្ដងទៀតក្នុង ១ ម៉ោង។ ប្រសិនបើបន្ទាន់ ទូរស័ព្ទ 1345 ឬ 112។'
+        : '⚠️ Message limit reached. Please wait 60 minutes. For urgent help call 1345 or 112.');
     return;
   }
 
   recordMsg();
   updateCounter();
-
   input.value = '';
   input.style.height = 'auto';
   document.getElementById('send-btn').disabled = true;
 
   appendMessage('user', text);
-  conversationHistory.push({ role: 'user', content: text });
-
+  conversationHistory.push({ role:'user', content:text });
   showTyping();
 
   try {
@@ -1507,44 +1709,36 @@ async function sendMessage() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ messages: conversationHistory }),
     });
-
     hideTyping();
 
     if (!res.ok) {
       const err = await res.json().catch(() => ({}));
-      appendMessage('assistant', err.error || 'Error. Please try again.');
+      appendMessage('assistant', err.error || '⚠️ Error. Please try again.');
       conversationHistory.pop();
     } else {
-      const data = await res.json();
+      const data  = await res.json();
       const reply = data.choices?.[0]?.message?.content || 'Sorry, please try again.';
-      const card = appendMessage('assistant', reply);
-      conversationHistory.push({ role: 'assistant', content: reply });
+      const card  = appendMessage('assistant', reply);
+      conversationHistory.push({ role:'assistant', content:reply });
       if (conversationHistory.length > 40) conversationHistory.splice(0, 2);
 
-      // Map shortcut button based on AI triage category
-      const meta = data._meta;
-      if (meta && meta.category && card) {
-        const tabMap = {
-          VISA: 'immigration', HEALTH: 'health', WORK: 'labor',
-          COMMUNITY: 'labor', TOURIST: 'places', HOUSING: null, DAILY: null, SCHOOL: null
+      // Map chip
+      const meta   = data._meta;
+      const tabMap = { VISA:'immigration', HEALTH:'health', WORK:'labor', COMMUNITY:'labor', TOURIST:'places' };
+      if (meta?.category && tabMap[meta.category] && card) {
+        const labels = {
+          km:{ VISA:'📍 ការិ​យាល័យ​ចំណាកស្រុក', HEALTH:'📍 ស្វែងរកមន្ទីរពេទ្យ', WORK:'📍 ការងារ & ជំនួយ', TOURIST:'📍 ស្វែងរកទីកន្លែង' },
+          en:{ VISA:'📍 Find Immigration Office', HEALTH:'📍 Find Hospital', WORK:'📍 Labor Support', TOURIST:'📍 Explore Places' },
+          kr:{ VISA:'📍 출입국사무소 찾기', HEALTH:'📍 병원 찾기', WORK:'📍 노동지원센터', TOURIST:'📍 관광지 찾기' },
         };
-        const tab = tabMap[meta.category];
-        if (tab) {
-          const labels = {
-            km: { VISA: '📍 ការិ​យាល័យ​ចំណាកស្រុក', HEALTH: '📍 ស្វែងរកមន្ទីរពេទ្យ', WORK: '📍 ការងារ & ជំនួយ', COMMUNITY: '📍 ស្ថានទូត & សហគមន៍', TOURIST: '📍 ស្វែងរកទីកន្លែង' },
-            en: { VISA: '📍 Find Immigration Office', HEALTH: '📍 Find Hospital', WORK: '📍 Labor Support', COMMUNITY: '📍 Embassy & Community', TOURIST: '📍 Explore Places' },
-            kr: { VISA: '📍 출입국사무소 찾기', HEALTH: '📍 병원 찾기', WORK: '📍 노동지원센터', COMMUNITY: '📍 대사관 & 커뮤니티', TOURIST: '📍 관광지 찾기' },
-          };
-          const langLabels = labels[currentLang] || labels.en;
-          const btnLabel = langLabels[meta.category] || '📍 Find Locations';
-          const mapRow = document.createElement('div');
-          mapRow.className = 'map-link-row';
-          mapRow.innerHTML = `<button class="inline-map-btn panel" onclick="openMapPanel('${tab}')">${btnLabel}</button>`;
-          card.appendChild(mapRow);
-        }
+        const btnLabel = (labels[currentLang] || labels.en)[meta.category] || '📍 Find Locations';
+        const row = document.createElement('div');
+        row.className = 'map-chip-row';
+        row.innerHTML = `<button class="map-chip" onclick="openMapPanel('${tabMap[meta.category]}')">${btnLabel}</button>`;
+        card.appendChild(row);
       }
     }
-  } catch (e) {
+  } catch {
     hideTyping();
     appendMessage('assistant', '⚠️ Connection error. For urgent help call **1345** or **112**.');
     conversationHistory.pop();
@@ -1554,24 +1748,18 @@ async function sendMessage() {
   input.focus();
 }
 
-// ══════════════════════════════════════════════════
-// INIT
-// ══════════════════════════════════════════════════
-document.getElementById('user-input').addEventListener('input', function() {
-  this.style.height = 'auto';
-  this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+/* ── INPUT EVENTS ── */
+document.addEventListener('DOMContentLoaded', () => {
+  const inp = document.getElementById('user-input');
+  if (!inp) return;
+  inp.addEventListener('input', function() {
+    this.style.height = 'auto';
+    this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+  });
+  inp.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+  });
 });
-
-document.getElementById('user-input').addEventListener('keydown', function(e) {
-  if (e.key === 'Enter' && !e.shiftKey) {
-    e.preventDefault();
-    sendMessage();
-  }
-});
-
-// Boot
-setLang('km');
-document.getElementById('user-input').focus();
 </script>
 </body>
 </html>
