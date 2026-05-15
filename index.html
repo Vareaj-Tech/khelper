@@ -5,9 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>K'Helper</title>
 
-  <!-- Netlify Identity — enable at: Netlify Dashboard → Site → Identity → Enable -->
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -654,6 +651,8 @@
       cursor: pointer;
       font-weight: 600;
       text-decoration: none;
+      display: inline-block;
+      flex-shrink: 0;
     }
 
     /* Source citation */
@@ -908,24 +907,18 @@
       <div class="auth-badge-sub kh">ឯកជន</div>
     </div>
     <div class="auth-badge">
-      <div class="auth-badge-title">Trusted</div>
-      <div class="auth-badge-sub kh">ទុកចិត្ត</div>
+      <div class="auth-badge-title">No sign-up</div>
+      <div class="auth-badge-sub kh">មិន​ទាម​ទារ​គណនី</div>
     </div>
   </div>
 
-  <!-- Language pill -->
+  <!-- Language pill — selecting language enters the app directly -->
   <div class="lang-pill" style="margin-bottom:32px">
-    <button class="lang-pill-btn active" onclick="setAuthLang('km')">ខ្មែរ</button>
+    <button class="lang-pill-btn active" onclick="enterApp('km')">ខ្មែរ</button>
     <span class="lang-pill-sep">·</span>
-    <button class="lang-pill-btn" onclick="setAuthLang('kr')">한국어</button>
+    <button class="lang-pill-btn" onclick="enterApp('kr')">한국어</button>
     <span class="lang-pill-sep">·</span>
-    <button class="lang-pill-btn" onclick="setAuthLang('en')">English</button>
-  </div>
-
-  <!-- CTA -->
-  <div class="auth-cta">
-    <button class="btn-primary" id="auth-signup-btn" onclick="openSignup()">ចាប់ផ្ដើម · Get Started</button>
-    <button class="btn-secondary" id="auth-login-btn" onclick="openLogin()">Sign in to existing account</button>
+    <button class="lang-pill-btn" onclick="enterApp('en')">English</button>
   </div>
 
   <div class="auth-footer" style="margin-top:4px">INSTALL FREE · NO APP STORE · khelper.app</div>
@@ -981,6 +974,7 @@
       </div>
 
       <button class="setup-submit" onclick="saveProfile()">រក្សាទុក &amp; ចូលប្រើ · Save &amp; Continue</button>
+      <button type="button" onclick="skipSetup()" style="background:none;border:none;color:var(--clay-400);font-size:13px;font-family:var(--font-body);cursor:pointer;margin-top:4px;text-decoration:underline;text-underline-offset:2px">Skip for now · រំលង</button>
     </div>
   </div>
 </div>
@@ -1093,11 +1087,18 @@
   <div id="main">
     <!-- Mobile header -->
     <div id="mobile-header">
-      <button id="hamburger-btn" onclick="toggleSidebar()">☰</button>
-      <div class="mobile-header-center">
+      <!-- Small lantern + wordmark (left) -->
+      <div style="display:flex;align-items:center;gap:7px;flex:1">
+        <svg viewBox="0 0 100 140" width="18" height="25" style="flex-shrink:0">
+          <rect x="30" y="12" width="40" height="10" rx="2" fill="#2a1810"/>
+          <ellipse cx="50" cy="66" rx="36" ry="40" fill="#d94e1f"/>
+          <ellipse cx="50" cy="60" rx="22" ry="28" fill="#e8a83a" opacity="0.5"/>
+          <rect x="30" y="104" width="40" height="8" rx="2" fill="#2a1810"/>
+        </svg>
         <span class="mobile-wordmark disp">K'<em>helper</em></span>
       </div>
-      <div style="width:34px"></div><!-- spacer -->
+      <!-- Hamburger (right) -->
+      <button id="hamburger-btn" onclick="toggleSidebar()">☰</button>
     </div>
 
     <!-- Desktop chat header (shows user info) -->
@@ -1155,6 +1156,64 @@ const LANTERN_SM = `<svg viewBox="0 0 100 140" width="13" height="18" style="fle
   <rect x="30" y="104" width="40" height="8" rx="2" fill="#2a1810"/>
 </svg>`;
 
+/* ── KNOWN HOTLINES (priority order — first match wins) ── */
+const HOTLINES = [
+  { num:'1393',         label:'CRISIS HOTLINE',        labelKh:'ខ្សែ​ជំនួយ​បន្ទាន់' },
+  { num:'119',          label:'AMBULANCE / FIRE',       labelKh:'រថ​យន្ត​ក្នុង​ករណី​បន្ទាន់' },
+  { num:'112',          label:'POLICE',                 labelKh:'នគរ​បាល' },
+  { num:'1350',         label:'LABOR RIGHTS',           labelKh:'សិទ្ធិ​ការ​ងារ' },
+  { num:'1345',         label:'IMMIGRATION',            labelKh:'ចំណាក​ស្រុក' },
+  { num:'1366',         label:'CRISIS SUPPORT',         labelKh:'គ្រួសារ​&​ហិង្សា' },
+  { num:'1577-1366',    label:'DANURI HELPLINE',        labelKh:'គ្រួសារ​ពហុ​វប្ប​ធម៌' },
+  { num:'1577-1000',    label:'NHIS',                   labelKh:'ធានា​រ៉ាប់​រង​សុខ​ភាព' },
+  { num:'1644-0644',    label:'KHMER HOTLINE',          labelKh:'ខ្សែ​ទូរ​ស័ព្ទ​ខ្មែរ' },
+  { num:'02-3785-1041', label:'CAMBODIAN EMBASSY',      labelKh:'ស្ថាន​ទូត​ខ្មែរ' },
+  { num:'02-2677-4071', label:'MIGRANT HOSPITAL',       labelKh:'មន្ទីរ​ពេទ្យ​ជន​ចំណាក​ស្រុក' },
+  { num:'132',          label:'LEGAL AID',              labelKh:'ជំនួយ​ច្បាប់​ឥត​គិត​ថ្លៃ' },
+];
+
+/* ── SOURCE CITATIONS by triage category ── */
+const SOURCES = {
+  VISA:      '출입국·외국인정책본부 · 2024',
+  WORK:      '고용노동부 (Ministry of Employment) · 2024',
+  HEALTH:    '국민건강보험공단 (NHIS) · 2024',
+  HOUSING:   '법무부 (Ministry of Justice) · 2024',
+  SCHOOL:    '교육부 (Ministry of Education) · 2024',
+  COMMUNITY: '주한 캄보디아대사관 (Cambodian Embassy) · 2024',
+  DAILY:     'K\'Helper AI Research · 2024',
+  TOURIST:   'Korea Tourism Organization (KTO) · 2024',
+};
+
+/* ── DETECT HOTLINE in AI text ── */
+function detectHotline(text) {
+  for (const h of HOTLINES) {
+    // Escape dashes in num for regex
+    const escaped = h.num.replace(/-/g, '[\\-\\s]?');
+    if (new RegExp(escaped).test(text)) return h;
+  }
+  return null;
+}
+
+/* ── BUILD HOTLINE CARD HTML ── */
+function buildHotlineCard(h) {
+  return `
+  <div class="hotline-card">
+    <div class="hotline-icon">📞</div>
+    <div style="flex:1;min-width:0">
+      <div class="hotline-label-text">${h.label} · <span style="font-family:var(--font-khmer)">${h.labelKh}</span></div>
+      <div class="hotline-number">${h.num}</div>
+    </div>
+    <a href="tel:${h.num.replace(/[^0-9]/g,'')}" class="hotline-call">Call</a>
+  </div>`;
+}
+
+/* ── BUILD SOURCE CITATION HTML ── */
+function buildSourceCitation(category) {
+  const src = SOURCES[category];
+  if (!src) return '';
+  return `<div class="bot-source">📄 Source: ${src}</div>`;
+}
+
 /* ── APP STATE ── */
 let currentLang = 'km';
 let conversationHistory = [];
@@ -1168,49 +1227,41 @@ function showScreen(name) {
   document.getElementById('screen-' + name).classList.add('active');
 }
 
-/* ── NETLIFY IDENTITY ── */
-// Called once Identity JS loads
-netlifyIdentity.on('init', user => {
-  if (user) {
-    currentUser = user;
-    afterLogin(user);
-  } else {
-    showScreen('auth');
-  }
-});
+/* ── ENTER APP (no login required) ── */
+function enterApp(lang) {
+  // Highlight selected lang on pill
+  currentLang = lang;
+  document.querySelectorAll('.lang-pill-btn').forEach(b => {
+    b.classList.toggle('active',
+      (lang === 'km' && b.textContent === 'ខ្មែរ') ||
+      (lang === 'kr' && b.textContent === '한국어') ||
+      (lang === 'en' && b.textContent === 'English')
+    );
+  });
 
-netlifyIdentity.on('login', user => {
-  currentUser = user;
-  netlifyIdentity.close();
-  afterLogin(user);
-});
-
-netlifyIdentity.on('logout', () => {
-  currentUser = null;
-  userProfile = null;
-  chatStarted = false;
-  showScreen('auth');
-});
-
-function openSignup() { netlifyIdentity.open('signup'); }
-function openLogin()  { netlifyIdentity.open('login'); }
-function doLogout()   { netlifyIdentity.logout(); }
-
-function afterLogin(user) {
-  const profile = loadProfile(user.email);
-  if (!profile) {
-    showScreen('setup');
-  } else {
+  // Load any existing local profile
+  const profile = loadProfile('anon');
+  if (profile) {
     userProfile = profile;
     initApp();
+  } else {
+    // Show optional quick-setup (name + visa — user can skip)
+    showScreen('setup');
   }
 }
 
-/* ── PROFILE ── */
-function profileKey(email) { return 'khelper_profile_' + email; }
+function doLogout() {
+  userProfile = null;
+  chatStarted = false;
+  conversationHistory = [];
+  showScreen('auth');
+}
 
-function loadProfile(email) {
-  try { return JSON.parse(localStorage.getItem(profileKey(email))); } catch { return null; }
+/* ── PROFILE ── */
+function profileKey(id) { return 'khelper_profile_' + (id || 'anon'); }
+
+function loadProfile(id) {
+  try { return JSON.parse(localStorage.getItem(profileKey(id))); } catch { return null; }
 }
 
 function saveProfile() {
@@ -1221,8 +1272,14 @@ function saveProfile() {
   if (!name) { alert('Please enter your name · សូមបញ្ចូលឈ្មោះ'); return; }
 
   const profile = { name, visaType, visaExpiry: expiry, savedAt: Date.now() };
-  localStorage.setItem(profileKey(currentUser.email), JSON.stringify(profile));
+  localStorage.setItem(profileKey('anon'), JSON.stringify(profile));
   userProfile = profile;
+  initApp();
+}
+
+function skipSetup() {
+  // Enter app as a guest with no profile
+  userProfile = null;
   initApp();
 }
 
@@ -1283,16 +1340,20 @@ function initApp() {
   setLang(currentLang);
 
   // Update header
-  if (userProfile) {
-    const displayName = userProfile.name || currentUser.email.split('@')[0];
+  if (userProfile && userProfile.name) {
+    const displayName = userProfile.name;
     document.getElementById('ch-user-name').textContent = displayName;
     const sub = [userProfile.visaType, 'Cambodia'].filter(Boolean).join(' · ');
     document.getElementById('ch-user-sub').textContent = sub || 'ជំនួយការ AI ខ្មែរ';
     document.getElementById('sidebar-user-name').textContent = displayName;
-    document.getElementById('sidebar-user-email').textContent = currentUser.email;
-
-    // Visa card
+    document.getElementById('sidebar-user-email').textContent = userProfile.visaType || 'Guest';
     updateVisaUI(userProfile);
+  } else {
+    // Guest / anonymous
+    document.getElementById('ch-user-name').textContent = 'K\'helper';
+    document.getElementById('ch-user-sub').textContent  = 'ជំនួយការ AI ខ្មែរ';
+    document.getElementById('sidebar-user-name').textContent = 'Guest';
+    document.getElementById('sidebar-user-email').textContent = 'No account';
   }
 
   renderHome();
@@ -1390,24 +1451,15 @@ const T = {
   }
 };
 
-/* ── AUTH LANG TOGGLE ── */
-function setAuthLang(lang) {
-  currentLang = lang;
-  document.querySelectorAll('.lang-pill-btn').forEach(b => {
-    b.classList.toggle('active',
-      (lang === 'km' && b.textContent === 'ខ្មែរ') ||
-      (lang === 'kr' && b.textContent === '한국어') ||
-      (lang === 'en' && b.textContent === 'English')
-    );
-  });
-}
+/* ── AUTH LANG TOGGLE (alias — lang pill now calls enterApp directly) ── */
+function setAuthLang(lang) { enterApp(lang); }
 
 /* ── RATE LIMITER ── */
 const RATE_LIMIT = 30;
 const RATE_WINDOW = 60 * 60 * 1000;
 
 function rateKey() {
-  return 'khelper_rate_' + (currentUser ? currentUser.email : 'anon');
+  return 'khelper_rate_' + (userProfile?.name ? userProfile.name : 'anon');
 }
 function getRateData()    { try { return JSON.parse(localStorage.getItem(rateKey()) || '[]').filter(t => Date.now() - t < RATE_WINDOW); } catch { return []; } }
 function recordMsg()      { const d = getRateData(); d.push(Date.now()); try { localStorage.setItem(rateKey(), JSON.stringify(d)); } catch {} }
@@ -1456,9 +1508,10 @@ function renderHome() {
   const home = document.createElement('div');
   home.id = 'home-card';
 
-  // Visa banner (mobile — sidebar handles desktop)
+  // ── Visa expiry ring card ──
   let visaBanner = '';
   if (userProfile && userProfile.visaExpiry) {
+    // Full ring with live expiry data
     const months = getMonthsLeft(userProfile.visaExpiry);
     const mRound = Math.ceil(months);
     const r = 34, circ = 2 * Math.PI * r;
@@ -1474,13 +1527,27 @@ function renderHome() {
             stroke-linecap="round"
             stroke-dasharray="${dash.toFixed(1)} ${(circ-dash).toFixed(1)}"
             transform="rotate(-90 42 42)"/>
-          <text x="42" y="47" text-anchor="middle" font-family="var(--font-display)" font-size="12" fill="var(--clay-800)">${userProfile.visaType||'VISA'}</text>
+          <text x="42" y="44" text-anchor="middle" font-family="var(--font-display)" font-size="11" fill="var(--clay-800)">${userProfile.visaType||'VISA'}</text>
         </svg>
-        <div style="flex:1;min-width:0;position:relative">
-          <div class="eyebrow" style="margin-bottom:3px">Your visa expires</div>
+        <div style="flex:1;min-width:0">
+          <div class="eyebrow" style="margin-bottom:3px">Visa Expiry · ផុត​សុពល​ភាព</div>
           <div class="disp" style="font-size:17px;color:var(--clay-800)">${formatExpiryDate(userProfile.visaExpiry)}</div>
-          <div class="kh" style="font-size:12px;color:var(--clay-500);margin-top:3px">${mRound <= 0 ? 'Expired!' : `នៅសល់ ${mRound} ខែ · ${mRound} months left`}</div>
-          <button onclick="quickTopic('visa')" style="margin-top:8px;padding:5px 12px;background:var(--terra-500);color:var(--cream);border:none;border-radius:999px;font-size:11px;font-family:var(--font-body);cursor:pointer">Renew →</button>
+          <div class="kh" style="font-size:12px;color:${isWarning?'#ef4444':'var(--clay-500)'};margin-top:3px">${mRound <= 0 ? '⚠️ Expired!' : `នៅ​សល់ ${mRound} ខែ · ${mRound} months left`}</div>
+          <button onclick="quickTopic('visa')" style="margin-top:8px;padding:5px 12px;background:var(--terra-500);color:var(--cream);border:none;border-radius:999px;font-size:11px;font-family:var(--font-body);cursor:pointer;font-weight:600">Renew →</button>
+        </div>
+      </div>`;
+  } else {
+    // Guest — show a soft "add visa date" prompt card
+    visaBanner = `
+      <div class="home-visa-banner" style="cursor:pointer;opacity:0.8" onclick="showScreen('setup')">
+        <svg viewBox="0 0 84 84" width="72" height="72" style="flex-shrink:0">
+          <circle cx="42" cy="42" r="34" stroke="var(--paper)" stroke-width="8" fill="none"/>
+          <text x="42" y="44" text-anchor="middle" font-family="var(--font-display)" font-size="10" fill="var(--clay-400)">VISA</text>
+        </svg>
+        <div style="flex:1;min-width:0">
+          <div class="eyebrow" style="margin-bottom:3px">Track your visa</div>
+          <div style="font-size:14px;color:var(--clay-500);line-height:1.4" class="kh">ចុច​ដើម្បី​បន្ថែម​ថ្ងៃ​ផុត​សុពល​ភាព​វីសា</div>
+          <div style="font-size:11px;color:var(--clay-400);margin-top:2px;font-family:var(--font-body)">Tap to add your visa expiry date →</div>
         </div>
       </div>`;
   }
@@ -1540,11 +1607,6 @@ function appendMessage(role, content) {
   row.className = 'msg-row';
 
   if (role === 'user') {
-    const meta = document.createElement('div');
-    meta.className = 'msg-meta user-meta';
-    meta.innerHTML = `You <div class="user-dot"></div>`;
-    row.appendChild(meta);
-
     const bubble = document.createElement('div');
     bubble.className = 'user-bubble';
     bubble.textContent = content;
@@ -1722,20 +1784,40 @@ async function sendMessage() {
       conversationHistory.push({ role:'assistant', content:reply });
       if (conversationHistory.length > 40) conversationHistory.splice(0, 2);
 
-      // Map chip
+      // Hotline card + source citation + map chip
       const meta   = data._meta;
-      const tabMap = { VISA:'immigration', HEALTH:'health', WORK:'labor', COMMUNITY:'labor', TOURIST:'places' };
-      if (meta?.category && tabMap[meta.category] && card) {
-        const labels = {
-          km:{ VISA:'📍 ការិ​យាល័យ​ចំណាកស្រុក', HEALTH:'📍 ស្វែងរកមន្ទីរពេទ្យ', WORK:'📍 ការងារ & ជំនួយ', TOURIST:'📍 ស្វែងរកទីកន្លែង' },
-          en:{ VISA:'📍 Find Immigration Office', HEALTH:'📍 Find Hospital', WORK:'📍 Labor Support', TOURIST:'📍 Explore Places' },
-          kr:{ VISA:'📍 출입국사무소 찾기', HEALTH:'📍 병원 찾기', WORK:'📍 노동지원센터', TOURIST:'📍 관광지 찾기' },
-        };
-        const btnLabel = (labels[currentLang] || labels.en)[meta.category] || '📍 Find Locations';
-        const row = document.createElement('div');
-        row.className = 'map-chip-row';
-        row.innerHTML = `<button class="map-chip" onclick="openMapPanel('${tabMap[meta.category]}')">${btnLabel}</button>`;
-        card.appendChild(row);
+      if (card) {
+        // 1. Hotline card — detect known phone numbers in reply
+        const hotline = detectHotline(reply);
+        if (hotline && !reply.includes('🆘')) {
+          // Don't double-show for crisis (crisis has its own block)
+          const hDiv = document.createElement('div');
+          hDiv.innerHTML = buildHotlineCard(hotline);
+          card.appendChild(hDiv.firstElementChild);
+        }
+
+        // 2. Source citation
+        const srcHtml = buildSourceCitation(meta?.category);
+        if (srcHtml) {
+          const sDiv = document.createElement('div');
+          sDiv.innerHTML = srcHtml;
+          card.appendChild(sDiv.firstElementChild);
+        }
+
+        // 3. Map chip — open map panel for location-heavy categories
+        const tabMap = { VISA:'immigration', HEALTH:'health', WORK:'labor', COMMUNITY:'labor', TOURIST:'places' };
+        if (meta?.category && tabMap[meta.category]) {
+          const labels = {
+            km:{ VISA:'📍 ការិ​យាល័យ​ចំណាកស្រុក', HEALTH:'📍 ស្វែងរកមន្ទីរពេទ្យ', WORK:'📍 ការងារ & ជំនួយ', TOURIST:'📍 ស្វែងរកទីកន្លែង' },
+            en:{ VISA:'📍 Find Immigration Office', HEALTH:'📍 Find Hospital', WORK:'📍 Labor Support', TOURIST:'📍 Explore Places' },
+            kr:{ VISA:'📍 출입국사무소 찾기', HEALTH:'📍 병원 찾기', WORK:'📍 노동지원센터', TOURIST:'📍 관광지 찾기' },
+          };
+          const btnLabel = (labels[currentLang] || labels.en)[meta.category] || '📍 Find Locations';
+          const row = document.createElement('div');
+          row.className = 'map-chip-row';
+          row.innerHTML = `<button class="map-chip" onclick="openMapPanel('${tabMap[meta.category]}')">${btnLabel}</button>`;
+          card.appendChild(row);
+        }
       }
     }
   } catch {
