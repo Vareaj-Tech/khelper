@@ -2,18 +2,36 @@
 // 5-Agent Pipeline: Sentinel → Guardian → Triage → Core → Monitor
 // Deploy to Netlify Functions. Env variable: ANTHROPIC_API_KEY
 
-const requestLog = new Map();
-const RATE_LIMIT = 30;
-const RATE_WINDOW = 60 * 60 * 1000;
+const RATE_LIMIT = 30;          // max requests per IP per window
+const RATE_WINDOW_SECONDS = 3600; // 1 hour
 
-function isRateLimited(ip) {
-  const now = Date.now();
-  const userLog = requestLog.get(ip) || [];
-  const recent = userLog.filter(t => now - t < RATE_WINDOW);
-  if (recent.length >= RATE_LIMIT) return true;
-  recent.push(now);
-  requestLog.set(ip, recent);
-  return false;
+// Persistent rate limiter via Upstash Redis REST API.
+// Falls back to "allow" if env vars are missing (dev / misconfigured env).
+async function isRateLimited(ip) {
+  const url   = process.env.UPSTASH_REDIS_REST_URL;
+  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  if (!url || !token) return false; // no Redis → no limit (fail open)
+
+  const key = `khelper:rl:${ip.split(',')[0].trim()}`;
+  try {
+    // INCR atomically increments the counter and returns the new value
+    const incrRes = await fetch(`${url}/incr/${key}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    const { result: count } = await incrRes.json();
+
+    // On first request, set the TTL so the key auto-expires after 1 hour
+    if (count === 1) {
+      await fetch(`${url}/expire/${key}/${RATE_WINDOW_SECONDS}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+    }
+
+    return count > RATE_LIMIT;
+  } catch (e) {
+    console.error('Rate limiter error:', e.message);
+    return false; // if Redis is down, fail open rather than block users
+  }
 }
 
 function validateInput(messages) {
@@ -349,7 +367,7 @@ exports.handler = async function(event, context) {
   try {
     const ip = event.headers['x-forwarded-for'] || event.headers['client-ip'] || 'unknown';
 
-    if (isRateLimited(ip)) {
+    if (await isRateLimited(ip)) {
       return {
         statusCode: 429, headers,
         body: JSON.stringify({ error: 'ចំណុចកំណត់សារ: សូមចាំ 1 ម៉ោង។ / Rate limit reached. Wait 1 hour. / 요청 한도 초과. 1시간 후 재시도.' }),
