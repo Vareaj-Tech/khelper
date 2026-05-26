@@ -835,6 +835,763 @@
     @media (min-width: 721px) {
       #screen-auth { padding: 60px 40px 70px; }
     }
+
+    /* ═══════════════════════════════════════════
+       CV BUILDER SCREEN
+    ═══════════════════════════════════════════ */
+    #screen-cv {
+      flex-direction: column;
+      background: var(--cream);
+      overflow-y: auto;
+    }
+
+    .cv-topbar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--hairline);
+      background: var(--cream);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      flex-shrink: 0;
+    }
+    .cv-back-btn {
+      background: none;
+      border: none;
+      font-size: 20px;
+      color: var(--clay-500);
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 8px;
+      line-height: 1;
+      transition: all 0.12s;
+    }
+    .cv-back-btn:hover { background: var(--cream-2); color: var(--clay-800); }
+    .cv-topbar-title {
+      font-family: var(--font-display);
+      font-size: 18px;
+      color: var(--clay-800);
+      letter-spacing: -0.02em;
+      flex: 1;
+    }
+    .cv-topbar-title em { font-style: italic; color: var(--terra-500); }
+
+    .cv-body {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 24px 20px 60px;
+      width: 100%;
+    }
+
+    .cv-intro {
+      background: linear-gradient(135deg, var(--cream-2) 0%, var(--cream-3) 100%);
+      border: 1px solid var(--paper);
+      border-radius: 18px;
+      padding: 18px 20px;
+      margin-bottom: 28px;
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+    .cv-intro-icon { font-size: 28px; flex-shrink: 0; }
+    .cv-intro-text { font-family: var(--font-khmer); font-size: 13.5px; color: var(--clay-600); line-height: 1.7; }
+    .cv-intro-text strong { color: var(--clay-800); font-weight: 700; }
+
+    .cv-section {
+      margin-bottom: 28px;
+    }
+    .cv-section-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1.5px solid var(--paper);
+    }
+    .cv-section-icon { font-size: 18px; }
+    .cv-section-title {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--clay-400);
+    }
+    .cv-section-kr {
+      font-family: var(--font-korean);
+      font-size: 13px;
+      color: var(--clay-500);
+      font-weight: 600;
+    }
+
+    .cv-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .cv-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+
+    .cv-field { display: flex; flex-direction: column; gap: 5px; }
+    .cv-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--clay-400);
+    }
+    .cv-label-kr { font-family: var(--font-korean); font-size: 11px; color: var(--clay-500); font-weight: 600; letter-spacing: 0; text-transform: none; }
+    .cv-input, .cv-select, .cv-textarea {
+      width: 100%;
+      padding: 11px 14px;
+      background: var(--cream);
+      border: 1.5px solid var(--paper);
+      border-radius: 12px;
+      font-family: var(--font-khmer);
+      font-size: 14px;
+      color: var(--clay-800);
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .cv-input:focus, .cv-select:focus, .cv-textarea:focus { border-color: var(--terra-400); }
+    .cv-input::placeholder, .cv-textarea::placeholder { color: var(--clay-400); }
+    .cv-select {
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23a87863' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 36px;
+    }
+    .cv-textarea { resize: vertical; min-height: 100px; line-height: 1.6; }
+
+    .cv-entry {
+      background: var(--cream);
+      border: 1.5px solid var(--paper);
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 10px;
+      position: relative;
+    }
+    .cv-entry-num {
+      position: absolute;
+      top: -10px; left: 14px;
+      background: var(--terra-500);
+      color: var(--cream);
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 10px;
+      border-radius: 999px;
+      letter-spacing: 0.05em;
+      font-family: var(--font-body);
+    }
+
+    .cv-ai-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 8px;
+    }
+    .cv-ai-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      background: linear-gradient(135deg, #f0dccb 0%, #f8dccd 100%);
+      border: 1px solid var(--paper);
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--terra-600);
+      cursor: pointer;
+      font-family: var(--font-body);
+      transition: all 0.15s;
+      flex-shrink: 0;
+    }
+    .cv-ai-btn:hover { background: var(--terra-100); border-color: var(--terra-300); }
+    .cv-ai-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .cv-ai-hint { font-family: var(--font-khmer); font-size: 11.5px; color: var(--clay-400); line-height: 1.5; }
+
+    .cv-char-count { font-size: 10px; color: var(--clay-400); text-align: right; margin-top: 4px; }
+
+    .cv-generate-btn {
+      width: 100%;
+      padding: 16px 24px;
+      background: var(--terra-500);
+      color: var(--cream);
+      border: none;
+      border-radius: 999px;
+      font-size: 16px;
+      font-weight: 700;
+      font-family: var(--font-khmer);
+      cursor: pointer;
+      box-shadow: 0 8px 24px -8px rgba(143,46,16,0.5);
+      transition: all 0.15s;
+      margin-top: 8px;
+    }
+    .cv-generate-btn:hover { background: var(--terra-600); transform: translateY(-1px); }
+    .cv-generate-btn:active { transform: translateY(0); }
+
+    /* ── CV PREVIEW ── */
+    #cv-preview-wrap {
+      display: none;
+      margin-top: 32px;
+      animation: fadeUp 0.35s ease;
+    }
+    #cv-preview-wrap.visible { display: block; }
+
+    .cv-preview-actions {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+    .cv-print-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 10px 20px;
+      background: var(--clay-800);
+      color: var(--cream);
+      border: none;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 600;
+      font-family: var(--font-body);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .cv-print-btn:hover { background: var(--clay-700); }
+    .cv-edit-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 10px 20px;
+      background: transparent;
+      color: var(--clay-500);
+      border: 1.5px solid var(--paper);
+      border-radius: 999px;
+      font-size: 14px;
+      font-family: var(--font-body);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .cv-edit-btn:hover { border-color: var(--terra-300); color: var(--clay-800); }
+
+    /* Korean Resume Document */
+    #cv-document {
+      background: #fff;
+      border: 1px solid var(--hairline-strong);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 24px rgba(74,36,25,0.1);
+    }
+    .cv-doc-inner {
+      padding: 32px 36px;
+      font-family: var(--font-korean), "Noto Sans KR", sans-serif;
+    }
+    .cv-doc-title {
+      text-align: center;
+      font-family: var(--font-korean);
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: 0.3em;
+      color: #111;
+      margin-bottom: 20px;
+      padding-bottom: 14px;
+      border-bottom: 2.5px solid #111;
+    }
+    .cv-doc-personal {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+    .cv-doc-personal-fields { flex: 1; }
+    .cv-doc-photo {
+      width: 100px;
+      flex-shrink: 0;
+      border: 1.5px solid #ccc;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f8f8f8;
+      text-align: center;
+      font-size: 10px;
+      color: #999;
+      font-family: var(--font-body);
+      min-height: 128px;
+      line-height: 1.4;
+    }
+    .cv-doc-row {
+      display: flex;
+      align-items: baseline;
+      gap: 0;
+      padding: 5px 0;
+      border-bottom: 1px solid #eee;
+      font-size: 13px;
+      color: #222;
+    }
+    .cv-doc-row:last-child { border-bottom: none; }
+    .cv-doc-key {
+      font-weight: 700;
+      width: 80px;
+      flex-shrink: 0;
+      color: #333;
+      font-size: 12px;
+    }
+    .cv-doc-val { flex: 1; }
+
+    .cv-doc-section {
+      margin-bottom: 18px;
+    }
+    .cv-doc-section-title {
+      font-family: var(--font-korean);
+      font-size: 14px;
+      font-weight: 700;
+      color: #fff;
+      background: #333;
+      padding: 5px 14px;
+      letter-spacing: 0.15em;
+      margin-bottom: 0;
+    }
+    .cv-doc-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12.5px;
+      color: #222;
+      font-family: var(--font-korean);
+    }
+    .cv-doc-table th {
+      background: #f0f0f0;
+      font-weight: 700;
+      padding: 6px 10px;
+      border: 1px solid #ddd;
+      text-align: center;
+      font-size: 11px;
+      letter-spacing: 0.05em;
+    }
+    .cv-doc-table td {
+      padding: 7px 10px;
+      border: 1px solid #ddd;
+      vertical-align: top;
+      line-height: 1.5;
+    }
+    .cv-doc-table td:first-child { white-space: nowrap; text-align: center; font-size: 11.5px; color: #555; }
+
+    .cv-doc-intro-text {
+      padding: 14px 16px;
+      border: 1px solid #ddd;
+      font-size: 13px;
+      line-height: 1.8;
+      color: #222;
+      font-family: var(--font-korean);
+      white-space: pre-wrap;
+    }
+
+    .cv-doc-footer {
+      margin-top: 20px;
+      text-align: right;
+      font-size: 12px;
+      color: #555;
+      font-family: var(--font-korean);
+      padding-top: 12px;
+      border-top: 1px solid #ddd;
+    }
+
+    /* Print styles */
+    @media print {
+      body > *:not(#screen-cv) { display: none !important; }
+      #screen-cv { display: block !important; overflow: visible; }
+      .cv-topbar, .cv-intro, .cv-section, .cv-generate-btn, .cv-preview-actions { display: none !important; }
+      #cv-preview-wrap { display: block !important; margin: 0 !important; }
+      #cv-document { border: none; border-radius: 0; box-shadow: none; }
+      .cv-doc-inner { padding: 20px 24px; }
+      @page { margin: 1.5cm; size: A4; }
+    }
+
+    @media (max-width: 720px) {
+      .cv-grid-2 { grid-template-columns: 1fr; }
+      .cv-grid-3 { grid-template-columns: 1fr 1fr; }
+      .cv-doc-inner { padding: 20px 16px; }
+      .cv-body { padding: 16px 14px 60px; }
+    }
+
+
+    /* ═══════════════════════════════════════════
+       TRANSLATOR MARKETPLACE
+    ═══════════════════════════════════════════ */
+    #screen-translate {
+      flex-direction: column;
+      background: var(--cream);
+      overflow-y: auto;
+    }
+
+    .tr-topbar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--hairline);
+      background: var(--cream);
+      position: sticky; top: 0; z-index: 10;
+      flex-shrink: 0;
+    }
+    .tr-topbar-title { font-family: var(--font-display); font-size: 18px; color: var(--clay-800); letter-spacing: -0.02em; flex: 1; }
+    .tr-topbar-title em { font-style: italic; color: var(--terra-500); }
+
+    /* Tabs */
+    .tr-tabs {
+      display: flex;
+      border-bottom: 1.5px solid var(--paper);
+      background: var(--cream);
+      flex-shrink: 0;
+    }
+    .tr-tab {
+      flex: 1;
+      padding: 13px 8px;
+      font-size: 13px;
+      font-weight: 600;
+      text-align: center;
+      cursor: pointer;
+      color: var(--clay-400);
+      border-bottom: 2.5px solid transparent;
+      margin-bottom: -1.5px;
+      font-family: var(--font-khmer);
+      background: none;
+      border-top: none; border-left: none; border-right: none;
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .tr-tab.active { color: var(--terra-500); border-bottom-color: var(--terra-500); }
+    .tr-tab-icon { font-size: 16px; }
+
+    .tr-panel { display: none; }
+    .tr-panel.active { display: block; }
+
+    /* ── FIND HELP TAB ── */
+    .tr-find-body {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 20px 18px 60px;
+      width: 100%;
+    }
+
+    .tr-hero {
+      background: linear-gradient(135deg, var(--terra-500) 0%, var(--terra-700) 100%);
+      border-radius: 20px;
+      padding: 22px 22px;
+      margin-bottom: 24px;
+      color: var(--cream);
+      position: relative;
+      overflow: hidden;
+    }
+    .tr-hero::before {
+      content: '';
+      position: absolute;
+      top: -40px; right: -40px;
+      width: 160px; height: 160px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.07);
+    }
+    .tr-hero-title {
+      font-family: var(--font-display);
+      font-size: 20px;
+      letter-spacing: -0.02em;
+      margin-bottom: 6px;
+      position: relative;
+    }
+    .tr-hero-sub {
+      font-family: var(--font-khmer);
+      font-size: 13px;
+      opacity: 0.85;
+      line-height: 1.6;
+      margin-bottom: 16px;
+      position: relative;
+    }
+    .tr-hero-stats {
+      display: flex;
+      gap: 20px;
+      position: relative;
+    }
+    .tr-hero-stat { text-align: center; }
+    .tr-hero-stat-num { font-family: var(--font-display); font-size: 24px; font-weight: 400; }
+    .tr-hero-stat-label { font-size: 10px; opacity: 0.75; font-family: var(--font-body); letter-spacing: 0.05em; margin-top: 1px; }
+
+    /* Filter row */
+    .tr-filter-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 18px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      -webkit-overflow-scrolling: touch;
+    }
+    .tr-filter-row::-webkit-scrollbar { display: none; }
+    .tr-filter-chip {
+      flex-shrink: 0;
+      padding: 7px 14px;
+      border: 1.5px solid var(--paper);
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--clay-500);
+      background: var(--cream);
+      cursor: pointer;
+      font-family: var(--font-body);
+      transition: all 0.12s;
+      white-space: nowrap;
+    }
+    .tr-filter-chip:hover { border-color: var(--terra-300); color: var(--terra-500); }
+    .tr-filter-chip.active { background: var(--terra-500); border-color: var(--terra-500); color: var(--cream); }
+
+    /* Translator cards */
+    .tr-section-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--clay-400);
+      margin-bottom: 12px;
+    }
+
+    .tr-card {
+      background: #fff;
+      border: 1px solid var(--hairline);
+      border-radius: 20px;
+      padding: 18px;
+      margin-bottom: 12px;
+      box-shadow: var(--soft-shadow);
+      animation: fadeUp 0.3s ease;
+      transition: transform 0.12s, box-shadow 0.12s;
+    }
+    .tr-card:hover { transform: translateY(-2px); box-shadow: 0 4px 20px rgba(74,36,25,0.1); }
+
+    .tr-card-top {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+    .tr-avatar {
+      width: 52px; height: 52px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--terra-400) 0%, var(--terra-600) 100%);
+      color: var(--cream);
+      font-size: 20px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      font-weight: 700;
+      font-family: var(--font-display);
+    }
+    .tr-card-info { flex: 1; min-width: 0; }
+    .tr-card-name {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--clay-800);
+      font-family: var(--font-khmer);
+      margin-bottom: 2px;
+    }
+    .tr-card-location {
+      font-size: 11.5px;
+      color: var(--clay-400);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .tr-card-langs {
+      display: flex;
+      gap: 5px;
+      flex-wrap: wrap;
+      margin-top: 6px;
+    }
+    .tr-lang-badge {
+      padding: 3px 10px;
+      background: var(--terra-100);
+      color: var(--terra-600);
+      border-radius: 999px;
+      font-size: 10.5px;
+      font-weight: 700;
+      font-family: var(--font-body);
+    }
+    .tr-verified-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      padding: 3px 9px;
+      background: #e8f5e9;
+      color: #2e7d32;
+      border-radius: 999px;
+      font-size: 10px;
+      font-weight: 700;
+      font-family: var(--font-body);
+    }
+
+    .tr-card-specs {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+    .tr-spec-chip {
+      padding: 4px 10px;
+      background: var(--cream-2);
+      border: 1px solid var(--paper);
+      border-radius: 999px;
+      font-size: 11px;
+      color: var(--clay-500);
+      font-family: var(--font-body);
+    }
+
+    .tr-card-bio {
+      font-family: var(--font-khmer);
+      font-size: 13px;
+      color: var(--clay-600);
+      line-height: 1.6;
+      margin-bottom: 14px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .tr-card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .tr-rate {
+      font-size: 12px;
+      color: var(--clay-400);
+    }
+    .tr-rate strong { color: var(--clay-800); font-size: 15px; font-family: var(--font-display); }
+    .tr-contact-btn {
+      padding: 9px 20px;
+      background: var(--terra-500);
+      color: var(--cream);
+      border: none;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+      font-family: var(--font-body);
+      cursor: pointer;
+      transition: all 0.12s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .tr-contact-btn:hover { background: var(--terra-600); }
+
+    /* Empty state */
+    .tr-empty {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--clay-400);
+    }
+    .tr-empty-icon { font-size: 48px; margin-bottom: 12px; }
+    .tr-empty-title { font-size: 16px; font-weight: 600; color: var(--clay-600); margin-bottom: 8px; font-family: var(--font-khmer); }
+    .tr-empty-sub { font-size: 13px; line-height: 1.6; font-family: var(--font-khmer); }
+
+    /* Request help button */
+    .tr-request-btn {
+      width: 100%;
+      padding: 14px;
+      background: var(--cream);
+      border: 2px dashed var(--terra-300);
+      border-radius: 16px;
+      color: var(--terra-500);
+      font-size: 14px;
+      font-weight: 700;
+      font-family: var(--font-khmer);
+      cursor: pointer;
+      transition: all 0.15s;
+      margin-top: 4px;
+    }
+    .tr-request-btn:hover { background: var(--terra-100); border-style: solid; }
+
+    /* ── REGISTER TAB ── */
+    .tr-reg-body {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 20px 18px 60px;
+      width: 100%;
+    }
+
+    .tr-earn-card {
+      background: linear-gradient(135deg, #fff5ee 0%, var(--cream-2) 100%);
+      border: 1px solid var(--terra-200);
+      border-radius: 20px;
+      padding: 20px;
+      margin-bottom: 24px;
+      display: flex;
+      gap: 14px;
+    }
+    .tr-earn-icon { font-size: 36px; flex-shrink: 0; }
+    .tr-earn-title { font-size: 16px; font-weight: 700; color: var(--clay-800); font-family: var(--font-khmer); margin-bottom: 4px; }
+    .tr-earn-sub { font-family: var(--font-khmer); font-size: 13px; color: var(--clay-500); line-height: 1.6; }
+    .tr-earn-amounts {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+    .tr-earn-pill {
+      padding: 5px 12px;
+      background: var(--terra-500);
+      color: var(--cream);
+      border-radius: 999px;
+      font-size: 11.5px;
+      font-weight: 700;
+      font-family: var(--font-body);
+    }
+
+    .tr-reg-success {
+      display: none;
+      text-align: center;
+      padding: 40px 20px;
+      animation: fadeUp 0.4s ease;
+    }
+    .tr-reg-success.visible { display: block; }
+    .tr-reg-success-icon { font-size: 60px; margin-bottom: 16px; }
+    .tr-reg-success-title { font-family: var(--font-display); font-size: 24px; color: var(--clay-800); letter-spacing: -0.02em; margin-bottom: 8px; }
+    .tr-reg-success-sub { font-family: var(--font-khmer); font-size: 14px; color: var(--clay-500); line-height: 1.7; max-width: 360px; margin: 0 auto; }
+
+    /* Request modal */
+    .tr-modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(31,13,9,0.5);
+      z-index: 300;
+      align-items: flex-end;
+      justify-content: center;
+    }
+    .tr-modal-overlay.open { display: flex; }
+    .tr-modal {
+      background: var(--cream);
+      border-radius: 24px 24px 0 0;
+      padding: 24px 20px 32px;
+      width: 100%;
+      max-width: 560px;
+      max-height: 90vh;
+      overflow-y: auto;
+      animation: fadeUp 0.3s ease;
+    }
+    .tr-modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .tr-modal-title { font-family: var(--font-display); font-size: 18px; color: var(--clay-800); letter-spacing: -0.02em; }
+    .tr-modal-close { background: none; border: none; font-size: 20px; cursor: pointer; color: var(--clay-400); padding: 4px; }
+
+    @media (max-width: 720px) {
+      .tr-find-body, .tr-reg-body { padding: 14px 14px 60px; }
+    }
+
   </style>
 </head>
 <body>
@@ -1038,6 +1795,10 @@
       <div class="nav-item" onclick="quickTopic('housing')"><span class="nav-icon">🏠</span><span id="nav-housing">លំនៅដ្ឋាន &amp; ជួល</span></div>
       <div class="nav-item" onclick="quickTopic('tourist')"><span class="nav-icon">🗺️</span><span id="nav-tourist">ទេសចរណ៍</span></div>
       <div class="nav-item" onclick="openMapPanel('places')"><span class="nav-icon">📍</span><span id="nav-location">ទីតាំង &amp; ផែនទី</span></div>
+      <div style="height:1px;background:var(--paper);margin:10px 10px 6px"></div>
+      <div class="sidebar-section-label eyebrow" style="margin-top:2px">ឧបករណ៍</div>
+      <div class="nav-item" onclick="openCVBuilder()"><span class="nav-icon">📄</span><span id="nav-cv">CV Builder · 이력서</span></div>
+      <div class="nav-item" onclick="openTranslator()"><span class="nav-icon">👥</span><span id="nav-translator">Find Translator · 통역</span></div>
     </nav>
 
     <!-- Language -->
@@ -1842,6 +2603,1006 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
   });
 });
+
+/* ═══════════════════════════════════════════
+   CV BUILDER
+═══════════════════════════════════════════ */
+
+function openCVBuilder() {
+  closeSidebar();
+  // Pre-fill from user profile if available
+  if (userProfile) {
+    if (userProfile.visaType) {
+      const visaSel = document.getElementById('cv-visa');
+      for (let opt of visaSel.options) {
+        if (opt.value === userProfile.visaType) { visaSel.value = userProfile.visaType; break; }
+      }
+    }
+    if (userProfile.name) {
+      // Try to fill name field
+      const nameKr = document.getElementById('cv-name-kr');
+      if (!nameKr.value) nameKr.value = userProfile.name;
+    }
+  }
+  showScreen('cv');
+}
+
+function updateIntroCount(el) {
+  document.getElementById('cv-intro-count').textContent = el.value.length;
+}
+
+function fmtMonth(ym) {
+  // ym = "2021-03" → "2021년 03월"
+  if (!ym) return '';
+  const [y, m] = ym.split('-');
+  return `${y}년 ${m}월`;
+}
+
+function calcAge(dobStr) {
+  if (!dobStr) return '';
+  const dob = new Date(dobStr);
+  const now = new Date();
+  let age = now.getFullYear() - dob.getFullYear();
+  const m = now.getMonth() - dob.getMonth();
+  if (m < 0 || (m === 0 && now.getDate() < dob.getDate())) age--;
+  return age;
+}
+
+function fmtDob(dobStr) {
+  if (!dobStr) return '';
+  const d = new Date(dobStr);
+  const age = calcAge(dobStr);
+  return `${d.getFullYear()}년 ${String(d.getMonth()+1).padStart(2,'0')}월 ${String(d.getDate()).padStart(2,'0')}일` + (age ? ` (만 ${age}세)` : '');
+}
+
+function buildCV() {
+  // Collect values
+  const v = {
+    nameKr:   document.getElementById('cv-name-kr').value.trim(),
+    nameEn:   document.getElementById('cv-name-en').value.trim().toUpperCase(),
+    dob:      document.getElementById('cv-dob').value,
+    phone:    document.getElementById('cv-phone').value.trim(),
+    email:    document.getElementById('cv-email').value.trim(),
+    visa:     document.getElementById('cv-visa').value,
+    address:  document.getElementById('cv-address').value.trim(),
+    edu: [
+      { from: document.getElementById('cv-edu1-from').value, to: document.getElementById('cv-edu1-to').value, status: document.getElementById('cv-edu1-status').value, school: document.getElementById('cv-edu1-school').value.trim(), major: document.getElementById('cv-edu1-major').value.trim() },
+      { from: document.getElementById('cv-edu2-from').value, to: document.getElementById('cv-edu2-to').value, status: document.getElementById('cv-edu2-status').value, school: document.getElementById('cv-edu2-school').value.trim(), major: document.getElementById('cv-edu2-major').value.trim() },
+    ],
+    work: [
+      { from: document.getElementById('cv-work1-from').value, to: document.getElementById('cv-work1-to').value, status: document.getElementById('cv-work1-status').value, company: document.getElementById('cv-work1-company').value.trim(), role: document.getElementById('cv-work1-role').value.trim(), desc: document.getElementById('cv-work1-desc').value.trim() },
+      { from: document.getElementById('cv-work2-from').value, to: document.getElementById('cv-work2-to').value, status: document.getElementById('cv-work2-status').value, company: document.getElementById('cv-work2-company').value.trim(), role: document.getElementById('cv-work2-role').value.trim(), desc: document.getElementById('cv-work2-desc').value.trim() },
+      { from: document.getElementById('cv-work3-from').value, to: document.getElementById('cv-work3-to').value, status: document.getElementById('cv-work3-status').value, company: document.getElementById('cv-work3-company').value.trim(), role: document.getElementById('cv-work3-role').value.trim(), desc: document.getElementById('cv-work3-desc').value.trim() },
+    ],
+    langKm: document.getElementById('cv-lang-km').value,
+    langKr: document.getElementById('cv-lang-kr').value,
+    langEn: document.getElementById('cv-lang-en').value,
+    intro:  document.getElementById('cv-intro-text').value.trim(),
+  };
+
+  if (!v.nameKr) { alert('이름을 입력하세요 · Please enter your Korean name'); return; }
+
+  const today = new Date();
+  const todayStr = `${today.getFullYear()}년 ${String(today.getMonth()+1).padStart(2,'0')}월 ${String(today.getDate()).padStart(2,'0')}일`;
+
+  // Build edu rows
+  let eduRows = '';
+  v.edu.filter(e => e.school).forEach(e => {
+    const period = e.from && e.to ? `${fmtMonth(e.from)} ~ ${fmtMonth(e.to)}` : (e.from ? `${fmtMonth(e.from)} ~` : '');
+    eduRows += `<tr><td>${period}</td><td>${e.school}</td><td style="text-align:center">${e.major}</td><td style="text-align:center">${e.status}</td></tr>`;
+  });
+  if (!eduRows) eduRows = `<tr><td colspan="4" style="text-align:center;color:#999;font-style:italic">해당 없음</td></tr>`;
+
+  // Build work rows
+  let workRows = '';
+  v.work.filter(w => w.company).forEach(w => {
+    const period = w.from && w.to ? `${fmtMonth(w.from)} ~ ${fmtMonth(w.to)}` : (w.from ? `${fmtMonth(w.from)} ~` : '');
+    workRows += `<tr><td>${period}</td><td>${w.company}</td><td style="text-align:center">${w.role}</td><td style="text-align:center">${w.status}</td></tr>`;
+    if (w.desc) workRows += `<tr><td></td><td colspan="3" style="color:#555;font-size:11.5px;padding-left:14px">▸ ${w.desc}</td></tr>`;
+  });
+  if (!workRows) workRows = `<tr><td colspan="4" style="text-align:center;color:#999;font-style:italic">해당 없음</td></tr>`;
+
+  const introHtml = v.intro
+    ? `<div class="cv-doc-intro-text">${v.intro.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>`
+    : `<div class="cv-doc-intro-text" style="color:#999;font-style:italic">(자기소개서를 입력하세요)</div>`;
+
+  document.getElementById('cv-doc-inner').innerHTML = `
+    <div class="cv-doc-title">이  력  서</div>
+
+    <div class="cv-doc-personal">
+      <div class="cv-doc-personal-fields">
+        <div class="cv-doc-row"><span class="cv-doc-key">성    명</span><span class="cv-doc-val">${v.nameKr}${v.nameEn ? ` (${v.nameEn})` : ''}</span></div>
+        <div class="cv-doc-row"><span class="cv-doc-key">생년월일</span><span class="cv-doc-val">${fmtDob(v.dob) || '—'}</span></div>
+        <div class="cv-doc-row"><span class="cv-doc-key">연 락 처</span><span class="cv-doc-val">${v.phone || '—'}</span></div>
+        <div class="cv-doc-row"><span class="cv-doc-key">이 메 일</span><span class="cv-doc-val">${v.email || '—'}</span></div>
+        <div class="cv-doc-row"><span class="cv-doc-key">주    소</span><span class="cv-doc-val">${v.address || '—'}</span></div>
+        <div class="cv-doc-row"><span class="cv-doc-key">국    적</span><span class="cv-doc-val">캄보디아 (Cambodia)</span></div>
+        <div class="cv-doc-row"><span class="cv-doc-key">체류자격</span><span class="cv-doc-val">${v.visa || '—'}</span></div>
+      </div>
+      <div class="cv-doc-photo">사진<br>3.5cm<br>×<br>4.5cm</div>
+    </div>
+
+    <div class="cv-doc-section">
+      <div class="cv-doc-section-title">학  력  사  항</div>
+      <table class="cv-doc-table">
+        <tr><th style="width:30%">기간</th><th style="width:40%">학교명</th><th style="width:18%">전공/종류</th><th style="width:12%">상태</th></tr>
+        ${eduRows}
+      </table>
+    </div>
+
+    <div class="cv-doc-section">
+      <div class="cv-doc-section-title">경  력  사  항</div>
+      <table class="cv-doc-table">
+        <tr><th style="width:30%">기간</th><th style="width:30%">회사명</th><th style="width:25%">직위/직무</th><th style="width:15%">상태</th></tr>
+        ${workRows}
+      </table>
+    </div>
+
+    <div class="cv-doc-section">
+      <div class="cv-doc-section-title">언  어  능  력</div>
+      <table class="cv-doc-table">
+        <tr><th>언어</th><th>수준</th><th>언어</th><th>수준</th></tr>
+        <tr><td style="text-align:center">크메르어</td><td style="text-align:center">원어민</td><td style="text-align:center">한국어</td><td style="text-align:center">${v.langKr}</td></tr>
+        <tr><td style="text-align:center">영어</td><td style="text-align:center">${v.langEn}</td><td></td><td></td></tr>
+      </table>
+    </div>
+
+    <div class="cv-doc-section">
+      <div class="cv-doc-section-title">자  기  소  개  서</div>
+      ${introHtml}
+    </div>
+
+    <div class="cv-doc-footer">
+      위 사항은 사실과 틀림없습니다.<br>
+      작성일: ${todayStr}<br><br>
+      성명: ${v.nameKr} <span style="display:inline-block;width:60px;border-bottom:1px solid #999;margin-left:4px">&nbsp;</span> (인)
+    </div>
+  `;
+
+  const wrap = document.getElementById('cv-preview-wrap');
+  wrap.classList.add('visible');
+  setTimeout(() => wrap.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+}
+
+async function aiGenerateIntro() {
+  const nameKr   = document.getElementById('cv-name-kr').value.trim();
+  const visa     = document.getElementById('cv-visa').value;
+  const langKr   = document.getElementById('cv-lang-kr').value;
+  const langEn   = document.getElementById('cv-lang-en').value;
+  const work1Co  = document.getElementById('cv-work1-company').value.trim();
+  const work1Ro  = document.getElementById('cv-work1-role').value.trim();
+  const work1Desc= document.getElementById('cv-work1-desc').value.trim();
+  const dob      = document.getElementById('cv-dob').value;
+  const age      = calcAge(dob);
+
+  const btn = document.getElementById('cv-ai-btn');
+  btn.disabled = true;
+  btn.textContent = '✨ Generating...';
+
+  const prompt = `당신은 한국어 자기소개서 전문 작성자입니다. 아래 정보를 바탕으로 한국 취업용 자기소개서를 작성해주세요. 반드시 한국어로만 작성하고, 300~500자 분량으로 해주세요. 성실하고 긍정적인 인상을 주는 내용으로 작성해주세요.
+
+지원자 정보:
+- 이름: ${nameKr || '(미입력)'}
+- 나이: ${age ? age + '세' : '(미입력)'}
+- 국적: 캄보디아
+- 체류자격: ${visa || '(미입력)'}
+- 한국어 수준: ${langKr}
+- 영어 수준: ${langEn}
+- 주요 경력: ${work1Co ? work1Co + ' / ' + work1Ro + (work1Desc ? ' — ' + work1Desc : '') : '(미입력)'}
+
+자기소개서만 출력하세요. 제목, 설명, 부연설명 없이 자기소개서 본문만 작성해주세요.`;
+
+  try {
+    const res = await fetch('/.netlify/functions/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        messages: [{ role: 'user', content: prompt }],
+        lang: 'kr',
+        cvMode: true
+      })
+    });
+    const data = await res.json();
+    const text = data.reply || data.content || data.message || '';
+    if (text) {
+      document.getElementById('cv-intro-text').value = text;
+      updateIntroCount(document.getElementById('cv-intro-text'));
+    } else {
+      alert('AI generation failed. Please write your introduction manually.');
+    }
+  } catch (err) {
+    alert('Could not connect. Please write your introduction manually.');
+  }
+
+  btn.disabled = false;
+  btn.textContent = '✨ AI Assist — Generate Korean 자기소개서';
+}
+
+
+/* ═══════════════════════════════════════════
+   TRANSLATOR MARKETPLACE
+═══════════════════════════════════════════ */
+
+const SPEC_LABELS = {
+  hospital:    '🏥 Hospital',
+  immigration: '🛂 Immigration',
+  job:         '💼 Job Interview',
+  contract:    '📄 Contract',
+  police:      '🚔 Police/Legal',
+  general:     '💬 General',
+};
+
+const MODE_LABELS = { remote: '📱 Remote', inperson: '🤝 In-person' };
+
+let trCurrentFilter = 'all';
+
+function openTranslator() {
+  closeSidebar();
+  showScreen('translate');
+  renderTranslatorList();
+}
+
+function switchTrTab(tab) {
+  document.querySelectorAll('.tr-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tr-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('tr-tab-' + tab).classList.add('active');
+  document.getElementById('tr-panel-' + tab).classList.add('active');
+  if (tab === 'find') renderTranslatorList();
+}
+
+/* ── DATA ── */
+function getTranslators() {
+  try { return JSON.parse(localStorage.getItem('khelper_translators') || '[]'); } catch { return []; }
+}
+function saveTranslator(t) {
+  const list = getTranslators();
+  list.push(t);
+  localStorage.setItem('khelper_translators', JSON.stringify(list));
+}
+function getHelpRequests() {
+  try { return JSON.parse(localStorage.getItem('khelper_help_requests') || '[]'); } catch { return []; }
+}
+function saveHelpRequest(r) {
+  const list = getHelpRequests();
+  list.push(r);
+  localStorage.setItem('khelper_help_requests', JSON.stringify(list));
+}
+
+/* ── RENDER TRANSLATOR LIST ── */
+function filterTranslators(filter, btn) {
+  trCurrentFilter = filter;
+  document.querySelectorAll('.tr-filter-chip').forEach(c => c.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  renderTranslatorList();
+}
+
+function renderTranslatorList() {
+  const list = document.getElementById('tr-list');
+  if (!list) return;
+  let translators = getTranslators();
+
+  // Update stat counter
+  const statEl = document.getElementById('tr-stat-translators');
+  if (statEl) statEl.textContent = translators.length;
+
+  // Filter
+  if (trCurrentFilter !== 'all') {
+    translators = translators.filter(t => {
+      if (trCurrentFilter === 'remote') return t.modes && t.modes.includes('remote');
+      return t.specialties && t.specialties.includes(trCurrentFilter);
+    });
+  }
+
+  if (translators.length === 0) {
+    list.innerHTML = `
+      <div class="tr-empty">
+        <div class="tr-empty-icon">👥</div>
+        <div class="tr-empty-title">
+          ${trCurrentFilter === 'all'
+            ? 'ចុះឈ្មោះជាដំបូង! Be the first translator!'
+            : 'No translators for this category yet.'}
+        </div>
+        <div class="tr-empty-sub">
+          ${trCurrentFilter === 'all'
+            ? 'អ្នកដែលចង់ចុះឈ្មោះ ចុច "ចុះឈ្មោះ & រក​ចំណូល" ខាងលើ<br><span style="font-family:var(--font-body);font-size:11.5px">Click "Register & Earn" tab to be the first translator on K\'helper</span>'
+            : 'Try "All" to see all available translators.'}
+        </div>
+      </div>`;
+    return;
+  }
+
+  list.innerHTML = translators.map((t, i) => {
+    const initials = (t.name || '?').charAt(0).toUpperCase();
+    const specs = (t.specialties || []).map(s => `<span class="tr-spec-chip">${SPEC_LABELS[s] || s}</span>`).join('');
+    const modes = (t.modes || []).map(m => `<span class="tr-spec-chip">${MODE_LABELS[m] || m}</span>`).join('');
+    const langBadges = `<span class="tr-lang-badge">🇰🇭 Khmer</span><span class="tr-lang-badge">🇰🇷 Korean · ${t.krLevel || 'Fluent'}</span>`;
+    const waMsg = encodeURIComponent(`K'Helper: ខ្ញុំចង់ស្នើសុំសេវាបកប្រែ - I found you on K'helper and need translation help.`);
+    const phoneClean = (t.phone || '').replace(/[^0-9]/g, '');
+
+    return `
+    <div class="tr-card">
+      <div class="tr-card-top">
+        <div class="tr-avatar" style="background:linear-gradient(135deg,${['#d94e1f','#e8a83a','#6b7a5a','#a87863'][i % 4]} 0%,${['#a8350f','#b57a1a','#4b5a3c','#7d4c3b'][i % 4]} 100%)">${initials}</div>
+        <div class="tr-card-info">
+          <div class="tr-card-name">${t.name || 'Anonymous'} <span class="tr-verified-badge">✓ K'helper</span></div>
+          <div class="tr-card-location">📍 ${t.location || 'Korea'}</div>
+          <div class="tr-card-langs">${langBadges}</div>
+        </div>
+      </div>
+      <div class="tr-card-specs">${specs}${modes}</div>
+      ${t.bio ? `<div class="tr-card-bio">${t.bio}</div>` : ''}
+      <div class="tr-card-footer">
+        <div class="tr-rate"><strong>₩15,000</strong> / 30min remote</div>
+        ${phoneClean
+          ? `<a class="tr-contact-btn" href="https://wa.me/82${phoneClean.replace(/^0/,'')}?text=${waMsg}" target="_blank" rel="noopener">💬 Contact</a>`
+          : `<button class="tr-contact-btn" onclick="openRequestModal()">📩 Request</button>`}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* ── REGISTER AS TRANSLATOR ── */
+function submitTranslatorRegistration() {
+  const name     = document.getElementById('tr-reg-name').value.trim();
+  const phone    = document.getElementById('tr-reg-phone').value.trim();
+  const location = document.getElementById('tr-reg-location').value;
+  const krLevel  = document.getElementById('tr-reg-kr-level').value;
+  const bio      = document.getElementById('tr-reg-bio').value.trim();
+
+  if (!name)  { alert('សូមបញ្ចូលឈ្មោះ · Please enter your name'); return; }
+  if (!phone) { alert('សូមបញ្ចូលលេខទូរស័ព្ទ · Please enter your phone number'); return; }
+
+  const specialties = ['hospital','immigration','job','contract','police','general']
+    .filter(s => document.getElementById('tr-spec-' + s)?.checked);
+  const modes = [];
+  if (document.getElementById('tr-mode-remote')?.checked)   modes.push('remote');
+  if (document.getElementById('tr-mode-inperson')?.checked) modes.push('inperson');
+
+  if (specialties.length === 0) { alert('Please select at least one specialty · សូមជ្រើសរើសសេវាបកប្រែ'); return; }
+
+  const translator = {
+    id: Date.now(),
+    name, phone, location,
+    krLevel: { conversational: 'Conversational', fluent: 'Fluent', 'native-level': 'Near-native' }[krLevel] || 'Fluent',
+    specialties, modes, bio,
+    registeredAt: new Date().toISOString(),
+  };
+
+  saveTranslator(translator);
+
+  // Show success
+  document.getElementById('tr-reg-form').style.display = 'none';
+  document.getElementById('tr-reg-success').classList.add('visible');
+
+  // If userProfile exists, attach name
+  console.log('Translator registered:', translator);
+}
+
+/* ── REQUEST HELP MODAL ── */
+function openRequestModal() {
+  document.getElementById('tr-request-form-content').style.display = 'block';
+  document.getElementById('tr-request-success').style.display = 'none';
+  document.getElementById('tr-request-modal').classList.add('open');
+}
+
+function closeRequestModal(e) {
+  if (!e || e.target === document.getElementById('tr-request-modal')) {
+    document.getElementById('tr-request-modal').classList.remove('open');
+  }
+}
+
+function submitHelpRequest() {
+  const type  = document.getElementById('tr-req-type').value;
+  const mode  = document.getElementById('tr-req-mode').value;
+  const when  = document.getElementById('tr-req-when').value;
+  const phone = document.getElementById('tr-req-phone').value.trim();
+  const desc  = document.getElementById('tr-req-desc').value.trim();
+
+  if (!phone) { alert('Please enter your phone number · សូមបញ្ចូលលេខទូរស័ព្ទ'); return; }
+
+  const request = {
+    id: Date.now(),
+    type, mode, when, phone, desc,
+    requestedAt: new Date().toISOString(),
+  };
+
+  saveHelpRequest(request);
+
+  // Show success
+  document.getElementById('tr-request-form-content').style.display = 'none';
+  document.getElementById('tr-request-success').style.display = 'block';
+
+  console.log('Help request saved:', request);
+}
+
 </script>
+
+<!-- ═══════════════════════════════════════════════
+     SCREEN 4: KOREAN CV BUILDER
+═══════════════════════════════════════════════ -->
+<div id="screen-cv" class="screen">
+
+  <!-- Top bar -->
+  <div class="cv-topbar">
+    <button class="cv-back-btn" onclick="showScreen('app')" title="Back">←</button>
+    <div class="cv-topbar-title disp">Korean <em>CV Builder</em></div>
+    <div style="font-family:var(--font-korean);font-size:13px;color:var(--clay-400);font-weight:600">이력서 만들기</div>
+  </div>
+
+  <div class="cv-body">
+
+    <!-- Intro -->
+    <div class="cv-intro">
+      <div class="cv-intro-icon">📄</div>
+      <div class="cv-intro-text">
+        <strong>បំពេញព័ត៌មានខ្លះ នឹងទទួលបាន 이력서 ជាភាសាកូរ៉េ។</strong><br>
+        Fill in your info below and we'll generate a proper Korean-style resume (이력서 + 자기소개서) ready to print or send to employers.
+      </div>
+    </div>
+
+    <!-- SECTION 1: Personal Info -->
+    <div class="cv-section">
+      <div class="cv-section-header">
+        <span class="cv-section-icon">👤</span>
+        <span class="cv-section-title">Personal Info</span>
+        <span class="cv-section-kr">인적사항</span>
+      </div>
+      <div class="cv-grid-2" style="margin-bottom:14px">
+        <div class="cv-field">
+          <label class="cv-label">Full Name (Korean) <span class="cv-label-kr">성명</span></label>
+          <input type="text" id="cv-name-kr" class="cv-input" placeholder="홍길동" />
+        </div>
+        <div class="cv-field">
+          <label class="cv-label">Full Name (English) <span class="cv-label-kr">영문명</span></label>
+          <input type="text" id="cv-name-en" class="cv-input" placeholder="HONG GIL DONG" />
+        </div>
+      </div>
+      <div class="cv-grid-2" style="margin-bottom:14px">
+        <div class="cv-field">
+          <label class="cv-label">Date of Birth <span class="cv-label-kr">생년월일</span></label>
+          <input type="date" id="cv-dob" class="cv-input" />
+        </div>
+        <div class="cv-field">
+          <label class="cv-label">Phone (Korea) <span class="cv-label-kr">연락처</span></label>
+          <input type="tel" id="cv-phone" class="cv-input" placeholder="010-0000-0000" />
+        </div>
+      </div>
+      <div class="cv-grid-2" style="margin-bottom:14px">
+        <div class="cv-field">
+          <label class="cv-label">Email <span class="cv-label-kr">이메일</span></label>
+          <input type="email" id="cv-email" class="cv-input" placeholder="you@email.com" />
+        </div>
+        <div class="cv-field">
+          <label class="cv-label">Visa Type <span class="cv-label-kr">체류자격</span></label>
+          <select id="cv-visa" class="cv-select">
+            <option value="">Select...</option>
+            <option value="E-9">E-9 (비전문취업)</option>
+            <option value="E-7">E-7 (특정활동)</option>
+            <option value="F-6">F-6 (결혼이민)</option>
+            <option value="F-2">F-2 (거주)</option>
+            <option value="D-2">D-2 (유학)</option>
+            <option value="H-2">H-2 (방문취업)</option>
+            <option value="기타">기타 (Other)</option>
+          </select>
+        </div>
+      </div>
+      <div class="cv-field">
+        <label class="cv-label">Address in Korea <span class="cv-label-kr">주소</span></label>
+        <input type="text" id="cv-address" class="cv-input" placeholder="e.g. 경기도 안산시 단원구..." />
+      </div>
+    </div>
+
+    <!-- SECTION 2: Education -->
+    <div class="cv-section">
+      <div class="cv-section-header">
+        <span class="cv-section-icon">🎓</span>
+        <span class="cv-section-title">Education</span>
+        <span class="cv-section-kr">학력사항</span>
+      </div>
+
+      <div class="cv-entry" id="edu-entry-1">
+        <div class="cv-entry-num">1</div>
+        <div class="cv-grid-3" style="margin-bottom:10px;margin-top:8px">
+          <div class="cv-field">
+            <label class="cv-label">From <span class="cv-label-kr">입학</span></label>
+            <input type="month" id="cv-edu1-from" class="cv-input" />
+          </div>
+          <div class="cv-field">
+            <label class="cv-label">To <span class="cv-label-kr">졸업</span></label>
+            <input type="month" id="cv-edu1-to" class="cv-input" />
+          </div>
+          <div class="cv-field">
+            <label class="cv-label">Status <span class="cv-label-kr">상태</span></label>
+            <select id="cv-edu1-status" class="cv-select">
+              <option value="졸업">졸업 (Graduated)</option>
+              <option value="재학중">재학중 (Current)</option>
+              <option value="중퇴">중퇴 (Dropped out)</option>
+            </select>
+          </div>
+        </div>
+        <div class="cv-grid-2">
+          <div class="cv-field">
+            <label class="cv-label">School Name <span class="cv-label-kr">학교명</span></label>
+            <input type="text" id="cv-edu1-school" class="cv-input" placeholder="e.g. 파사악대학교 (Cambodia)" />
+          </div>
+          <div class="cv-field">
+            <label class="cv-label">Major / Type <span class="cv-label-kr">전공/학교종류</span></label>
+            <input type="text" id="cv-edu1-major" class="cv-input" placeholder="e.g. 경영학 / 고등학교" />
+          </div>
+        </div>
+      </div>
+
+      <div class="cv-entry" id="edu-entry-2">
+        <div class="cv-entry-num">2 <span style="font-weight:400;opacity:0.7">(optional)</span></div>
+        <div class="cv-grid-3" style="margin-bottom:10px;margin-top:8px">
+          <div class="cv-field">
+            <label class="cv-label">From</label>
+            <input type="month" id="cv-edu2-from" class="cv-input" />
+          </div>
+          <div class="cv-field">
+            <label class="cv-label">To</label>
+            <input type="month" id="cv-edu2-to" class="cv-input" />
+          </div>
+          <div class="cv-field">
+            <label class="cv-label">Status</label>
+            <select id="cv-edu2-status" class="cv-select">
+              <option value="졸업">졸업</option>
+              <option value="재학중">재학중</option>
+              <option value="중퇴">중퇴</option>
+            </select>
+          </div>
+        </div>
+        <div class="cv-grid-2">
+          <div class="cv-field">
+            <label class="cv-label">School Name</label>
+            <input type="text" id="cv-edu2-school" class="cv-input" placeholder="(optional)" />
+          </div>
+          <div class="cv-field">
+            <label class="cv-label">Major / Type</label>
+            <input type="text" id="cv-edu2-major" class="cv-input" placeholder="(optional)" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 3: Work Experience -->
+    <div class="cv-section">
+      <div class="cv-section-header">
+        <span class="cv-section-icon">💼</span>
+        <span class="cv-section-title">Work Experience</span>
+        <span class="cv-section-kr">경력사항</span>
+      </div>
+
+      <div class="cv-entry" id="work-entry-1">
+        <div class="cv-entry-num">1</div>
+        <div class="cv-grid-3" style="margin-bottom:10px;margin-top:8px">
+          <div class="cv-field">
+            <label class="cv-label">From <span class="cv-label-kr">입사</span></label>
+            <input type="month" id="cv-work1-from" class="cv-input" />
+          </div>
+          <div class="cv-field">
+            <label class="cv-label">To <span class="cv-label-kr">퇴사</span></label>
+            <input type="month" id="cv-work1-to" class="cv-input" />
+          </div>
+          <div class="cv-field">
+            <label class="cv-label">Status</label>
+            <select id="cv-work1-status" class="cv-select">
+              <option value="퇴사">퇴사 (Left)</option>
+              <option value="재직중">재직중 (Current)</option>
+            </select>
+          </div>
+        </div>
+        <div class="cv-grid-2" style="margin-bottom:10px">
+          <div class="cv-field">
+            <label class="cv-label">Company <span class="cv-label-kr">회사명</span></label>
+            <input type="text" id="cv-work1-company" class="cv-input" placeholder="e.g. 삼성전자 주식회사" />
+          </div>
+          <div class="cv-field">
+            <label class="cv-label">Position <span class="cv-label-kr">직위/직무</span></label>
+            <input type="text" id="cv-work1-role" class="cv-input" placeholder="e.g. 생산직 / 용접공" />
+          </div>
+        </div>
+        <div class="cv-field">
+          <label class="cv-label">Main Duties <span class="cv-label-kr">담당업무</span></label>
+          <input type="text" id="cv-work1-desc" class="cv-input" placeholder="e.g. 자동차 부품 조립 및 품질 검사" />
+        </div>
+      </div>
+
+      <div class="cv-entry" id="work-entry-2">
+        <div class="cv-entry-num">2 <span style="font-weight:400;opacity:0.7">(optional)</span></div>
+        <div class="cv-grid-3" style="margin-bottom:10px;margin-top:8px">
+          <div class="cv-field">
+            <label class="cv-label">From</label>
+            <input type="month" id="cv-work2-from" class="cv-input" />
+          </div>
+          <div class="cv-field">
+            <label class="cv-label">To</label>
+            <input type="month" id="cv-work2-to" class="cv-input" />
+          </div>
+          <div class="cv-field">
+            <label class="cv-label">Status</label>
+            <select id="cv-work2-status" class="cv-select">
+              <option value="퇴사">퇴사</option>
+              <option value="재직중">재직중</option>
+            </select>
+          </div>
+        </div>
+        <div class="cv-grid-2" style="margin-bottom:10px">
+          <div class="cv-field">
+            <label class="cv-label">Company</label>
+            <input type="text" id="cv-work2-company" class="cv-input" placeholder="(optional)" />
+          </div>
+          <div class="cv-field">
+            <label class="cv-label">Position</label>
+            <input type="text" id="cv-work2-role" class="cv-input" placeholder="(optional)" />
+          </div>
+        </div>
+        <div class="cv-field">
+          <label class="cv-label">Main Duties</label>
+          <input type="text" id="cv-work2-desc" class="cv-input" placeholder="(optional)" />
+        </div>
+      </div>
+
+      <div class="cv-entry" id="work-entry-3">
+        <div class="cv-entry-num">3 <span style="font-weight:400;opacity:0.7">(optional)</span></div>
+        <div class="cv-grid-3" style="margin-bottom:10px;margin-top:8px">
+          <div class="cv-field"><label class="cv-label">From</label><input type="month" id="cv-work3-from" class="cv-input" /></div>
+          <div class="cv-field"><label class="cv-label">To</label><input type="month" id="cv-work3-to" class="cv-input" /></div>
+          <div class="cv-field"><label class="cv-label">Status</label><select id="cv-work3-status" class="cv-select"><option value="퇴사">퇴사</option><option value="재직중">재직중</option></select></div>
+        </div>
+        <div class="cv-grid-2" style="margin-bottom:10px">
+          <div class="cv-field"><label class="cv-label">Company</label><input type="text" id="cv-work3-company" class="cv-input" placeholder="(optional)" /></div>
+          <div class="cv-field"><label class="cv-label">Position</label><input type="text" id="cv-work3-role" class="cv-input" placeholder="(optional)" /></div>
+        </div>
+        <div class="cv-field"><label class="cv-label">Main Duties</label><input type="text" id="cv-work3-desc" class="cv-input" placeholder="(optional)" /></div>
+      </div>
+    </div>
+
+    <!-- SECTION 4: Languages & Skills -->
+    <div class="cv-section">
+      <div class="cv-section-header">
+        <span class="cv-section-icon">💬</span>
+        <span class="cv-section-title">Language Skills</span>
+        <span class="cv-section-kr">언어능력</span>
+      </div>
+      <div class="cv-grid-3">
+        <div class="cv-field">
+          <label class="cv-label">Khmer <span class="cv-label-kr">크메르어</span></label>
+          <select id="cv-lang-km" class="cv-select">
+            <option value="원어민">원어민 (Native)</option>
+          </select>
+        </div>
+        <div class="cv-field">
+          <label class="cv-label">Korean <span class="cv-label-kr">한국어</span></label>
+          <select id="cv-lang-kr" class="cv-select">
+            <option value="초급">초급 (Beginner)</option>
+            <option value="중급">중급 (Intermediate)</option>
+            <option value="고급">고급 (Advanced)</option>
+            <option value="유창">유창 (Fluent)</option>
+          </select>
+        </div>
+        <div class="cv-field">
+          <label class="cv-label">English <span class="cv-label-kr">영어</span></label>
+          <select id="cv-lang-en" class="cv-select">
+            <option value="초급">초급 (Beginner)</option>
+            <option value="중급">중급 (Intermediate)</option>
+            <option value="고급">고급 (Advanced)</option>
+            <option value="유창">유창 (Fluent)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 5: Self Introduction -->
+    <div class="cv-section">
+      <div class="cv-section-header">
+        <span class="cv-section-icon">✍️</span>
+        <span class="cv-section-title">Self Introduction</span>
+        <span class="cv-section-kr">자기소개서</span>
+      </div>
+      <div class="cv-field">
+        <textarea id="cv-intro-text" class="cv-textarea" rows="6"
+          placeholder="Write in Korean (한국어로 작성). Click AI Assist below to generate automatically."
+          oninput="updateIntroCount(this)"></textarea>
+        <div class="cv-char-count"><span id="cv-intro-count">0</span> / 800자 권장</div>
+      </div>
+      <div class="cv-ai-row">
+        <button class="cv-ai-btn" onclick="aiGenerateIntro()" id="cv-ai-btn">
+          ✨ AI Assist — Generate Korean 자기소개서
+        </button>
+        <span class="cv-ai-hint">ខ្ញុំនឹងសរសេរ 자기소개서 ជំនួសអ្នក ដោយផ្អែកលើព័ត៌មានខាងលើ</span>
+      </div>
+    </div>
+
+    <!-- Generate Button -->
+    <button class="cv-generate-btn" onclick="buildCV()">
+      📄 Generate Korean Resume · 이력서 만들기
+    </button>
+
+    <!-- CV Preview -->
+    <div id="cv-preview-wrap">
+      <div class="cv-preview-actions">
+        <button class="cv-print-btn" onclick="window.print()">🖨️ Print / Save as PDF</button>
+        <button class="cv-edit-btn" onclick="document.getElementById('cv-preview-wrap').classList.remove('visible');window.scrollTo(0,0)">✏️ Edit</button>
+      </div>
+      <div id="cv-document">
+        <div class="cv-doc-inner" id="cv-doc-inner">
+          <!-- Generated by JS -->
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /cv-body -->
+</div><!-- /screen-cv -->
+
+
+<!-- ═══════════════════════════════════════════════
+     SCREEN 5: TRANSLATOR MARKETPLACE
+═══════════════════════════════════════════════ -->
+<div id="screen-translate" class="screen">
+
+  <!-- Top bar -->
+  <div class="tr-topbar">
+    <button class="cv-back-btn" onclick="showScreen('app')" title="Back">←</button>
+    <div class="tr-topbar-title disp">Translator <em>Marketplace</em></div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tr-tabs">
+    <button class="tr-tab active" id="tr-tab-find" onclick="switchTrTab('find')">
+      <span class="tr-tab-icon">🔍</span>
+      <span class="kh">ស្វែងរកជំនួយ</span>
+    </button>
+    <button class="tr-tab" id="tr-tab-register" onclick="switchTrTab('register')">
+      <span class="tr-tab-icon">💰</span>
+      <span class="kh">ចុះឈ្មោះ &amp; រក​ចំណូល</span>
+    </button>
+  </div>
+
+  <!-- ── TAB 1: FIND HELP ── -->
+  <div class="tr-panel active" id="tr-panel-find">
+    <div class="tr-find-body">
+
+      <!-- Hero -->
+      <div class="tr-hero">
+        <div class="tr-hero-title disp">Find a Trusted Translator</div>
+        <div class="tr-hero-sub">ជ្រើសរើសអ្នកបកប្រែ ខ្មែរ-កូរ៉េ ដែលរស់នៅកូរ៉េ<br>Hospital · Immigration · Job Interview · Contract</div>
+        <div class="tr-hero-stats">
+          <div class="tr-hero-stat">
+            <div class="tr-hero-stat-num" id="tr-stat-translators">0</div>
+            <div class="tr-hero-stat-label">Translators</div>
+          </div>
+          <div class="tr-hero-stat">
+            <div class="tr-hero-stat-num">24/7</div>
+            <div class="tr-hero-stat-label">Available</div>
+          </div>
+          <div class="tr-hero-stat">
+            <div class="tr-hero-stat-num">₩0</div>
+            <div class="tr-hero-stat-label">Platform fee</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div class="tr-filter-row">
+        <button class="tr-filter-chip active" onclick="filterTranslators('all', this)">🌐 All</button>
+        <button class="tr-filter-chip" onclick="filterTranslators('hospital', this)">🏥 Hospital</button>
+        <button class="tr-filter-chip" onclick="filterTranslators('immigration', this)">🛂 Immigration</button>
+        <button class="tr-filter-chip" onclick="filterTranslators('job', this)">💼 Job Interview</button>
+        <button class="tr-filter-chip" onclick="filterTranslators('contract', this)">📄 Contract</button>
+        <button class="tr-filter-chip" onclick="filterTranslators('remote', this)">📱 Remote Only</button>
+      </div>
+
+      <!-- Translators list -->
+      <div class="tr-section-label">Available Translators · អ្នកបកប្រែ</div>
+      <div id="tr-list"></div>
+
+      <!-- Request Help button -->
+      <button class="tr-request-btn" onclick="openRequestModal()">
+        + មិនឃើញអ្នកបកប្រែ? ដាក់ស្នើសំណើ · Submit a Request
+      </button>
+
+    </div>
+  </div>
+
+  <!-- ── TAB 2: REGISTER ── -->
+  <div class="tr-panel" id="tr-panel-register">
+    <div class="tr-reg-body">
+
+      <!-- Earn card -->
+      <div class="tr-earn-card">
+        <div class="tr-earn-icon">💰</div>
+        <div>
+          <div class="tr-earn-title">ចុះឈ្មោះ · ជួយ · រកប្រាក់</div>
+          <div class="tr-earn-sub">
+            អ្នកនិយាយភាសាខ្មែរ + ភាសាកូរ៉េ? ចូលរួមជាអ្នកបកប្រែ។
+            K'helper ជាអ្នកភ្ជាប់អ្នកជាមួយមនុស្សដែលត្រូវការជំនួយ។
+          </div>
+          <div class="tr-earn-amounts">
+            <span class="tr-earn-pill">📱 Remote ₩15,000/hr</span>
+            <span class="tr-earn-pill">🏥 In-person ₩40,000/hr</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Registration form -->
+      <div id="tr-reg-form">
+        <div class="cv-section">
+          <div class="cv-section-header">
+            <span class="cv-section-icon">👤</span>
+            <span class="cv-section-title">Your Info</span>
+          </div>
+          <div class="cv-grid-2" style="margin-bottom:14px">
+            <div class="cv-field">
+              <label class="cv-label">Your Name · ឈ្មោះ</label>
+              <input type="text" id="tr-reg-name" class="cv-input kh" placeholder="ឈ្មោះរបស់អ្នក" />
+            </div>
+            <div class="cv-field">
+              <label class="cv-label">Phone / WhatsApp</label>
+              <input type="tel" id="tr-reg-phone" class="cv-input" placeholder="010-0000-0000" />
+            </div>
+          </div>
+          <div class="cv-grid-2" style="margin-bottom:14px">
+            <div class="cv-field">
+              <label class="cv-label">Location in Korea · ទីតាំង</label>
+              <select id="tr-reg-location" class="cv-select">
+                <option value="">Select city...</option>
+                <option>서울 (Seoul)</option>
+                <option>경기도 안산 (Ansan)</option>
+                <option>경기도 수원 (Suwon)</option>
+                <option>인천 (Incheon)</option>
+                <option>부산 (Busan)</option>
+                <option>대구 (Daegu)</option>
+                <option>대전 (Daejeon)</option>
+                <option>광주 (Gwangju)</option>
+                <option>경상남도 창원 (Changwon)</option>
+                <option>충청도 (Chungcheong)</option>
+                <option>경기도 파주 (Paju)</option>
+                <option>경기도 구미 (Gumi)</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="cv-field">
+              <label class="cv-label">Korean Level · ភាសាកូរ៉េ</label>
+              <select id="tr-reg-kr-level" class="cv-select">
+                <option value="conversational">Conversational (daily use)</option>
+                <option value="fluent">Fluent (complex situations)</option>
+                <option value="native-level">Near-native</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="cv-section">
+          <div class="cv-section-header">
+            <span class="cv-section-icon">🎯</span>
+            <span class="cv-section-title">What Can You Help With?</span>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
+            <label style="display:flex;align-items:center;gap:8px;padding:11px 14px;border:1.5px solid var(--paper);border-radius:12px;cursor:pointer;font-family:var(--font-body);font-size:13px;color:var(--clay-700)">
+              <input type="checkbox" id="tr-spec-hospital" value="hospital" style="accent-color:var(--terra-500)"> 🏥 Hospital
+            </label>
+            <label style="display:flex;align-items:center;gap:8px;padding:11px 14px;border:1.5px solid var(--paper);border-radius:12px;cursor:pointer;font-family:var(--font-body);font-size:13px;color:var(--clay-700)">
+              <input type="checkbox" id="tr-spec-immigration" value="immigration" style="accent-color:var(--terra-500)"> 🛂 Immigration Office
+            </label>
+            <label style="display:flex;align-items:center;gap:8px;padding:11px 14px;border:1.5px solid var(--paper);border-radius:12px;cursor:pointer;font-family:var(--font-body);font-size:13px;color:var(--clay-700)">
+              <input type="checkbox" id="tr-spec-job" value="job" style="accent-color:var(--terra-500)"> 💼 Job Interview
+            </label>
+            <label style="display:flex;align-items:center;gap:8px;padding:11px 14px;border:1.5px solid var(--paper);border-radius:12px;cursor:pointer;font-family:var(--font-body);font-size:13px;color:var(--clay-700)">
+              <input type="checkbox" id="tr-spec-contract" value="contract" style="accent-color:var(--terra-500)"> 📄 Contract / Documents
+            </label>
+            <label style="display:flex;align-items:center;gap:8px;padding:11px 14px;border:1.5px solid var(--paper);border-radius:12px;cursor:pointer;font-family:var(--font-body);font-size:13px;color:var(--clay-700)">
+              <input type="checkbox" id="tr-spec-police" value="police" style="accent-color:var(--terra-500)"> 🚔 Police / Legal
+            </label>
+            <label style="display:flex;align-items:center;gap:8px;padding:11px 14px;border:1.5px solid var(--paper);border-radius:12px;cursor:pointer;font-family:var(--font-body);font-size:13px;color:var(--clay-700)">
+              <input type="checkbox" id="tr-spec-general" value="general" style="accent-color:var(--terra-500)"> 💬 General Help
+            </label>
+          </div>
+
+          <div class="cv-grid-2" style="margin-bottom:14px">
+            <label style="display:flex;align-items:center;gap:8px;padding:11px 14px;border:1.5px solid var(--paper);border-radius:12px;cursor:pointer;font-family:var(--font-body);font-size:13px;color:var(--clay-700)">
+              <input type="checkbox" id="tr-mode-remote" style="accent-color:var(--terra-500)"> 📱 Remote (phone/video)
+            </label>
+            <label style="display:flex;align-items:center;gap:8px;padding:11px 14px;border:1.5px solid var(--paper);border-radius:12px;cursor:pointer;font-family:var(--font-body);font-size:13px;color:var(--clay-700)">
+              <input type="checkbox" id="tr-mode-inperson" style="accent-color:var(--terra-500)"> 🤝 In-person
+            </label>
+          </div>
+        </div>
+
+        <div class="cv-section">
+          <div class="cv-section-header">
+            <span class="cv-section-icon">✍️</span>
+            <span class="cv-section-title">Short Introduction · ណែនាំខ្លួន</span>
+          </div>
+          <div class="cv-field">
+            <textarea id="tr-reg-bio" class="cv-textarea" rows="3"
+              placeholder="ប្រាប់ខ្លះអំពីខ្លួន ហេតុអ្វីអ្នកចង់ជួយ និងបទពិសោធន៍ភាសាកូរ៉េ..."></textarea>
+          </div>
+        </div>
+
+        <button class="cv-generate-btn" onclick="submitTranslatorRegistration()">
+          👥 Register as Translator · ចុះឈ្មោះ
+        </button>
+
+        <p style="font-family:var(--font-khmer);font-size:11.5px;color:var(--clay-400);text-align:center;margin-top:12px;line-height:1.6">
+          K'helper នឹងពិនិត្យ និងបន្ថែមប្រវត្តិរូបអ្នកទៅក្នុងបញ្ជី ក្នុងរយៈពេល ២៤ ម៉ោង
+        </p>
+      </div>
+
+      <!-- Success state -->
+      <div class="tr-reg-success" id="tr-reg-success">
+        <div class="tr-reg-success-icon">🎉</div>
+        <div class="tr-reg-success-title disp">You're <em>registered!</em></div>
+        <div class="tr-reg-success-sub">
+          សូមអរគុណ! ប្រវត្តិរូបអ្នកត្រូវបានទទួល។ K'helper នឹងពិនិត្យ ហើយបន្ថែមវាទៅក្នុងបញ្ជីអ្នកបកប្រែ ក្នុងរយៈពេល ២៤ ម៉ោង។<br><br>
+          <span style="font-family:var(--font-body);font-size:12px">Your profile has been received. We'll review it and add you to the translator list within 24 hours.</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── REQUEST MODAL ── -->
+  <div class="tr-modal-overlay" id="tr-request-modal" onclick="closeRequestModal(event)">
+    <div class="tr-modal">
+      <div class="tr-modal-header">
+        <span class="tr-modal-title disp">Request a <em>Translator</em></span>
+        <button class="tr-modal-close" onclick="closeRequestModal()">✕</button>
+      </div>
+
+      <div id="tr-request-form-content">
+        <div class="cv-grid-2" style="margin-bottom:14px">
+          <div class="cv-field">
+            <label class="cv-label">Service Type</label>
+            <select id="tr-req-type" class="cv-select">
+              <option value="hospital">🏥 Hospital Visit</option>
+              <option value="immigration">🛂 Immigration Office</option>
+              <option value="job">💼 Job Interview</option>
+              <option value="contract">📄 Contract / Documents</option>
+              <option value="police">🚔 Police / Legal</option>
+              <option value="general">💬 General Help</option>
+            </select>
+          </div>
+          <div class="cv-field">
+            <label class="cv-label">Mode</label>
+            <select id="tr-req-mode" class="cv-select">
+              <option value="remote">📱 Remote (call/video)</option>
+              <option value="inperson">🤝 In-person</option>
+            </select>
+          </div>
+        </div>
+        <div class="cv-grid-2" style="margin-bottom:14px">
+          <div class="cv-field">
+            <label class="cv-label">When? · កាលបរិច្ឆេទ</label>
+            <input type="datetime-local" id="tr-req-when" class="cv-input" />
+          </div>
+          <div class="cv-field">
+            <label class="cv-label">Your Phone/WhatsApp</label>
+            <input type="tel" id="tr-req-phone" class="cv-input" placeholder="010-0000-0000" />
+          </div>
+        </div>
+        <div class="cv-field" style="margin-bottom:14px">
+          <label class="cv-label">Describe your situation · ពន្យល់អំពីស្ថានការណ៍</label>
+          <textarea id="tr-req-desc" class="cv-textarea" rows="3"
+            placeholder="ជំនួយអ្វីដែលអ្នកត្រូវការ? e.g. ខ្ញុំត្រូវទៅមន្ទីរពេទ្យ ហើយមិនអាចប្រាស្រ័យជាភាសាកូរ៉េ..."></textarea>
+        </div>
+        <button class="cv-generate-btn" onclick="submitHelpRequest()" style="margin-top:4px">
+          📩 Submit Request · ដាក់ស្នើ
+        </button>
+      </div>
+
+      <div id="tr-request-success" style="display:none;text-align:center;padding:20px 0">
+        <div style="font-size:48px;margin-bottom:12px">✅</div>
+        <div style="font-family:var(--font-display);font-size:18px;color:var(--clay-800);margin-bottom:8px">Request <em>Submitted!</em></div>
+        <div style="font-family:var(--font-khmer);font-size:13px;color:var(--clay-500);line-height:1.7">
+          K'helper នឹងទំនាក់ទំនងអ្នក ដើម្បីភ្ជាប់ជាមួយអ្នកបកប្រែ ក្នុងរយៈពេល ២-៤ ម៉ោង
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- /screen-translate -->
+
 </body>
 </html>
