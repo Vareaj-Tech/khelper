@@ -2248,7 +2248,7 @@ function setLang(lang) {
   }
   document.getElementById('emergency-line').innerHTML = t.emergency;
   document.getElementById('new-chat-label').textContent = t.newChat;
-  document.getElementById('topics-label').textContent   = t.topicsLabel;
+  { const el = document.getElementById('topics-label'); if (el) el.textContent = t.topicsLabel; }
   document.getElementById('lang-label').textContent     = t.langLabel;
   Object.entries(t.navItems).forEach(([k, v]) => {
     const el = document.getElementById('nav-' + k);
