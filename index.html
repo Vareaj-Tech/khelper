@@ -1783,19 +1783,7 @@
     </button>
 
     <!-- Nav -->
-    <div class="sidebar-section-label eyebrow" id="topics-label">ប្រធានបទរហ័ស</div>
     <nav class="sidebar-nav">
-      <div class="nav-item" onclick="quickTopic('visa')"><span class="nav-icon">🛂</span><span id="nav-visa">វីសា &amp; អន្តោប្រវេសន៍</span></div>
-      <div class="nav-item" onclick="quickTopic('work')"><span class="nav-icon">💼</span><span id="nav-work">ការងារ &amp; សិទ្ធិ</span></div>
-      <div class="nav-item" onclick="quickTopic('health')"><span class="nav-icon">🏥</span><span id="nav-health">សុខភាព</span></div>
-      <div class="nav-item" onclick="quickTopic('daily')"><span class="nav-icon">🌏</span><span id="nav-daily">ជីវិតប្រចាំ</span></div>
-      <div class="nav-item" onclick="quickTopic('culture')"><span class="nav-icon">🙏</span><span id="nav-culture">វប្បធម៌កូរ៉េ</span></div>
-      <div class="nav-item" onclick="quickTopic('language')"><span class="nav-icon">💬</span><span id="nav-language">ជំនួយភាសា</span></div>
-      <div class="nav-item" onclick="quickTopic('money')"><span class="nav-icon">💸</span><span id="nav-money">ផ្ញើប្រាក់ទៅកម្ពុជា</span></div>
-      <div class="nav-item" onclick="quickTopic('housing')"><span class="nav-icon">🏠</span><span id="nav-housing">លំនៅដ្ឋាន &amp; ជួល</span></div>
-      <div class="nav-item" onclick="quickTopic('tourist')"><span class="nav-icon">🗺️</span><span id="nav-tourist">ទេសចរណ៍</span></div>
-      <div class="nav-item" onclick="openMapPanel('places')"><span class="nav-icon">📍</span><span id="nav-location">ទីតាំង &amp; ផែនទី</span></div>
-      <div style="height:1px;background:var(--paper);margin:10px 10px 6px"></div>
       <div class="sidebar-section-label eyebrow" style="margin-top:2px">ឧបករណ៍</div>
       <div class="nav-item" onclick="openCVBuilder()"><span class="nav-icon">📄</span><span id="nav-cv">CV Builder · 이력서</span></div>
       <div class="nav-item" onclick="openTranslator()"><span class="nav-icon">👥</span><span id="nav-translator">Find Translator · 통역</span></div>
@@ -2139,6 +2127,10 @@ const T = {
       { icon:'🙏', title:'វប្បធម៌កូរ៉េ', sub:'ទំនៀមទម្លាប់, ជីវិត', topic:'culture' },
       { icon:'🗺️', title:'ទេសចរណ៍', sub:'ទីកន្លែង, ម្ហូប, កាហ្វេ', topic:'tourist' },
       { icon:'📍', title:'ទីតាំង & ផែនទី', sub:'Kakao · Naver · Google', topic:'location' },
+      { icon:'🌍', title:'ជីវិតប្រចាំថ្ងៃ', sub:'ការរស់នៅ, ដឹកជញ្ជូន', topic:'daily' },
+      { icon:'💬', title:'ជំនួយភាសា', sub:'ភាសាកូរ៉េមូលដ្ឋាន', topic:'language' },
+      { icon:'💸', title:'ផ្ញើប្រាក់ទៅផ្ទះ', sub:'ការផ្ញើ, ថ្លៃ', topic:'money' },
+      { icon:'🏠', title:'លំនៅដ្ឋាន & ជួល', sub:'ចន្សេ, វ៉ុលសេ', topic:'housing' },
     ],
     navItems: { visa:'វីសា & អន្តោប្រវេសន៍', work:'ការងារ & សិទ្ធិ', health:'សុខភាព', daily:'ជីវិតប្រចាំ', culture:'វប្បធម៌កូរ៉េ', language:'ជំនួយភាសា', money:'ផ្ញើប្រាក់ទៅកម្ពុជា', housing:'លំនៅដ្ឋាន & ជួល', tourist:'ទេសចរណ៍', location:'ទីតាំង & ផែនទី' },
     topicQueries: {
@@ -2167,6 +2159,10 @@ const T = {
       { icon:'🙏', title:'Korean Culture', sub:'Customs, daily life', topic:'culture' },
       { icon:'🗺️', title:'Tourism & Explore', sub:'Attractions, food', topic:'tourist' },
       { icon:'📍', title:'Locations & Maps', sub:'Kakao · Naver · Google', topic:'location' },
+      { icon:'🌍', title:'Daily Life', sub:'Living, transport', topic:'daily' },
+      { icon:'💬', title:'Language Help', sub:'Korean basics', topic:'language' },
+      { icon:'💸', title:'Send Money Home', sub:'Remittance, fees', topic:'money' },
+      { icon:'🏠', title:'Housing & Rent', sub:'Jeonse, wolse', topic:'housing' },
     ],
     navItems: { visa:'Visa & Immigration', work:'Work & Rights', health:'Health', daily:'Daily Life', culture:'Korean Culture', language:'Language Help', money:'Send Money Home', housing:'Housing & Rent', tourist:'Tourism & Explore', location:'Locations & Maps' },
     topicQueries: {
@@ -2195,6 +2191,10 @@ const T = {
       { icon:'🙏', title:'한국 문화', sub:'관습, 일상', topic:'culture' },
       { icon:'🗺️', title:'관광 & 탐방', sub:'관광지, 맛집', topic:'tourist' },
       { icon:'📍', title:'위치 & 지도', sub:'Kakao · Naver · Google', topic:'location' },
+      { icon:'🌍', title:'일상생활', sub:'생활, 교통', topic:'daily' },
+      { icon:'💬', title:'언어 도움', sub:'한국어 기초', topic:'language' },
+      { icon:'💸', title:'캄보디아 송금', sub:'송금, 수수료', topic:'money' },
+      { icon:'🏠', title:'주거 & 임대', sub:'전세, 월세', topic:'housing' },
     ],
     navItems: { visa:'비자 & 출입국', work:'근로 & 권리', health:'건강', daily:'일상생활', culture:'한국 문화', language:'언어 도움', money:'캄보디아 송금', housing:'주거 & 임대', tourist:'관광 & 탐방', location:'위치 & 지도' },
     topicQueries: {
@@ -2248,7 +2248,7 @@ function setLang(lang) {
   }
   document.getElementById('emergency-line').innerHTML = t.emergency;
   document.getElementById('new-chat-label').textContent = t.newChat;
-  document.getElementById('topics-label').textContent   = t.topicsLabel;
+  { const el = document.getElementById('topics-label'); if (el) el.textContent = t.topicsLabel; }
   document.getElementById('lang-label').textContent     = t.langLabel;
   Object.entries(t.navItems).forEach(([k, v]) => {
     const el = document.getElementById('nav-' + k);
