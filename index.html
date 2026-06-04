@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="km">
 <head>
   <meta charset="UTF-8" />
@@ -2566,7 +2566,7 @@ async function sendMessage() {
         }
 
         // 3. Map chip — open map panel for location-heavy categories
-        const tabMap = { VISA:'immigration', HEALTH:'health', WORK:'labor', COMMUNITY:'labor', TOURIST:'places' };
+        const tabMap = { VISA:'immigration', HEALTH:'health', WORK:'labor', COMMUNITY:'labor', TOURIST:'places', LOCATION:'places' };
         if (meta?.category && tabMap[meta.category]) {
           const labels = {
             km:{ VISA:'📍 ការិ​យាល័យ​ចំណាកស្រុក', HEALTH:'📍 ស្វែងរកមន្ទីរពេទ្យ', WORK:'📍 ការងារ & ជំនួយ', TOURIST:'📍 ស្វែងរកទីកន្លែង' },

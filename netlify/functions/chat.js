@@ -202,6 +202,22 @@ Best markets: 광장시장 (Gwangjang) — best street food. 노량진수산시�
 Cafe streets: 성수동, 연남동, 익선동, 인사동, 북촌.
 Korea Tourism Hotline (English): 1330 (24hr, free). visitkorea.or.kr for info.`,
   },
+  {
+    category: 'LOCATION',
+    keywords: [
+      'where is','where can i find','how to get to','directions to','nearest','closest',
+      'find hospital','find clinic','find office','find embassy','find church','find mosque',
+      'immigration office location','address of','location of','map',
+      '어디','위치','찾아가','근처','가까운','어떻게 가','주소',
+      'ណា','ទីណា','ស្វែងរកទីតាំង','ទីតាំង','ជិតបំផុត','ផ្លូវ','អាសយដ្ឋាន',
+    ],
+    augmentation: `## TRIAGE: LOCATION QUERY
+The user is looking for a specific place or directions. Be helpful and specific.
+Always mention the Korean name in parentheses so they can search on Kakao Map.
+Format place names as: English Name (한국어 이름).
+Suggest they use 카카오맵 (Kakao Map) — tap the 📍 button in K'Helper to search live.
+Include phone number and hours if known.`,
+  },
 ];
 
 function triageMessage(text) {
@@ -460,6 +476,7 @@ exports.handler = async function(event, context) {
           category: triage.category,
           scam_detected: isScam,
           response_ms: responseTimeMs,
+          location_query: triage.category === 'LOCATION' ? lastMessage.slice(0, 100) : null,
         },
       }),
     };
