@@ -186,6 +186,48 @@
       text-transform: uppercase;
     }
 
+    /* Google OAuth button */
+    .btn-google {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      max-width: 320px;
+      padding: 13px 20px;
+      background: #fff;
+      color: #3c4043;
+      border: 1.5px solid var(--paper);
+      border-radius: 999px;
+      font-size: 15px;
+      font-weight: 500;
+      font-family: var(--font-body);
+      cursor: pointer;
+      transition: all 0.15s;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+      text-decoration: none;
+    }
+    .btn-google:hover { border-color: #dadce0; box-shadow: 0 2px 8px rgba(0,0,0,0.12); }
+
+    .auth-divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      max-width: 320px;
+      margin: 4px 0;
+    }
+    .auth-divider-line { flex: 1; height: 1px; background: var(--paper); }
+    .auth-divider-text { font-size: 11px; color: var(--clay-400); letter-spacing: 0.06em; text-transform: uppercase; }
+
+    /* User stats in sidebar footer */
+    .sidebar-user-stats {
+      font-size: 10px;
+      color: var(--clay-400);
+      margin-top: 2px;
+      line-height: 1.5;
+    }
+
     /* ═══════════════════════════════════════════
        SCREEN 2 — PROFILE SETUP
     ═══════════════════════════════════════════ */
@@ -1669,6 +1711,24 @@
     </div>
   </div>
 
+  <!-- Google OAuth button -->
+  <button class="btn-google" onclick="loginWithGoogle()">
+    <svg width="18" height="18" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+      <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+      <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+      <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+      <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+    </svg>
+    Continue with Google
+  </button>
+
+  <!-- Divider -->
+  <div class="auth-divider">
+    <div class="auth-divider-line"></div>
+    <span class="auth-divider-text">or</span>
+    <div class="auth-divider-line"></div>
+  </div>
+
   <!-- Language pill — selecting language enters the app directly -->
   <div class="lang-pill" style="margin-bottom:32px">
     <button class="lang-pill-btn active" onclick="enterApp('km')">ខ្មែរ</button>
@@ -1816,6 +1876,7 @@
       <div class="sidebar-user">
         <span class="sidebar-user-name" id="sidebar-user-name">—</span>
         <span class="sidebar-user-email" id="sidebar-user-email">—</span>
+        <span class="sidebar-user-stats" id="sidebar-user-stats"></span>
       </div>
       <button class="logout-btn" onclick="doLogout()">Sign out</button>
     </div>
@@ -1988,6 +2049,64 @@ function showScreen(name) {
   document.getElementById('screen-' + name).classList.add('active');
 }
 
+/* ── GOOGLE OAUTH ── */
+function loginWithGoogle() {
+  window.location.href = '/.netlify/identity/authorize?provider=google';
+}
+
+function getStoredToken() {
+  try { return localStorage.getItem('khelper_auth_token'); } catch { return null; }
+}
+
+function saveToken(token) {
+  try { localStorage.setItem('khelper_auth_token', token); } catch {}
+}
+
+async function getUserCount() {
+  try {
+    const token = getStoredToken();
+    if (!token) return null;
+    const res = await fetch('/.netlify/identity/admin/users?per_page=1', {
+      headers: { 'Authorization': 'Bearer ' + token }
+    });
+    if (!res.ok) return null;
+    const data = await res.json();
+    return data.total_count || data.total || null;
+  } catch { return null; }
+}
+
+function getVisitCount() {
+  try {
+    const count = (parseInt(localStorage.getItem('khelper_visit_count') || '0', 10)) + 1;
+    localStorage.setItem('khelper_visit_count', String(count));
+    return count;
+  } catch { return null; }
+}
+
+async function updateUserStats() {
+  const statsEl = document.getElementById('sidebar-user-stats');
+  if (!statsEl) return;
+  const visits = parseInt(localStorage.getItem('khelper_visit_count') || '1', 10);
+  const lines = [`🗓️ Visit #${visits}`];
+  const total = await getUserCount();
+  if (total) lines.unshift(`👥 ${total.toLocaleString()} people using K'Helper`);
+  statsEl.textContent = lines.join(' · ');
+}
+
+/* Check for OAuth callback (Google redirect) on page load */
+(function handleOAuthCallback() {
+  try {
+    const hash = new URLSearchParams(window.location.hash.slice(1));
+    const token = hash.get('access_token');
+    if (token) {
+      saveToken(token);
+      history.replaceState(null, '', window.location.pathname);
+      // Will enter app after DOM ready via initApp call below
+      window._oauthToken = token;
+    }
+  } catch {}
+})();
+
 /* ── ENTER APP (no login required) ── */
 function enterApp(lang) {
   // Highlight selected lang on pill
@@ -2099,6 +2218,8 @@ function updateVisaUI(profile) {
 function initApp() {
   showScreen('app');
   setLang(currentLang);
+  getVisitCount();
+  updateUserStats();
 
   // Update header
   if (userProfile && userProfile.name) {
@@ -2594,14 +2715,20 @@ async function sendMessage() {
 /* ── INPUT EVENTS ── */
 document.addEventListener('DOMContentLoaded', () => {
   const inp = document.getElementById('user-input');
-  if (!inp) return;
-  inp.addEventListener('input', function() {
-    this.style.height = 'auto';
-    this.style.height = Math.min(this.scrollHeight, 120) + 'px';
-  });
-  inp.addEventListener('keydown', e => {
-    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
-  });
+  if (inp) {
+    inp.addEventListener('input', function() {
+      this.style.height = 'auto';
+      this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+    });
+    inp.addEventListener('keydown', e => {
+      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+    });
+  }
+
+  // Handle Google OAuth redirect: access_token was set in hash before DOM loaded
+  if (window._oauthToken) {
+    enterApp('km');
+  }
 });
 
 /* ═══════════════════════════════════════════

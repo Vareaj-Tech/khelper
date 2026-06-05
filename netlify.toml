@@ -1,5 +1,8 @@
 # K'HELPER — NETLIFY CONFIGURATION
 
+[identity]
+  external_providers = ["google"]
+
 [build]
   publish = "."
   functions = "netlify/functions"
