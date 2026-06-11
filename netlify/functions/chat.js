@@ -68,67 +68,83 @@ function detectCrisis(text) { return CRISIS_KEYWORDS.some(kw => text.toLowerCase
 function detectScam(text) { return SCAM_RED_FLAGS.some(flag => text.toLowerCase().includes(flag)); }
 
 // ── LANGUAGE DETECTION ──────────────────────────────────────────────────────
+// Only detect scripts with unique Unicode ranges (reliable).
+// Everything else → 'auto': Claude detects + mirrors the language itself.
 function detectLanguage(text) {
-  const khmerChars    = (text.match(/[ក-៿᧠-᧿]/g) || []).length;
-  const koreanChars   = (text.match(/[가-힯ᄀ-ᇿ㄰-㆏]/g) || []).length;
-  const chineseChars  = (text.match(/[一-鿿㐀-䶿]/g) || []).length;
-  const thaiChars     = (text.match(/[฀-๿]/g) || []).length;
-  const arabicChars   = (text.match(/[؀-ۿݐ-ݿ]/g) || []).length;
-  const vietnameseChars = (text.match(/[àáâãèéêìíòóôõùúýăđĩũơưạảấầẩẫậắằẳẵặẹẻẽếềểễệỉịọỏốồổỗộớờởỡợụủứừửữựỳỵỷỹ]/gi) || []).length;
   const total = text.replace(/\s/g, '').length || 1;
 
-  if (khmerChars / total > 0.15)    return 'km';
-  if (koreanChars / total > 0.15)   return 'kr';
-  if (chineseChars / total > 0.15)  return 'zh';
-  if (thaiChars / total > 0.15)     return 'th';
-  if (arabicChars / total > 0.15)   return 'ar';
-  if (vietnameseChars / total > 0.08) return 'vi';
-  return 'en';  // default to English for all other scripts
+  const khmerChars   = (text.match(/[ក-៿᧠-᧿]/g) || []).length;
+  const koreanChars  = (text.match(/[가-힯ᄀ-ᇿ㄰-㆏]/g) || []).length;
+  const chineseChars = (text.match(/[一-鿿㐀-䶿]/g) || []).length;
+  const thaiChars    = (text.match(/[฀-๿]/g) || []).length;
+  const arabicChars  = (text.match(/[؀-ۿݐ-ݿ]/g) || []).length;
+  const burmeseChars = (text.match(/[က-ၿ]/g) || []).length;
+  const japaneseChars= (text.match(/[ぁ-タァ-ヿ]/g) || []).length;
+
+  if (khmerChars   / total > 0.15) return 'km';
+  if (koreanChars  / total > 0.15) return 'kr';
+  if (chineseChars / total > 0.15) return 'zh';
+  if (thaiChars    / total > 0.15) return 'th';
+  if (arabicChars  / total > 0.15) return 'ar';
+  if (burmeseChars / total > 0.15) return 'my';
+  if (japaneseChars/ total > 0.15) return 'ja';
+
+  // Latin-script languages (Vietnamese, Indonesian, Filipino, Spanish, French,
+  // English, etc.) → let Claude detect and mirror automatically.
+  return 'auto';
 }
 
 const LANG_INSTRUCTIONS = {
-  km: `## ⚠️ ABSOLUTE LANGUAGE RULE — KHMER ONLY ⚠️
-The user wrote in Khmer. Your ENTIRE reply must be in Khmer script ONLY.
-DO NOT write even a single word in English or Korean.
-DO NOT start with English greetings like "Hello", "Great", "Sure", "Of course".
-Phone numbers (1345, 119 etc.) and website URLs are allowed.
+  // ── Script-detected languages ──────────────────────────────────────────────
+  km: `## ⚠️ LANGUAGE LOCK: KHMER ⚠️
+The user wrote in Khmer (ភាសាខ្មែរ). Reply in Khmer script ONLY — every single word.
+ZERO English or Korean words allowed. Phone numbers and URLs are OK.
+Korean institution names in brackets only: [건강보험].
+Short sentences. Everyday Khmer. Not formal.`,
+
+  kr: `## ⚠️ LANGUAGE LOCK: KOREAN ⚠️
+The user wrote in Korean (한국어). Reply in Korean ONLY — every single word.
+ZERO English or other language words. Speak naturally and warmly.`,
+
+  zh: `## ⚠️ LANGUAGE LOCK: CHINESE ⚠️
+The user wrote in Chinese (中文). Reply in Chinese ONLY — every single word.
+ZERO English or Korean words. Korean institution names in brackets: [건강보험].`,
+
+  th: `## ⚠️ LANGUAGE LOCK: THAI ⚠️
+The user wrote in Thai (ภาษาไทย). Reply in Thai ONLY — every single word.
+ZERO English or Korean words. Korean institution names in brackets: [건강보험].`,
+
+  ar: `## ⚠️ LANGUAGE LOCK: ARABIC ⚠️
+The user wrote in Arabic (العربية). Reply in Arabic ONLY — every single word.
+ZERO English or Korean words. Korean institution names in brackets: [건강보험].`,
+
+  my: `## ⚠️ LANGUAGE LOCK: BURMESE ⚠️
+The user wrote in Burmese (မြန်မာဘာသာ). Reply in Burmese ONLY — every single word.
+ZERO English or Korean words. Korean institution names in brackets: [건강보험].`,
+
+  ja: `## ⚠️ LANGUAGE LOCK: JAPANESE ⚠️
+The user wrote in Japanese (日本語). Reply in Japanese ONLY — every single word.
+ZERO English or Korean words. Korean institution names in brackets: [건강보험].`,
+
+  // ── Auto-detect (all Latin-script languages + any unrecognised script) ──────
+  auto: `## ⚠️ ABSOLUTE LANGUAGE RULE ⚠️
+Step 1 — Identify the EXACT language of the user's most recent message.
+Step 2 — Reply in THAT LANGUAGE ONLY. Every single word. No exceptions.
+
+Examples:
+• User wrote in Vietnamese (Tiếng Việt) → reply ENTIRELY in Vietnamese
+• User wrote in Indonesian (Bahasa Indonesia) → reply ENTIRELY in Indonesian
+• User wrote in Filipino/Tagalog → reply ENTIRELY in Filipino/Tagalog
+• User wrote in English → reply ENTIRELY in English
+• User wrote in Spanish → reply ENTIRELY in Spanish
+• User wrote in French → reply ENTIRELY in French
+• User wrote in Nepali → reply ENTIRELY in Nepali
+• User wrote in Hindi → reply ENTIRELY in Hindi
+
+NEVER default to English if the user wrote in a different language.
+NEVER mix two languages in one reply.
 Korean institution names may appear in brackets only: [건강보험].
-Write like a trusted friend — short sentences, everyday Khmer, NOT formal.`,
-
-  en: `## ⚠️ ABSOLUTE LANGUAGE RULE — ENGLISH ONLY ⚠️
-The user wrote in English. Your ENTIRE reply must be in English ONLY.
-DO NOT write even a single word in Khmer or Korean.
-Korean institution names may appear in brackets only: [건강보험].
-Be warm, clear, and direct.`,
-
-  kr: `## ⚠️ ABSOLUTE LANGUAGE RULE — KOREAN ONLY ⚠️
-The user wrote in Korean. Your ENTIRE reply must be in Korean (한국어) ONLY.
-DO NOT write even a single word in other languages.
-Speak naturally and warmly in Korean.`,
-
-  zh: `## ⚠️ ABSOLUTE LANGUAGE RULE — CHINESE ONLY ⚠️
-The user wrote in Chinese. Your ENTIRE reply must be in Chinese (中文) ONLY.
-DO NOT mix in English, Korean, or any other script.
-Phone numbers and website URLs are allowed. Korean institution names in brackets: [건강보험].
-Be warm, helpful, and concise.`,
-
-  th: `## ⚠️ ABSOLUTE LANGUAGE RULE — THAI ONLY ⚠️
-The user wrote in Thai. Your ENTIRE reply must be in Thai (ภาษาไทย) ONLY.
-DO NOT mix in English, Korean, or any other script.
-Phone numbers and website URLs are allowed. Korean institution names in brackets: [건강보험].
-Be warm and helpful.`,
-
-  ar: `## ⚠️ ABSOLUTE LANGUAGE RULE — ARABIC ONLY ⚠️
-The user wrote in Arabic. Your ENTIRE reply must be in Arabic (العربية) ONLY.
-DO NOT mix in English, Korean, or any other script.
-Phone numbers and website URLs are allowed. Korean institution names in brackets: [건강보험].
-Be warm and helpful.`,
-
-  vi: `## ⚠️ ABSOLUTE LANGUAGE RULE — VIETNAMESE ONLY ⚠️
-The user wrote in Vietnamese. Your ENTIRE reply must be in Vietnamese (Tiếng Việt) ONLY.
-DO NOT mix in English, Korean, or any other language.
-Phone numbers and website URLs are allowed. Korean institution names in brackets: [건강보험].
-Be warm, clear, and helpful.`,
+Phone numbers (1345, 119 etc.) and URLs are always allowed.`,
 };
 
 const TRIAGE_RULES = [
@@ -314,13 +330,6 @@ You know Korean visa rules, labor law, healthcare, housing, and daily life for A
 For anyone dealing with the system (visa, work, health, housing), speak as someone who has lived in Korea for years and survived every bureaucratic headache. You help others navigate what you already know.
 For tourists, speak as an enthusiastic local guide who knows the best places, hidden gems, and practical tips.
 
-## CRITICAL LANGUAGE RULE
-Detect the language of the user's MOST RECENT message. Reply in THAT EXACT language.
-- User writes in English → reply ONLY in English
-- User writes in Korean → reply ONLY in Korean
-- User writes in Khmer → reply ONLY in Khmer (use real Khmer Unicode script — NEVER romanized)
-- When in doubt → default to English
-
 ## TONE RULES
 - Be warm, direct, and helpful — like a trusted friend who knows Korea well
 - Keep sentences SHORT — one idea per sentence
@@ -453,15 +462,17 @@ exports.handler = async function(event, context) {
     const isScam = detectScam(lastLower);
     const triage = triageMessage(lastMessage);
     const detectedLang = detectLanguage(lastMessage);
-    const langInstruction = LANG_INSTRUCTIONS[detectedLang];
+    const langInstruction = LANG_INSTRUCTIONS[detectedLang] || LANG_INSTRUCTIONS['auto'];
 
-    // Language lock goes at BOTH TOP and BOTTOM — sandwiches everything
+    // Language rule is the ABSOLUTE FIRST instruction and repeated at the END.
+    // Sandwiching is critical — models tend to follow the last instruction they see.
+    // The triage augmentation goes in the MIDDLE so it never overwrites the lang rule.
     const enrichedSystem = [
-      langInstruction,
+      '# RULE #1 — LANGUAGE (overrides everything else)\n' + langInstruction,
       KHELPER_SYSTEM_PROMPT,
       triage.augmentation || '',
-      langInstruction,  // repeat at end for emphasis
-    ].filter(Boolean).join('\n\n');
+      '# REMINDER — RULE #1 STILL APPLIES\n' + langInstruction,
+    ].filter(Boolean).join('\n\n---\n\n');
 
     const apiKey = process.env.ANTHROPIC_API_KEY;
     if (!apiKey) {
