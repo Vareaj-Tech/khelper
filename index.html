@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>K'Helper</title>
 
+  <!-- Google Identity Services (OAuth) -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -2033,30 +2036,94 @@ function showScreen(name) {
   document.getElementById('screen-' + name).classList.add('active');
 }
 
-/* ── GOOGLE OAUTH ── */
+/* ── GOOGLE OAUTH (Google Identity Services) ── */
+// 👉 TO ENABLE GOOGLE SIGN-IN:
+//    1. Go to console.cloud.google.com → Create project → APIs & Services → Credentials
+//    2. Create OAuth 2.0 Client ID → Web application
+//    3. Add https://khelper.org to "Authorized JavaScript origins"
+//    4. Copy the Client ID and paste it below (replacing the placeholder)
+const GOOGLE_CLIENT_ID = 'YOUR_CLIENT_ID.apps.googleusercontent.com';
+
 function loginWithGoogle() {
-  window.location.href = '/.netlify/identity/authorize?provider=google';
+  if (!window.google || !GOOGLE_CLIENT_ID || GOOGLE_CLIENT_ID.startsWith('YOUR_')) {
+    // GSI not loaded or client ID not set — fall back gracefully
+    const msg = document.createElement('div');
+    msg.style.cssText = 'position:fixed;top:24px;left:50%;transform:translateX(-50%);background:#333;color:#fff;padding:12px 20px;border-radius:12px;font-size:14px;z-index:9999;max-width:300px;text-align:center;';
+    msg.textContent = 'Google sign-in is being set up. Please use the language buttons below to continue.';
+    document.body.appendChild(msg);
+    setTimeout(() => msg.remove(), 3500);
+    return;
+  }
+
+  google.accounts.id.initialize({
+    client_id: GOOGLE_CLIENT_ID,
+    callback: handleGoogleCredential,
+    auto_select: false,
+    cancel_on_tap_outside: true,
+  });
+  google.accounts.id.prompt((notification) => {
+    if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+      // One Tap blocked — show rendered button in overlay
+      showGoogleButtonOverlay();
+    }
+  });
 }
 
-function getStoredToken() {
-  try { return localStorage.getItem('khelper_auth_token'); } catch { return null; }
+function showGoogleButtonOverlay() {
+  const overlay = document.createElement('div');
+  overlay.id = 'google-overlay';
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.45);display:flex;align-items:center;justify-content:center;z-index:9999;';
+  overlay.innerHTML = `
+    <div style="background:#fff;border-radius:20px;padding:36px 32px;text-align:center;max-width:320px;width:90%;">
+      <p style="font-family:sans-serif;font-size:16px;color:#333;margin-bottom:20px;">Continue with Google</p>
+      <div id="google-btn-container"></div>
+      <button onclick="document.getElementById('google-overlay').remove()"
+        style="margin-top:16px;background:none;border:none;color:#999;font-size:13px;cursor:pointer;font-family:sans-serif;">
+        Cancel
+      </button>
+    </div>`;
+  document.body.appendChild(overlay);
+  google.accounts.id.renderButton(document.getElementById('google-btn-container'), {
+    theme: 'outline', size: 'large', shape: 'pill', text: 'continue_with',
+  });
 }
 
-function saveToken(token) {
-  try { localStorage.setItem('khelper_auth_token', token); } catch {}
-}
-
-async function getUserCount() {
+function handleGoogleCredential(response) {
   try {
-    const token = getStoredToken();
-    if (!token) return null;
-    const res = await fetch('/.netlify/identity/admin/users?per_page=1', {
-      headers: { 'Authorization': 'Bearer ' + token }
-    });
-    if (!res.ok) return null;
-    const data = await res.json();
-    return data.total_count || data.total || null;
-  } catch { return null; }
+    // Decode the JWT payload (no secret needed — just reading public claims)
+    const base64 = response.credential.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+    const pad = (4 - base64.length % 4) % 4;
+    const payload = JSON.parse(atob(base64 + '='.repeat(pad)));
+
+    const googleUser = {
+      name:     payload.given_name || payload.name || 'User',
+      email:    payload.email || '',
+      picture:  payload.picture || '',
+    };
+
+    // Save profile and go straight to setup screen (so they can add visa info)
+    const profile = { ...googleUser, visaType: '', visaExpiry: '', savedAt: Date.now() };
+    try { localStorage.setItem(profileKey('anon'), JSON.stringify(profile)); } catch {}
+    userProfile = profile;
+
+    // Close any overlay
+    const overlay = document.getElementById('google-overlay');
+    if (overlay) overlay.remove();
+
+    currentLang = 'en';
+    // Check if they already have a full profile saved
+    const existing = loadProfile('anon');
+    if (existing && existing.name && existing.visaType) {
+      initApp();
+    } else {
+      showScreen('setup');
+    }
+  } catch (e) {
+    console.error('Google credential decode failed:', e);
+    const overlay = document.getElementById('google-overlay');
+    if (overlay) overlay.remove();
+    alert('Sign-in failed. Please use the language buttons to continue.');
+  }
 }
 
 function getVisitCount() {
@@ -2072,24 +2139,8 @@ async function updateUserStats() {
   if (!statsEl) return;
   const visits = parseInt(localStorage.getItem('khelper_visit_count') || '1', 10);
   const lines = [`🗓️ Visit #${visits}`];
-  const total = await getUserCount();
-  if (total) lines.unshift(`👥 ${total.toLocaleString()} people using K'Helper`);
   statsEl.textContent = lines.join(' · ');
 }
-
-/* Check for OAuth callback (Google redirect) on page load */
-(function handleOAuthCallback() {
-  try {
-    const hash = new URLSearchParams(window.location.hash.slice(1));
-    const token = hash.get('access_token');
-    if (token) {
-      saveToken(token);
-      history.replaceState(null, '', window.location.pathname);
-      // Will enter app after DOM ready via initApp call below
-      window._oauthToken = token;
-    }
-  } catch {}
-})();
 
 /* ── ENTER APP (no login required) ── */
 function enterApp(lang) {
