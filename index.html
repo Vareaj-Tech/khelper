@@ -1692,8 +1692,8 @@
   <div class="auth-wordmark disp">K'<em>helper</em></div>
 
   <!-- Taglines -->
-  <div class="auth-tagline">A knowledgeable friend in your pocket.</div>
-  <div class="auth-tagline-kh kh">ជំនួយការដែលគួរឱ្យទុកចិត្ត</div>
+  <div class="auth-tagline">For anyone navigating life in Korea.</div>
+  <div class="auth-tagline-kh kh">ជំនួយការសម្រាប់ជនបរទេសគ្រប់រូបនៅក្នុងប្រទេសកូរ៉េ</div>
 
   <!-- 3 badges -->
   <div class="auth-badges">
@@ -2001,7 +2001,7 @@ const SOURCES = {
   HEALTH:    '국민건강보험공단 (NHIS) · 2024',
   HOUSING:   '법무부 (Ministry of Justice) · 2024',
   SCHOOL:    '교육부 (Ministry of Education) · 2024',
-  COMMUNITY: '주한 캄보디아대사관 (Cambodian Embassy) · 2024',
+  COMMUNITY: 'Migrant Support Center (다누리) · 2024',
   DAILY:     'K\'Helper AI Research · 2024',
   TOURIST:   'Korea Tourism Organization (KTO) · 2024',
 };
@@ -2225,15 +2225,15 @@ function initApp() {
   if (userProfile && userProfile.name) {
     const displayName = userProfile.name;
     document.getElementById('ch-user-name').textContent = displayName;
-    const sub = [userProfile.visaType, 'Cambodia'].filter(Boolean).join(' · ');
-    document.getElementById('ch-user-sub').textContent = sub || 'ជំនួយការ AI ខ្មែរ';
+    const sub = [userProfile.visaType, userProfile.nationality || 'Korea'].filter(Boolean).join(' · ');
+    document.getElementById('ch-user-sub').textContent = sub || 'Your Korea guide';
     document.getElementById('sidebar-user-name').textContent = displayName;
     document.getElementById('sidebar-user-email').textContent = userProfile.visaType || 'Guest';
     updateVisaUI(userProfile);
   } else {
     // Guest / anonymous
     document.getElementById('ch-user-name').textContent = 'K\'helper';
-    document.getElementById('ch-user-sub').textContent  = 'ជំនួយការ AI ខ្មែរ';
+    document.getElementById('ch-user-sub').textContent  = 'Your Korea guide';
     document.getElementById('sidebar-user-name').textContent = 'Guest';
     document.getElementById('sidebar-user-email').textContent = 'No account';
   }
@@ -2297,7 +2297,7 @@ const T = {
       daily:'I want to know about daily life in Korea',
       culture:'I want to learn about Korean culture and customs',
       language:'I need help with Korean language or translation',
-      money:'I want to send money back to Cambodia',
+      money:'I want to send money home — what are the best apps?',
       housing:'I have a question about rent or housing in Korea',
       tourist:'I am a tourist. Help me find attractions, food, and cafes.',
       location:'Find an important location like immigration office or hospital'
@@ -2790,8 +2790,9 @@ function buildCV() {
     dob:      document.getElementById('cv-dob').value,
     phone:    document.getElementById('cv-phone').value.trim(),
     email:    document.getElementById('cv-email').value.trim(),
-    visa:     document.getElementById('cv-visa').value,
-    address:  document.getElementById('cv-address').value.trim(),
+    visa:        document.getElementById('cv-visa').value,
+    address:     document.getElementById('cv-address').value.trim(),
+    nationality: document.getElementById('cv-nationality').value.trim(),
     edu: [
       { from: document.getElementById('cv-edu1-from').value, to: document.getElementById('cv-edu1-to').value, status: document.getElementById('cv-edu1-status').value, school: document.getElementById('cv-edu1-school').value.trim(), major: document.getElementById('cv-edu1-major').value.trim() },
       { from: document.getElementById('cv-edu2-from').value, to: document.getElementById('cv-edu2-to').value, status: document.getElementById('cv-edu2-status').value, school: document.getElementById('cv-edu2-school').value.trim(), major: document.getElementById('cv-edu2-major').value.trim() },
@@ -2843,7 +2844,7 @@ function buildCV() {
         <div class="cv-doc-row"><span class="cv-doc-key">연 락 처</span><span class="cv-doc-val">${v.phone || '—'}</span></div>
         <div class="cv-doc-row"><span class="cv-doc-key">이 메 일</span><span class="cv-doc-val">${v.email || '—'}</span></div>
         <div class="cv-doc-row"><span class="cv-doc-key">주    소</span><span class="cv-doc-val">${v.address || '—'}</span></div>
-        <div class="cv-doc-row"><span class="cv-doc-key">국    적</span><span class="cv-doc-val">캄보디아 (Cambodia)</span></div>
+        <div class="cv-doc-row"><span class="cv-doc-key">국    적</span><span class="cv-doc-val">${v.nationality || (userProfile && userProfile.nationality) || '—'}</span></div>
         <div class="cv-doc-row"><span class="cv-doc-key">체류자격</span><span class="cv-doc-val">${v.visa || '—'}</span></div>
       </div>
       <div class="cv-doc-photo">사진<br>3.5cm<br>×<br>4.5cm</div>
@@ -2892,15 +2893,16 @@ function buildCV() {
 }
 
 async function aiGenerateIntro() {
-  const nameKr   = document.getElementById('cv-name-kr').value.trim();
-  const visa     = document.getElementById('cv-visa').value;
-  const langKr   = document.getElementById('cv-lang-kr').value;
-  const langEn   = document.getElementById('cv-lang-en').value;
-  const work1Co  = document.getElementById('cv-work1-company').value.trim();
-  const work1Ro  = document.getElementById('cv-work1-role').value.trim();
-  const work1Desc= document.getElementById('cv-work1-desc').value.trim();
-  const dob      = document.getElementById('cv-dob').value;
-  const age      = calcAge(dob);
+  const nameKr      = document.getElementById('cv-name-kr').value.trim();
+  const visa        = document.getElementById('cv-visa').value;
+  const nationality = document.getElementById('cv-nationality').value.trim() || (userProfile && userProfile.nationality) || '외국인';
+  const langKr      = document.getElementById('cv-lang-kr').value;
+  const langEn      = document.getElementById('cv-lang-en').value;
+  const work1Co     = document.getElementById('cv-work1-company').value.trim();
+  const work1Ro     = document.getElementById('cv-work1-role').value.trim();
+  const work1Desc   = document.getElementById('cv-work1-desc').value.trim();
+  const dob         = document.getElementById('cv-dob').value;
+  const age         = calcAge(dob);
 
   const btn = document.getElementById('cv-ai-btn');
   btn.disabled = true;
@@ -2911,7 +2913,7 @@ async function aiGenerateIntro() {
 지원자 정보:
 - 이름: ${nameKr || '(미입력)'}
 - 나이: ${age ? age + '세' : '(미입력)'}
-- 국적: 캄보디아
+- 국적: ${nationality}
 - 체류자격: ${visa || '(미입력)'}
 - 한국어 수준: ${langKr}
 - 영어 수준: ${langEn}
@@ -3217,6 +3219,10 @@ function submitHelpRequest() {
         <label class="cv-label">Address in Korea <span class="cv-label-kr">주소</span></label>
         <input type="text" id="cv-address" class="cv-input" placeholder="e.g. 경기도 안산시 단원구..." />
       </div>
+      <div class="cv-field">
+        <label class="cv-label">Nationality <span class="cv-label-kr">국적</span></label>
+        <input type="text" id="cv-nationality" class="cv-input" placeholder="e.g. Cambodia · Vietnam · USA · Philippines" />
+      </div>
     </div>
 
     <!-- SECTION 2: Education -->
@@ -3250,7 +3256,7 @@ function submitHelpRequest() {
         <div class="cv-grid-2">
           <div class="cv-field">
             <label class="cv-label">School Name <span class="cv-label-kr">학교명</span></label>
-            <input type="text" id="cv-edu1-school" class="cv-input" placeholder="e.g. 파사악대학교 (Cambodia)" />
+            <input type="text" id="cv-edu1-school" class="cv-input" placeholder="e.g. 파사악대학교 · Hanoi University · Ateneo de Manila" />
           </div>
           <div class="cv-field">
             <label class="cv-label">Major / Type <span class="cv-label-kr">전공/학교종류</span></label>
@@ -3493,7 +3499,7 @@ function submitHelpRequest() {
       <!-- Hero -->
       <div class="tr-hero">
         <div class="tr-hero-title disp">Find a Trusted Translator</div>
-        <div class="tr-hero-sub">ជ្រើសរើសអ្នកបកប្រែ ខ្មែរ-កូរ៉េ ដែលរស់នៅកូរ៉េ<br>Hospital · Immigration · Job Interview · Contract</div>
+        <div class="tr-hero-sub">Khmer · Vietnamese · Chinese · Filipino · English<br>Hospital · Immigration · Job Interview · Contract</div>
         <div class="tr-hero-stats">
           <div class="tr-hero-stat">
             <div class="tr-hero-stat-num" id="tr-stat-translators">0</div>

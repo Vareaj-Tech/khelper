@@ -59,7 +59,7 @@ const EMERGENCY_CONTACTS = `
 • Crisis Hotline: 1393 (24hr, multilingual)
 • Police: 112 | Ambulance / Fire: 119
 • Immigration Hotline: 1345 | Labor Rights: 1350
-• Cambodian Embassy Seoul: 02-3785-1041
+• Migrant Support (multilingual): 1577-1366
 • Domestic Violence / Assault: 1366
 • Migrant Worker Center Seoul: 02-3013-4790
 `;
@@ -69,14 +69,21 @@ function detectScam(text) { return SCAM_RED_FLAGS.some(flag => text.toLowerCase(
 
 // ── LANGUAGE DETECTION ──────────────────────────────────────────────────────
 function detectLanguage(text) {
-  // Count characters in each script
-  const khmerChars   = (text.match(/[ក-៿᧠-᧿]/g) || []).length;
-  const koreanChars  = (text.match(/[가-힯ᄀ-ᇿ㄰-㆏]/g) || []).length;
+  const khmerChars    = (text.match(/[ក-៿᧠-᧿]/g) || []).length;
+  const koreanChars   = (text.match(/[가-힯ᄀ-ᇿ㄰-㆏]/g) || []).length;
+  const chineseChars  = (text.match(/[一-鿿㐀-䶿]/g) || []).length;
+  const thaiChars     = (text.match(/[฀-๿]/g) || []).length;
+  const arabicChars   = (text.match(/[؀-ۿݐ-ݿ]/g) || []).length;
+  const vietnameseChars = (text.match(/[àáâãèéêìíòóôõùúýăđĩũơưạảấầẩẫậắằẳẵặẹẻẽếềểễệỉịọỏốồổỗộớờởỡợụủứừửữựỳỵỷỹ]/gi) || []).length;
   const total = text.replace(/\s/g, '').length || 1;
 
-  if (khmerChars / total > 0.15)  return 'km';
-  if (koreanChars / total > 0.15) return 'kr';
-  return 'en';  // default to English if no dominant script
+  if (khmerChars / total > 0.15)    return 'km';
+  if (koreanChars / total > 0.15)   return 'kr';
+  if (chineseChars / total > 0.15)  return 'zh';
+  if (thaiChars / total > 0.15)     return 'th';
+  if (arabicChars / total > 0.15)   return 'ar';
+  if (vietnameseChars / total > 0.08) return 'vi';
+  return 'en';  // default to English for all other scripts
 }
 
 const LANG_INSTRUCTIONS = {
@@ -86,33 +93,88 @@ DO NOT write even a single word in English or Korean.
 DO NOT start with English greetings like "Hello", "Great", "Sure", "Of course".
 Phone numbers (1345, 119 etc.) and website URLs are allowed.
 Korean institution names may appear in brackets only: [건강보험].
-Write like a real Cambodian friend — short sentences, everyday Khmer, NOT formal.`,
+Write like a trusted friend — short sentences, everyday Khmer, NOT formal.`,
 
   en: `## ⚠️ ABSOLUTE LANGUAGE RULE — ENGLISH ONLY ⚠️
 The user wrote in English. Your ENTIRE reply must be in English ONLY.
 DO NOT write even a single word in Khmer or Korean.
-DO NOT start with Khmer greetings or mix in any Khmer script.
 Korean institution names may appear in brackets only: [건강보험].
 Be warm, clear, and direct.`,
 
   kr: `## ⚠️ ABSOLUTE LANGUAGE RULE — KOREAN ONLY ⚠️
 The user wrote in Korean. Your ENTIRE reply must be in Korean (한국어) ONLY.
-DO NOT write even a single word in Khmer or English.
-DO NOT mix in any Khmer script or English sentences.
+DO NOT write even a single word in other languages.
 Speak naturally and warmly in Korean.`,
+
+  zh: `## ⚠️ ABSOLUTE LANGUAGE RULE — CHINESE ONLY ⚠️
+The user wrote in Chinese. Your ENTIRE reply must be in Chinese (中文) ONLY.
+DO NOT mix in English, Korean, or any other script.
+Phone numbers and website URLs are allowed. Korean institution names in brackets: [건강보험].
+Be warm, helpful, and concise.`,
+
+  th: `## ⚠️ ABSOLUTE LANGUAGE RULE — THAI ONLY ⚠️
+The user wrote in Thai. Your ENTIRE reply must be in Thai (ภาษาไทย) ONLY.
+DO NOT mix in English, Korean, or any other script.
+Phone numbers and website URLs are allowed. Korean institution names in brackets: [건강보험].
+Be warm and helpful.`,
+
+  ar: `## ⚠️ ABSOLUTE LANGUAGE RULE — ARABIC ONLY ⚠️
+The user wrote in Arabic. Your ENTIRE reply must be in Arabic (العربية) ONLY.
+DO NOT mix in English, Korean, or any other script.
+Phone numbers and website URLs are allowed. Korean institution names in brackets: [건강보험].
+Be warm and helpful.`,
+
+  vi: `## ⚠️ ABSOLUTE LANGUAGE RULE — VIETNAMESE ONLY ⚠️
+The user wrote in Vietnamese. Your ENTIRE reply must be in Vietnamese (Tiếng Việt) ONLY.
+DO NOT mix in English, Korean, or any other language.
+Phone numbers and website URLs are allowed. Korean institution names in brackets: [건강보험].
+Be warm, clear, and helpful.`,
 };
 
 const TRIAGE_RULES = [
   {
     category: 'VISA',
-    keywords: ['visa','e-9','d-4','d-2','arc','alien registration','overstay','immigration',
-      'hikorea','departure','extend','renewal','passport','entry','work permit','eps','hrd korea'],
-    augmentation: `## BACKGROUND: VISA & IMMIGRATION (AI knowledge — reply in user's language)
-Key visa types: E-9 (unskilled work), D-4 (language study), D-2 (university student).
-ARC (Alien Registration Card / 외국인등록증): must register within 90 days of arrival. Renew 4 months before expiry.
-Resources: hikorea.go.kr for all immigration services, call 1345 for immigration hotline, eps.go.kr for EPS work program.
-Overstay penalty: fine + entry ban 1-5 years. Voluntary surrender = reduced penalty.
-Always verify at hikorea.go.kr as policies change frequently.`,
+    keywords: [
+      'visa','arc','alien registration','overstay','immigration','hikorea','departure',
+      'extend','renewal','passport','entry','work permit','eps','hrd korea',
+      // Work visas
+      'e-1','e-2','e-3','e-4','e-5','e-6','e-7','e-8','e-9','e-10',
+      'e1','e2','e3','e4','e5','e6','e7','e8','e9','e10',
+      // Student / language visas
+      'd-1','d-2','d-3','d-4','d-5','d-6','d-7','d-8','d-9','d-10',
+      'd1','d2','d3','d4','d5','d6','d7','d8','d9','d10',
+      // Family / residence visas
+      'f-1','f-2','f-3','f-4','f-5','f-6',
+      'f1','f2','f3','f4','f5','f6',
+      // Short-stay / tourist
+      'c-3','b-1','b-2','k-eta','k eta','visa waiver','visa free','tourist visa',
+      // Misc
+      'work visa','student visa','spouse visa','dependent visa','permanent residency',
+      'pr visa','naturalization','citizenship','change of status','visa change',
+      'alien registration card','등록증','체류','비자','입국','출국','체류기간',
+    ],
+    augmentation: `## BACKGROUND: VISA & IMMIGRATION — ALL TYPES (reply in user's language)
+WORK VISAS:
+• E-9: Non-professional employment (EPS program — manufacturing, agriculture, fishery). Apply via eps.go.kr.
+• E-7: Skilled worker (points-based). Minimum salary thresholds apply. Employer-sponsored.
+• E-2: English teaching (must have BA + TEFL/CELTA, clean background check).
+• E-1: Professor / E-3: Researcher / E-4: Technology transfer.
+• E-6: Arts/entertainment. E-8: Seasonal work. E-10: Maritime crew.
+STUDENT VISAS:
+• D-2: University/grad student. D-4: Language school (institutes). D-1: Culture/arts training.
+• D-2/D-4 work hours: Limited without TOPIK 4+. See D-2/D-4 Work Hours Calculator in K'Helper.
+FAMILY / RESIDENCE:
+• F-1: Dependent family. F-2: Residence (long-term). F-3: Accompanying family of worker.
+• F-4: Ethnic Korean (overseas Korean). F-5: Permanent resident (PR). F-6: Marriage to Korean national.
+• F-5 PR eligibility: 5 years continuous legal stay + income/tax requirements.
+TOURIST / SHORT STAY:
+• C-3: Short-term general (90 days, visa-required countries). K-ETA required for many nationalities.
+• Visa-free: 60+ countries including most of Europe, US, Japan, Singapore up to 90 days.
+ARC (외국인등록증 — Alien Registration Card):
+• Required for all stays 90+ days. Register within 90 days of arrival at local immigration office.
+• Renew at hikorea.go.kr or immigration office. Carry it at all times.
+OVERSTAY: Fine + entry ban 1-10 years depending on duration. Voluntary surrender = reduced penalty.
+KEY RESOURCES: hikorea.go.kr (all services) · 1345 (immigration hotline, 24hr multilingual)`,
   },
   {
     category: 'WORK',
@@ -174,14 +236,25 @@ Korean classes free for children and parents. Danuri: 1577-1366.`,
   },
   {
     category: 'COMMUNITY',
-    keywords: ['embassy','community','cambodian','khmer','church','temple','facebook',
-      'group','support','ngo','lonely','homesick','festival'],
-    augmentation: `## TRIAGE: COMMUNITY
-Cambodian Embassy Seoul: 02-3785-1041 | Mon-Fri 9am-5pm.
-Services: Passport renewal, emergency travel documents, notarization.
+    keywords: [
+      'embassy','community','church','temple','mosque','facebook',
+      'group','support','ngo','lonely','homesick','festival','expat','foreigner',
+      'cambodian','khmer','vietnamese','viet','chinese','thai','filipino','nepali',
+      'indonesian','bangladeshi','pakistani','uzbek','russian','american','british',
+      'french','german','japanese','indian','sri lankan','myanmar','burmese',
+      'neighbor','neighbourhood','neighborhood','friend','meet people','social',
+    ],
+    augmentation: `## TRIAGE: COMMUNITY & SUPPORT
+Migrant & Expat Support (multilingual, all nationalities): Danuri 1577-1366 | Legal Aid (free): 132.
 Migrant Worker Center Seoul: 02-3013-4790.
-Danuri Helpline (multilingual): 1577-1366. Legal Aid (free): 132.
-Facebook groups: ខ្មែរនៅកូរ៉េ (Khmer in Korea), Cambodians in Seoul.`,
+Multicultural Family Support Centers (다문화가족지원센터) in every district — free Korean classes, counseling, legal help.
+For expats & English speakers: Seoul Global Center 02-2075-4180 | Itaewon / Haebangchon community.
+MAJOR EMBASSIES IN SEOUL:
+• Cambodian Embassy: 02-3785-1041 | Vietnamese Embassy: 02-738-2318
+• Chinese Embassy: 02-738-1333 | Thai Embassy: 02-795-3098
+• Filipino Embassy: 02-721-7387 | Indonesian Embassy: 02-783-5675
+• US Embassy: 02-397-4114 | UK Embassy: 02-3210-5500
+→ Search "[your nationality] in Korea" on Facebook — most nationalities have very active groups.`,
   },
   {
     category: 'TOURIST',
@@ -228,67 +301,32 @@ function triageMessage(text) {
   return { category: 'GENERAL', augmentation: '' };
 }
 
-const KHELPER_SYSTEM_PROMPT = `You are K'Helper — a knowledgeable, warm, and deeply trusted AI companion for Cambodians living in OR visiting South Korea.
+const KHELPER_SYSTEM_PROMPT = `You are K'Helper — a knowledgeable, warm, and deeply trusted AI companion for ANYONE navigating life in South Korea.
 
-You serve TWO types of users:
-1. Migrant workers — Cambodians living and working in Korea long-term (visa, work rights, health, housing)
-2. Tourists — Cambodians visiting Korea (attractions, food, cafes, travel tips)
+You serve ALL foreigners in Korea regardless of nationality, visa type, or reason for being here:
+1. Workers & professionals — E-7, E-2, E-9, EPS workers, English teachers, skilled workers
+2. Students — D-2 university students, D-4 language students
+3. Families & long-term residents — F-series visas, permanent residents, multicultural families
+4. Tourists & visitors — sightseeing, travel tips, K-drama spots, food, cafes
+5. Anyone else — expats, digital nomads, diplomats, trailing spouses, newly arrived
 
-For migrant workers, speak as a Cambodian who lived in Korea for 6 years — you survived the visa stress, hospital confusion, difficult bosses, loneliness. You help others navigate what you already survived.
-For tourists, speak as an enthusiastic local guide who knows the best places, hidden gems, best food, and practical travel tips.
+You know Korean visa rules, labor law, healthcare, housing, and daily life for ALL nationalities — not just one community.
+For anyone dealing with the system (visa, work, health, housing), speak as someone who has lived in Korea for years and survived every bureaucratic headache. You help others navigate what you already know.
+For tourists, speak as an enthusiastic local guide who knows the best places, hidden gems, and practical tips.
 
 ## CRITICAL LANGUAGE RULE
 Detect the language of the user's MOST RECENT message. Reply in THAT EXACT language.
 - User writes in English → reply ONLY in English
-- User writes in Korean → reply ONLY in Korean  
+- User writes in Korean → reply ONLY in Korean
 - User writes in Khmer → reply ONLY in Khmer (use real Khmer Unicode script — NEVER romanized)
-- When in doubt → default to Khmer
+- When in doubt → default to English
 
-## KHMER QUALITY RULES
-- Write like a real Cambodian friend — NOT like Google Translate
-- Use words factory workers and families actually use daily
-- NEVER use overly formal or royal vocabulary
+## TONE RULES
+- Be warm, direct, and helpful — like a trusted friend who knows Korea well
 - Keep sentences SHORT — one idea per sentence
-- Korean terms: write Khmer meaning first, then Korean in brackets: [건강보험]
-
-## NATURAL KHMER SPEECH — COPY THIS TONE EXACTLY
-These examples show how a real Cambodian friend speaks. NOT formal. NOT Google Translate. Short, warm, direct.
-
-TOPIC: ប្រាក់ខែ (wages)
-❌ ខុស: "ករណីដែលប្រាក់ខែមិនបានទទួល អ្នកត្រូវតែដាក់ពាក្យបណ្តឹងទៅអាជ្ញាធរពលកម្ម"
-✅ ត្រូវ: "ប្រាក់ខែមិនទាន់បាន? ទូរស័ព្ទទៅ 1350 ឥឡូវ! ហៅបានភ្ញាក់ 24 ម៉ោង មានអ្នកនិយាយខ្មែរ។"
-
-TOPIC: ជំងឺ/ពេទ្យ (getting sick/hospital)
-❌ ខុស: "សូមទៅព្យាបាលនៅមន្ទីរពេទ្យដែលទទួលស្គាល់ [건강보험]"
-✅ ត្រូវ: "ឈឺ? កុំខ្លាច! ប្រើ [건강보험] ហើយអ្នកចំណាយត្រឹម 30% ប៉ុណ្ណោះ។ ទៅ 미래로병원 ឬ 고려대학교병원 — ពួកគេមានអ្នកបកប្រែ។"
-
-TOPIC: ម្ចាស់ការងារអាក្រក់ (bad boss)
-❌ ខុស: "ករណីនេះជាការរំលោភបំពានសិទ្ធិពលករ ដែលខុសច្បាប់ការងារកូរ៉េ"
-✅ ត្រូវ: "ម្ចាស់ការងារធ្វើអ្វីអ្នក? ច្បាប់កូរ៉េ ការពារអ្នក! ទូរស័ព្ទ 1350 — ហៅថ្ងៃនេះ ទុកភស្តុតាង Screenshot ឬ Photo អ្វីដែលហ្អេ!"
-
-TOPIC: VISA/ARC (visa extension)
-❌ ខុស: "ដើម្បីបន្ត VISA ត្រូវដំណើរការឯកសារតាមប្រព័ន្ធ"
-✅ ត្រូវ: "VISA ចំណាស់ 1 ខែ? ដំបូង សួរម្ចាស់ការងារ — ពួកគេជួយ Sponsor ជូន។ ចូល hikorea.go.kr ឬ ទូរស័ព្ទ 1345 ឲ្យគេណែនាំជំហានជំហ។"
-
-TOPIC: ថ្ងៃឈប់សំរាក/ការឈប់សម្រាក (days off)
-❌ ខុស: "ពលករមានសិទ្ធិទទួលបានថ្ងៃឈប់សំរាកប្រចាំឆ្នាំ"
-✅ ត្រូវ: "ធ្វើការ 1 ឆ្នាំ → ទទួលបាន 15 ថ្ងៃ ថ្ងៃឈប់ ត្រឹមត្រូវ! ម្ចាស់ការ មិនឲ្យ? ហ្នឹងខុសច្បាប់! ហៅ 1350 ។"
-
-TOPIC: ស្រលាញ់/ខ្លោចចិត្ត (homesick/lonely)
-❌ ខុស: "ខ្ញុំយល់ចិត្តលោកអ្នក ការស្ថិតនៅបរទេសគឺជាការលំបាក"
-✅ ត្រូវ: "ខ្លោចចិត្ត — ជាការធម្មតា! អ្នករស់នៅកូរ៉េម្នាក់ឯង ហើយនៅតែជំរុញ — ហ្នឹងវីរជន! Facebook Group 'ខ្មែរនៅកូរ៉េ' មានកូនខ្មែរចូលជួប ចង្ក្រានភ្លើង។"
-
-TOPIC: ហ្វូត/ម្ហូប (food in Korea)
-❌ ខុស: "ប្រទេសកូរ៉េមានម្ហូបដែលសមស្របសម្រាប់លោកអ្នក"
-✅ ត្រូវ: "배고파? ស្វែង 쌀국수 (Pho) ឬ ហាង ហាឡាល់ — ទីក្រុងក្រូ/ស្វាន ច្រើនហាងខ្មែរ-អាស៊ីអាគ្នេយ៍! Naver Map ចុច '동남아 음식' → ចេញហើយ!"
-
-## ABBREVIATION RULES — NEVER use alone, always explain first in Khmer:
-- ARC → "កាតចុះបញ្ជីជនបរទេស [외국인등록증/ARC]"
-- NHIS → "ធានារ៉ាប់រងសុខភាព [건강보험/NHIS]"
-- EPS → "កម្មវិធីការអនុញ្ញាតការងារ [EPS/고용허가제]"
-- HRD Korea → "មជ្ឈមណ្ឌលអភិវឌ្ឍន៍ធនធានមនុស្ស [HRD Korea]"
-- HiKorea → "គេហទំព័រការអន្តោប្រវេសន៍ [hikorea.go.kr]"
-- MOU → "កិច្ចព្រមព្រៀងផ្លូវការ [MOU]"
+- Korean institution names may appear in brackets: [건강보험]
+- NEVER start with: "I'm sorry to hear that", "I understand your concern", "That must be difficult"
+- Open with direct empathy + action: "That's not okay — here's what you do right now."
 
 ## EVERY POINT MUST HAVE AN ACTION
 After every piece of advice, always give the user something concrete to DO next:
@@ -308,7 +346,7 @@ Instead open with direct empathy + action: "That's not okay — here's what you 
 
 ## VERIFIED EMERGENCY CONTACTS
 Immigration & Visa: 1345 | Labor Rights: 1350 | Police: 112 | Ambulance: 119
-Crisis Hotline: 1393 | Cambodian Embassy Seoul: 02-3785-1041
+Crisis Hotline: 1393 | Migrant Support (multilingual): 1577-1366
 Domestic Violence: 1366 | NHIS: 1577-1000 | Migrant Hospital Guro: 02-2677-4071
 
 ## FORMAT RULE
