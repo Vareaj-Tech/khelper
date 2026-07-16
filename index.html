@@ -2066,30 +2066,101 @@ function applySetupLang() {
 //    4. Copy the Client ID and paste it below (replacing the placeholder)
 const GOOGLE_CLIENT_ID = '83400368290-1m1hh96ubq5hodl70fa28udar048mrk5.apps.googleusercontent.com';
 
-function loginWithGoogle() {
-  if (!window.google || !GOOGLE_CLIENT_ID || GOOGLE_CLIENT_ID.startsWith('YOUR_')) {
-    // GSI not loaded or client ID not set — fall back gracefully
-    const msg = document.createElement('div');
-    msg.style.cssText = 'position:fixed;top:24px;left:50%;transform:translateX(-50%);background:#333;color:#fff;padding:12px 20px;border-radius:12px;font-size:14px;z-index:9999;max-width:300px;text-align:center;';
-    msg.textContent = 'Google sign-in is being set up. Please use the language buttons below to continue.';
-    document.body.appendChild(msg);
-    setTimeout(() => msg.remove(), 3500);
+/* Dynamically (re)load the GSI script — returns true if google.accounts.id is available */
+function loadGsi(timeoutMs = 6000) {
+  return new Promise((resolve) => {
+    if (window.google?.accounts?.id) return resolve(true);
+    const s = document.createElement('script');
+    s.src = 'https://accounts.google.com/gsi/client';
+    s.async = true;
+    s.onload = () => resolve(!!window.google?.accounts?.id);
+    s.onerror = () => resolve(false);
+    document.head.appendChild(s);
+    setTimeout(() => resolve(!!window.google?.accounts?.id), timeoutMs);
+  });
+}
+
+function gsiToast(text) {
+  const msg = document.createElement('div');
+  msg.style.cssText = 'position:fixed;top:24px;left:50%;transform:translateX(-50%);background:#333;color:#fff;padding:12px 20px;border-radius:12px;font-size:14px;z-index:9999;max-width:300px;text-align:center;';
+  msg.textContent = text;
+  document.body.appendChild(msg);
+  return msg;
+}
+
+async function loginWithGoogle() {
+  if (!GOOGLE_CLIENT_ID || GOOGLE_CLIENT_ID.startsWith('YOUR_')) return;
+
+  // Tier 1: GSI already loaded, or loads on retry
+  let ok = !!window.google?.accounts?.id;
+  let toast = null;
+  if (!ok) {
+    toast = gsiToast('Connecting to Google…');
+    ok = await loadGsi();
+    if (toast) toast.remove();
+  }
+
+  if (ok) {
+    google.accounts.id.initialize({
+      client_id: GOOGLE_CLIENT_ID,
+      callback: handleGoogleCredential,
+      auto_select: false,
+      cancel_on_tap_outside: true,
+    });
+    google.accounts.id.prompt((notification) => {
+      if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+        // One Tap blocked — show rendered button in overlay
+        showGoogleButtonOverlay();
+      }
+    });
     return;
   }
 
-  google.accounts.id.initialize({
-    client_id: GOOGLE_CLIENT_ID,
-    callback: handleGoogleCredential,
-    auto_select: false,
-    cancel_on_tap_outside: true,
-  });
-  google.accounts.id.prompt((notification) => {
-    if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-      // One Tap blocked — show rendered button in overlay
-      showGoogleButtonOverlay();
-    }
-  });
+  // Tier 2: GSI script blocked (ad blocker / network filter) — plain OAuth redirect,
+  // no external script needed. Requires the site origin in "Authorized redirect URIs".
+  loginWithGoogleRedirect();
 }
+
+/* OAuth 2.0 implicit-flow redirect — works even when the GSI script is blocked */
+function loginWithGoogleRedirect() {
+  const state = Math.random().toString(36).slice(2);
+  try { sessionStorage.setItem('khelper_oauth_state', state); } catch {}
+  const params = new URLSearchParams({
+    client_id: GOOGLE_CLIENT_ID,
+    redirect_uri: location.origin + '/',
+    response_type: 'token',
+    scope: 'openid email profile',
+    state,
+    prompt: 'select_account',
+  });
+  location.href = 'https://accounts.google.com/o/oauth2/v2/auth?' + params.toString();
+}
+
+/* Handle the redirect back from Google (access token arrives in the URL fragment) */
+(async function handleOAuthRedirect() {
+  if (!location.hash.includes('access_token=')) return;
+  const frag = new URLSearchParams(location.hash.slice(1));
+  const token = frag.get('access_token');
+  const state = frag.get('state');
+  // Clean token out of the URL immediately
+  history.replaceState(null, '', location.pathname);
+  let expected = null;
+  try { expected = sessionStorage.getItem('khelper_oauth_state'); } catch {}
+  if (!token || (expected && state !== expected)) return;
+  try {
+    const res = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+      headers: { Authorization: 'Bearer ' + token },
+    });
+    const info = await res.json();
+    finishGoogleSignIn({
+      name:    info.given_name || info.name || 'User',
+      email:   info.email || '',
+      picture: info.picture || '',
+    });
+  } catch (e) {
+    console.error('OAuth userinfo fetch failed:', e);
+  }
+})();
 
 function showGoogleButtonOverlay() {
   const overlay = document.createElement('div');
@@ -2117,34 +2188,38 @@ function handleGoogleCredential(response) {
     const pad = (4 - base64.length % 4) % 4;
     const payload = JSON.parse(atob(base64 + '='.repeat(pad)));
 
-    const googleUser = {
+    finishGoogleSignIn({
       name:     payload.given_name || payload.name || 'User',
       email:    payload.email || '',
       picture:  payload.picture || '',
-    };
-
-    // Save profile and go straight to setup screen (so they can add visa info)
-    const profile = { ...googleUser, visaType: '', visaExpiry: '', savedAt: Date.now() };
-    try { localStorage.setItem(profileKey('anon'), JSON.stringify(profile)); } catch {}
-    userProfile = profile;
-
-    // Close any overlay
-    const overlay = document.getElementById('google-overlay');
-    if (overlay) overlay.remove();
-
-    currentLang = 'en';
-    // Check if they already have a full profile saved
-    const existing = loadProfile('anon');
-    if (existing && existing.name && existing.visaType) {
-      initApp();
-    } else {
-      showScreen('setup');
-    }
+    });
   } catch (e) {
     console.error('Google credential decode failed:', e);
     const overlay = document.getElementById('google-overlay');
     if (overlay) overlay.remove();
     alert('Sign-in failed. Please use the language buttons to continue.');
+  }
+}
+
+/* Shared post-sign-in flow (used by both GSI and redirect fallback) */
+function finishGoogleSignIn(googleUser) {
+  // Keep any visa info the user saved before signing in
+  const prior = loadProfile('anon') || {};
+  const profile = { ...prior, ...googleUser, savedAt: Date.now() };
+  try { localStorage.setItem(profileKey('anon'), JSON.stringify(profile)); } catch {}
+  userProfile = profile;
+
+  // Close any overlay
+  const overlay = document.getElementById('google-overlay');
+  if (overlay) overlay.remove();
+
+  if (profile.name && profile.visaType) {
+    initApp();
+  } else {
+    showScreen('setup');
+    // Prefill name from the Google account
+    const nameInput = document.getElementById('setup-name');
+    if (nameInput && !nameInput.value && profile.name) nameInput.value = profile.name;
   }
 }
 
