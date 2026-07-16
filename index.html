@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="km">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
@@ -1718,14 +1718,14 @@
 
   <!-- Language pill — selecting language enters the app directly -->
   <div class="lang-pill" style="margin-bottom:32px">
-    <button class="lang-pill-btn active" onclick="enterApp('km')">ខ្មែរ</button>
+    <button class="lang-pill-btn active" onclick="enterApp('en')">English</button>
+    <span class="lang-pill-sep">·</span>
+    <button class="lang-pill-btn" onclick="enterApp('km')">ខ្មែរ</button>
     <span class="lang-pill-sep">·</span>
     <button class="lang-pill-btn" onclick="enterApp('kr')">한국어</button>
-    <span class="lang-pill-sep">·</span>
-    <button class="lang-pill-btn" onclick="enterApp('en')">English</button>
   </div>
 
-  <div class="auth-footer" style="margin-top:4px">INSTALL FREE · NO APP STORE · khelper.app</div>
+  <div class="auth-footer" style="margin-top:4px">INSTALL FREE · NO APP STORE · khelper.org</div>
 </div>
 
 <!-- ═══════════════════════════════════════════════
@@ -1742,43 +1742,44 @@
         <rect x="30" y="104" width="40" height="8" rx="2" fill="#2a1810"/>
         <path d="M44 112 L50 130 L56 112 Z" fill="#d94e1f"/>
       </svg>
-      <div class="setup-title disp">Welcome to K'<em>helper</em></div>
-      <div class="setup-sub" style="margin-top:6px">ប្រាប់ខ្ញុំអំពីខ្លួនអ្នក ដើម្បីជួយបានល្អជាងនេះ<br>
-        <span style="font-family:var(--font-body);font-size:12px;color:var(--clay-400)">Tell us a bit about yourself — we'll tailor help to your situation.</span>
-      </div>
+      <div class="setup-title disp"><span id="setup-title-text">Welcome to</span> K'<em>helper</em></div>
+      <div class="setup-sub" style="margin-top:6px" id="setup-sub-text">Tell us a bit about yourself — we'll tailor help to your situation.</div>
     </div>
 
     <div class="setup-form" id="setup-form">
       <div class="form-group">
-        <label class="form-label eyebrow">Full Name · ឈ្មោះ</label>
-        <input type="text" id="setup-name" class="form-input kh" placeholder="ឈ្មោះរបស់អ្នក" autocomplete="name" required />
+        <label class="form-label eyebrow" id="setup-name-label">Full name</label>
+        <input type="text" id="setup-name" class="form-input" placeholder="Your name" autocomplete="name" required />
       </div>
 
       <div class="form-group">
-        <label class="form-label eyebrow">Visa Type · ប្រភេទទិដ្ឋាការ</label>
+        <label class="form-label eyebrow" id="setup-visa-label">Visa type</label>
         <select id="setup-visa-type" class="form-select">
           <option value="">-- Select visa type --</option>
           <option value="E-9">E-9 (Non-Professional Employment)</option>
+          <option value="E-7">E-7 (Skilled Worker)</option>
           <option value="E-6">E-6 (Arts/Performance)</option>
+          <option value="E-2">E-2 (Language Teacher)</option>
           <option value="D-2">D-2 (Student)</option>
           <option value="D-4">D-4 (General Training)</option>
           <option value="F-2">F-2 (Resident)</option>
           <option value="F-4">F-4 (Overseas Korean)</option>
+          <option value="F-5">F-5 (Permanent Resident)</option>
           <option value="F-6">F-6 (Marriage Migrant)</option>
           <option value="C-3">C-3 (Short Visit/Tourist)</option>
           <option value="H-2">H-2 (Working Visit)</option>
-          <option value="other">Other · ផ្សេងៗ</option>
+          <option value="other">Other</option>
         </select>
       </div>
 
       <div class="form-group">
-        <label class="form-label eyebrow">Visa Expiry Date · ថ្ងៃផុតសុពលភាព</label>
+        <label class="form-label eyebrow" id="setup-expiry-label">Visa expiry date</label>
         <input type="date" id="setup-visa-expiry" class="form-input" />
-        <span class="form-note">ថ្ងៃដែលភ្ជាប់នៅក្នុងទិដ្ឋាការ ឬ កាតចុះបញ្ជី — K'Helper នឹងជូនដំណឹងអ្នកមុនផុតសុពលភាព</span>
+        <span class="form-note" id="setup-note-text">K'Helper will remind you before your visa expires</span>
       </div>
 
-      <button class="setup-submit" onclick="saveProfile()">រក្សាទុក &amp; ចូលប្រើ · Save &amp; Continue</button>
-      <button type="button" onclick="skipSetup()" style="background:none;border:none;color:var(--clay-400);font-size:13px;font-family:var(--font-body);cursor:pointer;margin-top:4px;text-decoration:underline;text-underline-offset:2px">Skip for now · រំលង</button>
+      <button class="setup-submit" id="setup-save-btn" onclick="saveProfile()">Save &amp; Continue</button>
+      <button type="button" id="setup-skip-btn" onclick="skipSetup()" style="background:none;border:none;color:var(--clay-400);font-size:13px;font-family:var(--font-body);cursor:pointer;margin-top:4px;text-decoration:underline;text-underline-offset:2px">Skip for now</button>
     </div>
   </div>
 </div>
@@ -1876,15 +1877,15 @@
       <button class="map-close-btn" onclick="closeMapPanel()">✕</button>
     </div>
     <div class="map-tabs">
-      <button class="map-tab active" onclick="switchMapTab('immigration')" id="tab-immigration">🛂 ចំណាកស្រុក</button>
-      <button class="map-tab" onclick="switchMapTab('health')" id="tab-health">🏥 សុខភាព</button>
-      <button class="map-tab" onclick="switchMapTab('food')" id="tab-food">🍜 ម្ហូប</button>
-      <button class="map-tab" onclick="switchMapTab('cafe')" id="tab-cafe">☕ កាហ្វេ</button>
-      <button class="map-tab" onclick="switchMapTab('places')" id="tab-places">🏛️ ទីកន្លែង</button>
-      <button class="map-tab" onclick="switchMapTab('labor')" id="tab-labor">💼 ការងារ</button>
+      <button class="map-tab active" onclick="switchMapTab('immigration')" id="tab-immigration">🛂 Immigration</button>
+      <button class="map-tab" onclick="switchMapTab('health')" id="tab-health">🏥 Health</button>
+      <button class="map-tab" onclick="switchMapTab('food')" id="tab-food">🍜 Food</button>
+      <button class="map-tab" onclick="switchMapTab('cafe')" id="tab-cafe">☕ Cafe</button>
+      <button class="map-tab" onclick="switchMapTab('places')" id="tab-places">🏛️ Places</button>
+      <button class="map-tab" onclick="switchMapTab('labor')" id="tab-labor">💼 Labor</button>
     </div>
     <div class="map-search-row">
-      <input type="text" class="map-search-input kh" id="map-search-input" placeholder="ស្វែងរកទីតាំង...">
+      <input type="text" class="map-search-input" id="map-search-input" placeholder="Search locations...">
       <button class="map-search-btn" onclick="doMapSearch()">🔍</button>
     </div>
     <div class="map-locations-list" id="map-locations-list"></div>
@@ -1924,7 +1925,7 @@
         <div class="ch-name" id="ch-user-name">K'helper</div>
         <div class="ch-sub">
           <span class="live-dot"></span>
-          <span id="ch-user-sub">ជំនួយការ AI ខ្មែរ</span>
+          <span id="ch-user-sub">Your Korea guide</span>
         </div>
       </div>
       <div class="ch-actions">
@@ -1938,7 +1939,7 @@
     <!-- Input -->
     <div id="input-area">
       <div class="input-pill">
-        <textarea id="user-input" rows="1" maxlength="2000" class="kh" placeholder="សារទៅ K'Helper..."></textarea>
+        <textarea id="user-input" rows="1" maxlength="2000" placeholder="Message K'Helper..."></textarea>
         <button id="send-btn" onclick="sendMessage()">
           <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l14-7-5 16-3-7-6-2z"/></svg>
         </button>
@@ -2024,7 +2025,7 @@ function buildSourceCitation(category) {
 }
 
 /* ── APP STATE ── */
-let currentLang = 'km';
+let currentLang = 'en';
 let conversationHistory = [];
 let chatStarted = false;
 let currentUser = null;
@@ -2034,6 +2035,27 @@ let userProfile = null;
 function showScreen(name) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById('screen-' + name).classList.add('active');
+  if (name === 'setup') applySetupLang();
+}
+
+/* Translate the profile-setup screen to the active language */
+function applySetupLang() {
+  const t = T[currentLang];
+  if (!t || !t.setupTitle) return;
+  const set = (id, txt) => { const el = document.getElementById(id); if (el) el.textContent = txt; };
+  set('setup-title-text', t.setupTitle);
+  set('setup-sub-text', t.setupSub);
+  set('setup-name-label', t.setupName);
+  set('setup-visa-label', t.setupVisa);
+  set('setup-expiry-label', t.setupExpiry);
+  set('setup-note-text', t.setupNote);
+  set('setup-save-btn', t.setupSave);
+  set('setup-skip-btn', t.setupSkip);
+  const nameInput = document.getElementById('setup-name');
+  if (nameInput) {
+    nameInput.placeholder = t.setupNamePh;
+    nameInput.className = 'form-input' + (currentLang === 'km' ? ' kh' : currentLang === 'kr' ? ' kr' : '');
+  }
 }
 
 /* ── GOOGLE OAUTH (Google Identity Services) ── */
@@ -2184,7 +2206,7 @@ function saveProfile() {
   const visaType = document.getElementById('setup-visa-type').value;
   const expiry   = document.getElementById('setup-visa-expiry').value;
 
-  if (!name) { alert('Please enter your name · សូមបញ្ចូលឈ្មោះ'); return; }
+  if (!name) { alert(T[currentLang].nameRequired); return; }
 
   const profile = { name, visaType, visaExpiry: expiry, savedAt: Date.now() };
   localStorage.setItem(profileKey('anon'), JSON.stringify(profile));
@@ -2215,8 +2237,8 @@ function formatExpiryDate(dateStr) {
 
 function updateVisaUI(profile) {
   if (!profile || !profile.visaExpiry) {
-    document.getElementById('visa-date-display').textContent = 'No expiry set';
-    document.getElementById('visa-remaining-display').textContent = 'Tap to add visa date';
+    document.getElementById('visa-date-display').textContent = '—';
+    document.getElementById('visa-remaining-display').textContent = T[currentLang].visaTapAdd;
     return;
   }
 
@@ -2227,11 +2249,8 @@ function updateVisaUI(profile) {
   document.getElementById('visa-ring-label').textContent    = profile.visaType || 'VISA';
 
   const monthsRounded = Math.ceil(months);
-  const remaining = monthsRounded <= 0
-    ? 'Expired!'
-    : monthsRounded === 1
-      ? 'នៅសល់ 1 ខែ · 1 month left'
-      : `នៅសល់ ${monthsRounded} ខែ · ${monthsRounded} months left`;
+  const tt = T[currentLang];
+  const remaining = monthsRounded <= 0 ? tt.expired : tt.monthsLeft(monthsRounded);
   document.getElementById('visa-remaining-display').textContent = remaining;
 
   // Ring: assume 12-month visa cycle; show months remaining as fraction
@@ -2288,6 +2307,19 @@ const T = {
     emergency: 'ជំនួយបន្ទាន់: <strong>1345</strong> · <strong>119</strong>',
     mapPanelTitle: 'ទីតាំង & ផែនទី',
     msgLeft: n => `${n} សារ នៅសល់`,
+    visaExpiryLabel: 'ថ្ងៃផុតសុពលភាពវីសា',
+    visaTrack: 'តាមដានវីសារបស់អ្នក',
+    visaTapAdd: 'ចុចដើម្បីបន្ថែមថ្ងៃផុតសុពលភាពវីសា →',
+    monthsLeft: n => `នៅសល់ ${n} ខែ`,
+    expired: '⚠️ ផុតកំណត់ហើយ!',
+    renew: 'បន្តវីសា →',
+    setupTitle: 'សូមស្វាគមន៍មកកាន់',
+    setupSub: 'ប្រាប់ខ្ញុំអំពីខ្លួនអ្នក ដើម្បីជួយបានល្អជាងនេះ',
+    setupName: 'ឈ្មោះ', setupNamePh: 'ឈ្មោះរបស់អ្នក',
+    setupVisa: 'ប្រភេទទិដ្ឋាការ', setupExpiry: 'ថ្ងៃផុតសុពលភាព',
+    setupNote: 'K\'Helper នឹងជូនដំណឹងអ្នកមុនវីសាផុតសុពលភាព',
+    setupSave: 'រក្សាទុក & ចូលប្រើ', setupSkip: 'រំលង',
+    nameRequired: 'សូមបញ្ចូលឈ្មោះ',
     topics: [
       { icon:'🛂', title:'វីសា & ឯកសារ', sub:'ការបន្ត, ចុះឈ្មោះ', topic:'visa' },
       { icon:'💼', title:'សិទ្ធិការងារ', sub:'កិច្ចសន្យា, ប្រាក់ខែ', topic:'work' },
@@ -2316,6 +2348,19 @@ const T = {
     emergency: 'Emergency: <strong>Immigration 1345</strong> · <strong>119</strong>',
     mapPanelTitle: 'Locations & Maps',
     msgLeft: n => `${n} messages left`,
+    visaExpiryLabel: 'Visa expiry',
+    visaTrack: 'Track your visa',
+    visaTapAdd: 'Tap to add your visa expiry date →',
+    monthsLeft: n => `${n} month${n === 1 ? '' : 's'} left`,
+    expired: '⚠️ Expired!',
+    renew: 'Renew →',
+    setupTitle: 'Welcome to',
+    setupSub: 'Tell us a bit about yourself — we\'ll tailor help to your situation.',
+    setupName: 'Full name', setupNamePh: 'Your name',
+    setupVisa: 'Visa type', setupExpiry: 'Visa expiry date',
+    setupNote: 'K\'Helper will remind you before your visa expires',
+    setupSave: 'Save & Continue', setupSkip: 'Skip for now',
+    nameRequired: 'Please enter your name',
     topics: [
       { icon:'🛂', title:'Visa & Documents', sub:'Renewal, registration', topic:'visa' },
       { icon:'💼', title:'Work Rights', sub:'Contract, wages', topic:'work' },
@@ -2344,6 +2389,19 @@ const T = {
     emergency: '긴급: <strong>출입국 1345</strong> · <strong>119</strong>',
     mapPanelTitle: '위치 & 지도',
     msgLeft: n => `${n}개 메시지 남음`,
+    visaExpiryLabel: '비자 만료일',
+    visaTrack: '비자 관리',
+    visaTapAdd: '비자 만료일을 추가하려면 탭하세요 →',
+    monthsLeft: n => `${n}개월 남음`,
+    expired: '⚠️ 만료됨!',
+    renew: '갱신 →',
+    setupTitle: '환영합니다',
+    setupSub: '상황에 맞는 도움을 드릴 수 있도록 알려주세요.',
+    setupName: '이름', setupNamePh: '이름을 입력하세요',
+    setupVisa: '비자 종류', setupExpiry: '비자 만료일',
+    setupNote: 'K\'Helper가 비자 만료 전에 알려드립니다',
+    setupSave: '저장 & 시작', setupSkip: '건너뛰기',
+    nameRequired: '이름을 입력해 주세요',
     topics: [
       { icon:'🛂', title:'비자 & 서류', sub:'갱신, 등록', topic:'visa' },
       { icon:'💼', title:'근로 권리', sub:'계약, 임금', topic:'work' },
@@ -2447,10 +2505,10 @@ function renderHome() {
           <text x="42" y="44" text-anchor="middle" font-family="var(--font-display)" font-size="11" fill="var(--clay-800)">${userProfile.visaType||'VISA'}</text>
         </svg>
         <div style="flex:1;min-width:0">
-          <div class="eyebrow" style="margin-bottom:3px">Visa Expiry · ផុត​សុពល​ភាព</div>
+          <div class="eyebrow" style="margin-bottom:3px">${t.visaExpiryLabel}</div>
           <div class="disp" style="font-size:17px;color:var(--clay-800)">${formatExpiryDate(userProfile.visaExpiry)}</div>
-          <div class="kh" style="font-size:12px;color:${isWarning?'#ef4444':'var(--clay-500)'};margin-top:3px">${mRound <= 0 ? '⚠️ Expired!' : `នៅ​សល់ ${mRound} ខែ · ${mRound} months left`}</div>
-          <button onclick="quickTopic('visa')" style="margin-top:8px;padding:5px 12px;background:var(--terra-500);color:var(--cream);border:none;border-radius:999px;font-size:11px;font-family:var(--font-body);cursor:pointer;font-weight:600">Renew →</button>
+          <div style="font-size:12px;color:${isWarning?'#ef4444':'var(--clay-500)'};margin-top:3px">${mRound <= 0 ? t.expired : t.monthsLeft(mRound)}</div>
+          <button onclick="quickTopic('visa')" style="margin-top:8px;padding:5px 12px;background:var(--terra-500);color:var(--cream);border:none;border-radius:999px;font-size:11px;font-family:var(--font-body);cursor:pointer;font-weight:600">${t.renew}</button>
         </div>
       </div>`;
   } else {
@@ -2462,9 +2520,8 @@ function renderHome() {
           <text x="42" y="44" text-anchor="middle" font-family="var(--font-display)" font-size="10" fill="var(--clay-400)">VISA</text>
         </svg>
         <div style="flex:1;min-width:0">
-          <div class="eyebrow" style="margin-bottom:3px">Track your visa</div>
-          <div style="font-size:14px;color:var(--clay-500);line-height:1.4" class="kh">ចុច​ដើម្បី​បន្ថែម​ថ្ងៃ​ផុត​សុពល​ភាព​វីសា</div>
-          <div style="font-size:11px;color:var(--clay-400);margin-top:2px;font-family:var(--font-body)">Tap to add your visa expiry date →</div>
+          <div class="eyebrow" style="margin-bottom:3px">${t.visaTrack}</div>
+          <div style="font-size:14px;color:var(--clay-500);line-height:1.4">${t.visaTapAdd}</div>
         </div>
       </div>`;
   }
