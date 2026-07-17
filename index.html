@@ -2124,41 +2124,68 @@ async function loginWithGoogle() {
 /* OAuth 2.0 implicit-flow redirect — works even when the GSI script is blocked */
 function loginWithGoogleRedirect() {
   const state = Math.random().toString(36).slice(2);
+  const nonce = Math.random().toString(36).slice(2);
   try { sessionStorage.setItem('khelper_oauth_state', state); } catch {}
   const params = new URLSearchParams({
     client_id: GOOGLE_CLIENT_ID,
     redirect_uri: location.origin + '/',
-    response_type: 'token',
+    response_type: 'id_token token',
     scope: 'openid email profile',
     state,
+    nonce,
     prompt: 'select_account',
   });
   location.href = 'https://accounts.google.com/o/oauth2/v2/auth?' + params.toString();
 }
 
-/* Handle the redirect back from Google (access token arrives in the URL fragment) */
+function decodeJwtPayload(jwt) {
+  const base64 = jwt.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+  const pad = (4 - base64.length % 4) % 4;
+  return JSON.parse(atob(base64 + '='.repeat(pad)));
+}
+
+/* Handle the redirect back from Google (tokens arrive in the URL fragment) */
 (async function handleOAuthRedirect() {
-  if (!location.hash.includes('access_token=')) return;
+  if (!location.hash.includes('access_token=') && !location.hash.includes('id_token=')) return;
   const frag = new URLSearchParams(location.hash.slice(1));
-  const token = frag.get('access_token');
+  const idToken = frag.get('id_token');
+  const accessToken = frag.get('access_token');
   const state = frag.get('state');
-  // Clean token out of the URL immediately
+  // Clean tokens out of the URL immediately
   history.replaceState(null, '', location.pathname);
   let expected = null;
   try { expected = sessionStorage.getItem('khelper_oauth_state'); } catch {}
-  if (!token || (expected && state !== expected)) return;
-  try {
-    const res = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
-      headers: { Authorization: 'Bearer ' + token },
-    });
-    const info = await res.json();
-    finishGoogleSignIn({
-      name:    info.given_name || info.name || 'User',
-      email:   info.email || '',
-      picture: info.picture || '',
-    });
-  } catch (e) {
-    console.error('OAuth userinfo fetch failed:', e);
+  if (expected && state !== expected) return;
+
+  // Preferred: decode the id_token locally — no network call, cannot be blocked
+  if (idToken) {
+    try {
+      const p = decodeJwtPayload(idToken);
+      finishGoogleSignIn({
+        name:    p.given_name || p.name || 'User',
+        email:   p.email || '',
+        picture: p.picture || '',
+      });
+      return;
+    } catch (e) { console.error('id_token decode failed:', e); }
+  }
+
+  // Fallback: userinfo endpoint with the access token
+  if (accessToken) {
+    try {
+      const res = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+        headers: { Authorization: 'Bearer ' + accessToken },
+      });
+      const info = await res.json();
+      finishGoogleSignIn({
+        name:    info.given_name || info.name || 'User',
+        email:   info.email || '',
+        picture: info.picture || '',
+      });
+    } catch (e) {
+      console.error('OAuth userinfo fetch failed:', e);
+      alert('Sign-in almost worked, but your network blocked the final step. Please try again or continue with a language button.');
+    }
   }
 })();
 
