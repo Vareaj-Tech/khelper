@@ -8,6 +8,9 @@
   <!-- Google Identity Services (OAuth) -->
   <script src="https://accounts.google.com/gsi/client" async defer></script>
 
+  <!-- Supabase (email/password auth) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -1709,14 +1712,33 @@
     Continue with Google
   </button>
 
+  <!-- Email/password sign-in (visible only when Supabase is configured) -->
+  <div id="email-auth" style="display:none;width:100%;max-width:320px;margin-top:14px">
+    <div class="auth-divider" style="margin-bottom:12px">
+      <div class="auth-divider-line"></div>
+      <span class="auth-divider-text">or use email</span>
+      <div class="auth-divider-line"></div>
+    </div>
+    <input type="email" id="auth-email" class="form-input" placeholder="Email" autocomplete="email"
+      style="width:100%;margin-bottom:8px" />
+    <input type="password" id="auth-password" class="form-input" placeholder="Password" autocomplete="current-password"
+      style="width:100%;margin-bottom:10px" />
+    <div id="auth-email-msg" style="display:none;font-size:12px;color:var(--terra-600);margin-bottom:8px;text-align:center"></div>
+    <button class="btn-primary" style="font-family:var(--font-body);padding:13px 24px;font-size:15px" onclick="loginWithEmail()">Sign in</button>
+    <div style="display:flex;justify-content:space-between;margin-top:10px">
+      <button onclick="signupWithEmail()" style="background:none;border:none;color:var(--clay-500);font-size:12.5px;font-family:var(--font-body);cursor:pointer;text-decoration:underline;text-underline-offset:2px">Create account</button>
+      <button onclick="forgotPassword()" style="background:none;border:none;color:var(--clay-400);font-size:12.5px;font-family:var(--font-body);cursor:pointer">Forgot password?</button>
+    </div>
+  </div>
+
   <!-- Divider -->
-  <div class="auth-divider">
+  <div class="auth-divider" style="margin-top:14px">
     <div class="auth-divider-line"></div>
-    <span class="auth-divider-text">or</span>
+    <span class="auth-divider-text">just browsing?</span>
     <div class="auth-divider-line"></div>
   </div>
 
-  <!-- Language pill — selecting language enters the app directly -->
+  <!-- Language pill — selecting language enters the app directly as guest -->
   <div class="lang-pill" style="margin-bottom:32px">
     <button class="lang-pill-btn active" onclick="enterApp('en')">English</button>
     <span class="lang-pill-sep">·</span>
@@ -2250,6 +2272,95 @@ function finishGoogleSignIn(googleUser) {
   }
 }
 
+/* ── EMAIL / PASSWORD AUTH (Supabase) ──
+   👉 TO ACTIVATE:
+   1. Create a free project at supabase.com (any name, e.g. "khelper")
+   2. Project Settings → API → copy "Project URL" and "anon public" key
+   3. Paste them below. The email form appears automatically once set.  */
+const SUPABASE_URL = 'YOUR_SUPABASE_URL';
+const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+let sbClient = null;
+
+function supabaseReady() {
+  if (sbClient) return sbClient;
+  if (!window.supabase || SUPABASE_URL.startsWith('YOUR_')) return null;
+  try {
+    sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    return sbClient;
+  } catch { return null; }
+}
+
+function emailAuthMsg(text, isError) {
+  const el = document.getElementById('auth-email-msg');
+  if (!el) return;
+  el.textContent = text;
+  el.style.display = text ? 'block' : 'none';
+  el.style.color = isError ? 'var(--terra-600)' : 'var(--sage-700)';
+}
+
+function finishEmailSignIn(user) {
+  const name = user.user_metadata?.name || (user.email ? user.email.split('@')[0] : 'User');
+  finishGoogleSignIn({ name, email: user.email || '', picture: '' });
+}
+
+async function loginWithEmail() {
+  const sb = supabaseReady();
+  if (!sb) return;
+  const email = document.getElementById('auth-email').value.trim();
+  const password = document.getElementById('auth-password').value;
+  if (!email || !password) { emailAuthMsg('Please enter email and password', true); return; }
+  emailAuthMsg('Signing in…', false);
+  const { data, error } = await sb.auth.signInWithPassword({ email, password });
+  if (error) {
+    emailAuthMsg(error.message === 'Invalid login credentials'
+      ? 'Wrong email or password — or tap "Create account"' : error.message, true);
+    return;
+  }
+  emailAuthMsg('', false);
+  finishEmailSignIn(data.user);
+}
+
+async function signupWithEmail() {
+  const sb = supabaseReady();
+  if (!sb) return;
+  const email = document.getElementById('auth-email').value.trim();
+  const password = document.getElementById('auth-password').value;
+  if (!email || !password) { emailAuthMsg('Enter an email and choose a password first', true); return; }
+  if (password.length < 6) { emailAuthMsg('Password must be at least 6 characters', true); return; }
+  emailAuthMsg('Creating account…', false);
+  const { data, error } = await sb.auth.signUp({ email, password });
+  if (error) { emailAuthMsg(error.message, true); return; }
+  if (data.session) {
+    // Email confirmation disabled — signed in immediately
+    finishEmailSignIn(data.user);
+  } else {
+    emailAuthMsg('Check your email to confirm your account, then sign in.', false);
+  }
+}
+
+async function forgotPassword() {
+  const sb = supabaseReady();
+  if (!sb) return;
+  const email = document.getElementById('auth-email').value.trim();
+  if (!email) { emailAuthMsg('Type your email above first, then tap Forgot password', true); return; }
+  const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: location.origin + '/' });
+  emailAuthMsg(error ? error.message : 'Password reset email sent — check your inbox.', !!error);
+}
+
+/* Show the email form and restore any existing session once Supabase loads */
+window.addEventListener('load', async () => {
+  const sb = supabaseReady();
+  if (!sb) return;
+  const section = document.getElementById('email-auth');
+  if (section) section.style.display = 'block';
+  try {
+    const { data } = await sb.auth.getSession();
+    if (data?.session?.user && document.getElementById('screen-auth')?.classList.contains('active')) {
+      finishEmailSignIn(data.session.user);
+    }
+  } catch {}
+});
+
 function getVisitCount() {
   try {
     const count = (parseInt(localStorage.getItem('khelper_visit_count') || '0', 10)) + 1;
@@ -2293,6 +2404,7 @@ function doLogout() {
   userProfile = null;
   chatStarted = false;
   conversationHistory = [];
+  try { supabaseReady()?.auth.signOut(); } catch {}
   showScreen('auth');
 }
 
