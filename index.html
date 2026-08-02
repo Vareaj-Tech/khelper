@@ -560,24 +560,37 @@
     .home-topics-label { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--clay-400); margin-bottom: 12px; }
     .home-topics-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 8px;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
     }
     .topic-card {
-      background: var(--cream);
-      border: 1px solid var(--hairline);
-      border-radius: 16px;
-      padding: 14px 12px;
+      background: #fff;
+      border: 1px solid var(--paper);
+      border-radius: 14px;
+      padding: 13px 13px 14px;
       cursor: pointer;
       text-align: left;
       transition: all 0.15s;
       box-shadow: var(--soft-shadow);
     }
-    .topic-card:hover { background: var(--cream-2); border-color: var(--terra-300); transform: translateY(-2px); }
+    /* Hero card — Health Insurance leads, spans full width, terracotta-tinted */
+    .topic-card.hero {
+      grid-column: 1 / -1;
+      background: linear-gradient(135deg, #fff, #fdeee6);
+      border-color: rgba(217,78,31,0.35);
+    }
+    .topic-card:hover { border-color: var(--terra-300); transform: translateY(-2px); }
     .topic-card:active { transform: translateY(0); }
-    .topic-icon { font-size: 20px; margin-bottom: 9px; display: block; }
-    .topic-title { font-size: 12px; font-weight: 600; color: var(--clay-800); font-family: var(--font-khmer); line-height: 1.3; }
-    .topic-sub { font-size: 10px; color: var(--clay-400); margin-top: 2px; }
+    .topic-ic {
+      width: 34px; height: 34px; border-radius: 10px;
+      background: rgba(217,78,31,0.09);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 10px;
+    }
+    .topic-card.hero .topic-ic { width: 38px; height: 38px; }
+    .topic-title { font-size: 13.5px; font-weight: 600; color: var(--clay-800); line-height: 1.3; }
+    .topic-card.hero .topic-title { font-size: 15px; }
+    .topic-sub { font-size: 11px; color: var(--clay-400); margin-top: 3px; line-height: 1.35; }
 
     /* Messages */
     .msg-row { display: flex; flex-direction: column; width: 100%; animation: fadeUp 0.25s ease; }
@@ -1852,23 +1865,17 @@
       <span>＋</span> <span id="new-chat-label" class="kh">ការសន្ទនាថ្មី</span>
     </button>
 
-    <!-- Nav -->
-    <div class="sidebar-section-label eyebrow" id="topics-label">ប្រធានបទរហ័ស</div>
+    <!-- Nav — health-first v1: only what a stressed, unwell person needs -->
+    <div class="sidebar-section-label eyebrow" id="topics-label">Topics</div>
     <nav class="sidebar-nav">
-      <div class="nav-item" onclick="quickTopic('visa')"><span class="nav-icon">🛂</span><span id="nav-visa">វីសា &amp; អន្តោប្រវេសន៍</span></div>
-      <div class="nav-item" onclick="quickTopic('work')"><span class="nav-icon">💼</span><span id="nav-work">ការងារ &amp; សិទ្ធិ</span></div>
-      <div class="nav-item" onclick="quickTopic('health')"><span class="nav-icon">🏥</span><span id="nav-health">សុខភាព</span></div>
-      <div class="nav-item" onclick="quickTopic('daily')"><span class="nav-icon">🌏</span><span id="nav-daily">ជីវិតប្រចាំ</span></div>
-      <div class="nav-item" onclick="quickTopic('culture')"><span class="nav-icon">🙏</span><span id="nav-culture">វប្បធម៌កូរ៉េ</span></div>
-      <div class="nav-item" onclick="quickTopic('language')"><span class="nav-icon">💬</span><span id="nav-language">ជំនួយភាសា</span></div>
-      <div class="nav-item" onclick="quickTopic('money')"><span class="nav-icon">💸</span><span id="nav-money">ផ្ញើប្រាក់ទៅកម្ពុជា</span></div>
-      <div class="nav-item" onclick="quickTopic('housing')"><span class="nav-icon">🏠</span><span id="nav-housing">លំនៅដ្ឋាន &amp; ជួល</span></div>
-      <div class="nav-item" onclick="quickTopic('tourist')"><span class="nav-icon">🗺️</span><span id="nav-tourist">ទេសចរណ៍</span></div>
-      <div class="nav-item" onclick="openMapPanel('places')"><span class="nav-icon">📍</span><span id="nav-location">ទីតាំង &amp; ផែនទី</span></div>
-      <div style="height:1px;background:var(--paper);margin:10px 10px 6px"></div>
-      <div class="sidebar-section-label eyebrow" style="margin-top:2px">ឧបករណ៍</div>
-      <div class="nav-item" onclick="openCVBuilder()"><span class="nav-icon">📄</span><span id="nav-cv">CV Builder · 이력서</span></div>
-      <div class="nav-item" onclick="openTranslator()"><span class="nav-icon">👥</span><span id="nav-translator">Find Translator · 통역</span></div>
+      <div class="nav-item nav-hero" onclick="quickTopic('health')"><span class="nav-icon">♥</span><span id="nav-health">Health Insurance</span></div>
+      <div class="nav-item" onclick="quickTopic('visa')"><span class="nav-icon">🪪</span><span id="nav-visa">Visa &amp; Documents</span></div>
+      <div class="nav-item" onclick="quickTopic('hospital')"><span class="nav-icon">🏥</span><span id="nav-hospital">Find a Hospital</span></div>
+      <div class="nav-item" onclick="quickTopic('work')"><span class="nav-icon">💼</span><span id="nav-work">Work Rights</span></div>
+      <div class="nav-item" onclick="quickTopic('daily')"><span class="nav-icon">🌏</span><span id="nav-daily">Daily Life</span></div>
+      <div style="height:1px;background:var(--paper);margin:12px 10px 8px"></div>
+      <div class="sidebar-section-label eyebrow" style="margin-top:2px">Emergency</div>
+      <div class="nav-item" style="color:var(--terra-600);font-weight:600" onclick="quickTopic('health')"><span class="nav-icon">☎</span><span>Immigration 1345 · ER 119</span></div>
     </nav>
 
     <!-- Language -->
@@ -2516,7 +2523,7 @@ function showRenewInfo() {
 /* ── TRANSLATIONS ── */
 const T = {
   km: {
-    newChat: 'ការសន្ទនាថ្មី', topicsLabel: 'ប្រធានបទរហ័ស', langLabel: 'ភាសា',
+    newChat: 'ការសន្ទនាថ្មី', topicsLabel: 'តើយើងអាចជួយអ្វីថ្ងៃនេះ?', langLabel: 'ភាសា',
     placeholder: 'សារទៅ K\'Helper...',
     emergency: 'ជំនួយបន្ទាន់: <strong>1345</strong> · <strong>119</strong>',
     mapPanelTitle: 'ទីតាំង & ផែនទី',
@@ -2535,14 +2542,14 @@ const T = {
     setupSave: 'រក្សាទុក & ចូលប្រើ', setupSkip: 'រំលង',
     nameRequired: 'សូមបញ្ចូលឈ្មោះ',
     topics: [
-      { icon:'🛂', title:'វីសា & ឯកសារ', sub:'ការបន្ត, ចុះឈ្មោះ', topic:'visa' },
-      { icon:'💼', title:'សិទ្ធិការងារ', sub:'កិច្ចសន្យា, ប្រាក់ខែ', topic:'work' },
-      { icon:'🏥', title:'ធានារ៉ាប់រង', sub:'ធានារ៉ាប់រង, មន្ទីរពេទ្យ', topic:'health' },
-      { icon:'🙏', title:'វប្បធម៌កូរ៉េ', sub:'ទំនៀមទម្លាប់, ជីវិត', topic:'culture' },
-      { icon:'🗺️', title:'ទេសចរណ៍', sub:'ទីកន្លែង, ម្ហូប, កាហ្វេ', topic:'tourist' },
-      { icon:'📍', title:'ទីតាំង & ផែនទី', sub:'Kakao · Naver · Google', topic:'location' },
+      { key:'insurance', hero:true, title:'ធានារ៉ាប់រងសុខភាព (NHIS)', sub:'ពិនិត្យការធានា · វិក្កយបត្រ · អ្វីដែលអ្នកគួរបាន', topic:'health' },
+      { key:'visa', title:'វីសា & ឯកសារ', sub:'ការបន្ត, ការចុះឈ្មោះ', topic:'visa' },
+      { key:'hospital', title:'ស្វែងរកមន្ទីរពេទ្យ', sub:'ជិតអ្នក · ភាសារបស់អ្នក', topic:'hospital' },
+      { key:'work', title:'សិទ្ធិការងារ', sub:'កិច្ចសន្យា, ប្រាក់ខែ', topic:'work' },
+      { key:'daily', title:'ជីវិតប្រចាំថ្ងៃ', sub:'ធនាគារ, លំនៅដ្ឋាន', topic:'daily' },
     ],
-    navItems: { visa:'វីសា & អន្តោប្រវេសន៍', work:'ការងារ & សិទ្ធិ', health:'សុខភាព', daily:'ជីវិតប្រចាំ', culture:'វប្បធម៌កូរ៉េ', language:'ជំនួយភាសា', money:'ផ្ញើប្រាក់ទៅកម្ពុជា', housing:'លំនៅដ្ឋាន & ជួល', tourist:'ទេសចរណ៍', location:'ទីតាំង & ផែនទី' },
+    navTitle: 'ប្រធានបទ',
+    navItems: { health:'ធានារ៉ាប់រងសុខភាព', visa:'វីសា & ឯកសារ', hospital:'ស្វែងរកមន្ទីរពេទ្យ', work:'សិទ្ធិការងារ', daily:'ជីវិតប្រចាំថ្ងៃ' },
     topicQueries: {
       visa:'ខ្ញុំមានសំណួរអំពីវីសា ឬ កាតចុះបញ្ជីជនបរទេស នៅកូរ៉េ',
       work:'ខ្ញុំចង់ដឹងអំពីសិទ្ធិការងារ ឬ បញ្ហាជាមួយថៅកែ',
@@ -2557,7 +2564,7 @@ const T = {
     }
   },
   en: {
-    newChat: 'New Chat', topicsLabel: 'Quick Topics', langLabel: 'Language',
+    newChat: 'New Chat', topicsLabel: 'How can we help today?', langLabel: 'Language',
     placeholder: 'Message K\'Helper...',
     emergency: 'Emergency: <strong>Immigration 1345</strong> · <strong>119</strong>',
     mapPanelTitle: 'Locations & Maps',
@@ -2576,14 +2583,14 @@ const T = {
     setupSave: 'Save & Continue', setupSkip: 'Skip for now',
     nameRequired: 'Please enter your name',
     topics: [
-      { icon:'🛂', title:'Visa & Documents', sub:'Renewal, registration', topic:'visa' },
-      { icon:'💼', title:'Work Rights', sub:'Contract, wages', topic:'work' },
-      { icon:'🏥', title:'Health Insurance', sub:'NHIS, hospital', topic:'health' },
-      { icon:'🙏', title:'Korean Culture', sub:'Customs, daily life', topic:'culture' },
-      { icon:'🗺️', title:'Tourism & Explore', sub:'Attractions, food', topic:'tourist' },
-      { icon:'📍', title:'Locations & Maps', sub:'Kakao · Naver · Google', topic:'location' },
+      { key:'insurance', hero:true, title:'Health Insurance (NHIS)', sub:'Coverage check · hospital bills · what you\'re owed', topic:'health' },
+      { key:'visa', title:'Visa & Documents', sub:'Renewal, ARC, deadlines', topic:'visa' },
+      { key:'hospital', title:'Find a Hospital', sub:'Near you, your language', topic:'hospital' },
+      { key:'work', title:'Work Rights', sub:'Contract, wages, safety', topic:'work' },
+      { key:'daily', title:'Daily Life', sub:'Banking, housing, more', topic:'daily' },
     ],
-    navItems: { visa:'Visa & Immigration', work:'Work & Rights', health:'Health', daily:'Daily Life', culture:'Korean Culture', language:'Language Help', money:'Send Money Home', housing:'Housing & Rent', tourist:'Tourism & Explore', location:'Locations & Maps' },
+    navTitle: 'Topics',
+    navItems: { health:'Health Insurance', visa:'Visa & Documents', hospital:'Find a Hospital', work:'Work Rights', daily:'Daily Life' },
     topicQueries: {
       visa:'I have a question about my visa or Alien Registration Card in Korea',
       work:'I want to know about my work rights or a problem with my employer',
@@ -2598,7 +2605,7 @@ const T = {
     }
   },
   kr: {
-    newChat: '새 대화', topicsLabel: '빠른 주제', langLabel: '언어',
+    newChat: '새 대화', topicsLabel: '오늘 무엇을 도와드릴까요?', langLabel: '언어',
     placeholder: 'K\'Helper에게 메시지...',
     emergency: '긴급: <strong>출입국 1345</strong> · <strong>119</strong>',
     mapPanelTitle: '위치 & 지도',
@@ -2617,14 +2624,14 @@ const T = {
     setupSave: '저장 & 시작', setupSkip: '건너뛰기',
     nameRequired: '이름을 입력해 주세요',
     topics: [
-      { icon:'🛂', title:'비자 & 서류', sub:'갱신, 등록', topic:'visa' },
-      { icon:'💼', title:'근로 권리', sub:'계약, 임금', topic:'work' },
-      { icon:'🏥', title:'건강보험', sub:'건강보험, 병원', topic:'health' },
-      { icon:'🙏', title:'한국 문화', sub:'관습, 일상', topic:'culture' },
-      { icon:'🗺️', title:'관광 & 탐방', sub:'관광지, 맛집', topic:'tourist' },
-      { icon:'📍', title:'위치 & 지도', sub:'Kakao · Naver · Google', topic:'location' },
+      { key:'insurance', hero:true, title:'건강보험 (NHIS)', sub:'보장 확인 · 병원비 · 받을 수 있는 것', topic:'health' },
+      { key:'visa', title:'비자 & 서류', sub:'갱신, 등록증, 기한', topic:'visa' },
+      { key:'hospital', title:'병원 찾기', sub:'가까운 곳 · 내 언어로', topic:'hospital' },
+      { key:'work', title:'근로 권리', sub:'계약, 임금, 안전', topic:'work' },
+      { key:'daily', title:'일상생활', sub:'은행, 주거 등', topic:'daily' },
     ],
-    navItems: { visa:'비자 & 출입국', work:'근로 & 권리', health:'건강', daily:'일상생활', culture:'한국 문화', language:'언어 도움', money:'캄보디아 송금', housing:'주거 & 임대', tourist:'관광 & 탐방', location:'위치 & 지도' },
+    navTitle: '주제',
+    navItems: { health:'건강보험', visa:'비자 & 서류', hospital:'병원 찾기', work:'근로 권리', daily:'일상생활' },
     topicQueries: {
       visa:'한국에서 비자나 외국인등록증에 대해 질문이 있어요',
       work:'근로 권리나 고용주 문제에 대해 알고 싶어요',
@@ -2676,7 +2683,7 @@ function setLang(lang) {
   }
   document.getElementById('emergency-line').innerHTML = t.emergency;
   document.getElementById('new-chat-label').textContent = t.newChat;
-  document.getElementById('topics-label').textContent   = t.topicsLabel;
+  document.getElementById('topics-label').textContent   = t.navTitle || t.topicsLabel;
   document.getElementById('lang-label').textContent     = t.langLabel;
   Object.entries(t.navItems).forEach(([k, v]) => {
     const el = document.getElementById('nav-' + k);
@@ -2745,8 +2752,8 @@ function renderHome() {
     <div class="home-topics-label eyebrow">${t.topicsLabel}</div>
     <div class="home-topics-grid">
       ${t.topics.map(c => `
-        <div class="topic-card" onclick="quickTopic('${c.topic}')">
-          <span class="topic-icon">${c.icon}</span>
+        <div class="topic-card${c.hero ? ' hero' : ''}" onclick="quickTopic('${c.topic}')">
+          <span class="topic-ic">${HICON[c.key] || ''}</span>
           <div class="topic-title">${c.title}</div>
           <div class="topic-sub">${c.sub}</div>
         </div>`).join('')}
@@ -2754,6 +2761,15 @@ function renderHome() {
 
   chat.appendChild(home);
 }
+
+/* ── Thin-line SVG topic icons (health-first v1) ── */
+const HICON = {
+  insurance: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--terra-500)" stroke-width="2" stroke-linecap="round"><path d="M12 21C7 17 3 13.5 3 9.5A5.5 5.5 0 0 1 12 5.7 5.5 5.5 0 0 1 21 9.5c0 4-4 7.5-9 11.5z"/><path d="M12 8v6M9 11h6"/></svg>',
+  visa:      '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--terra-500)" stroke-width="2" stroke-linecap="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18"/></svg>',
+  hospital:  '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--terra-500)" stroke-width="2" stroke-linecap="round"><path d="M3 21V8l9-5 9 5v13"/><path d="M9 21v-6h6v6"/></svg>',
+  work:      '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--terra-500)" stroke-width="2" stroke-linecap="round"><rect x="2" y="7" width="20" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>',
+  daily:     '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--terra-500)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>',
+};
 
 /* ── MARKDOWN RENDERER ── */
 function renderMarkdown(text) {
@@ -2917,6 +2933,7 @@ function closeSidebar()  { document.getElementById('sidebar').classList.remove('
 function quickTopic(topic) {
   closeSidebar();
   if (topic === 'location') { openMapPanel('places'); return; }
+  if (topic === 'hospital') { openMapPanel('health'); return; }
   const q = T[currentLang].topicQueries[topic];
   if (q) { document.getElementById('user-input').value = q; sendMessage(); }
 }
