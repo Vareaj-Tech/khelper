@@ -841,6 +841,9 @@
     .map-search-input:focus { border-color: var(--terra-400); }
     .map-search-btn { padding: 8px 14px; background: var(--terra-500); color: var(--cream); border: none; border-radius: 999px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: var(--font-body); }
     .map-locations-list { flex: 1; overflow-y: auto; padding: 10px; }
+    .book-slot { padding: 8px 16px; border-radius: 999px; border: 1px solid var(--paper); background: #fff; color: var(--clay-500); font-size: 13px; font-family: var(--font-body); cursor: pointer; transition: all 0.15s; }
+    .book-slot.active { background: var(--terra-500); border-color: var(--terra-500); color: #fff; font-weight: 600; }
+    .map-book-btn { display:block; width:100%; margin-top:8px; padding:9px; background:var(--terra-500); color:var(--cream); border:none; border-radius:999px; font-size:12.5px; font-weight:600; font-family:var(--font-body); cursor:pointer; }
     .map-location-card { background: var(--cream); border: 1px solid var(--hairline); border-radius: 16px; padding: 14px; margin-bottom: 9px; box-shadow: var(--soft-shadow); }
     .map-loc-name { font-size: 13px; font-weight: 600; color: var(--clay-800); margin-bottom: 2px; }
     .map-loc-kr { font-size: 12px; color: var(--clay-500); margin-bottom: 3px; font-family: var(--font-korean); }
@@ -2918,7 +2921,46 @@ function switchMapTab(tab) {
         <a href="https://map.naver.com/v5/search/${encodeURIComponent(loc.query)}" target="_blank" rel="noopener" class="map-btn naver">N Naver</a>
         <a href="https://www.google.com/maps/search/${encodeURIComponent(loc.query+' Korea')}" target="_blank" rel="noopener" class="map-btn google">G Google</a>
       </div>
+      ${tab === 'health' ? `<button class="map-book-btn" onclick="openBooking('${loc.name.replace(/'/g,"\\'")}','${loc.kr.replace(/'/g,"\\'")}')">📅 Book a visit →</button>` : ''}
     </div>`).join('');
+}
+
+/* ── BOOK A VISIT (health-first v1 transaction) ── */
+function openBooking(name, kr) {
+  closeMapPanel();
+  if (name) document.getElementById('book-clinic-name').textContent = name;
+  if (kr)   document.getElementById('book-clinic-kr').textContent = kr + ' · Open now';
+  // reset slots to first
+  document.querySelectorAll('.book-slot').forEach((b,i) => b.classList.toggle('active', i === 0));
+  document.getElementById('book-confirm-time').textContent = '10:30';
+  const btn = document.getElementById('book-confirm');
+  btn.disabled = false;
+  btn.innerHTML = 'Confirm booking · <span id="book-confirm-time">' + (document.querySelector('.book-slot.active')?.textContent || '10:30') + '</span>';
+  showScreen('book');
+}
+function selectSlot(el) {
+  document.querySelectorAll('.book-slot').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  const t = el.textContent;
+  const span = document.getElementById('book-confirm-time');
+  if (span) span.textContent = t;
+}
+function confirmBooking() {
+  const time = document.querySelector('.book-slot.active')?.textContent || '10:30';
+  const clinic = document.getElementById('book-clinic-name').textContent;
+  const btn = document.getElementById('book-confirm');
+  btn.disabled = true;
+  btn.style.background = 'var(--sage-500)';
+  btn.innerHTML = '✓ Requested · ' + time;
+  // Concierge model: show a confirmation the app is relaying to the clinic.
+  const wrap = document.getElementById('book-wrap');
+  const done = document.createElement('div');
+  done.style.cssText = 'margin:14px 18px 0;background:#fff;border:1px solid var(--paper);border-left:4px solid var(--sage-500);border-radius:12px;padding:14px 16px';
+  done.innerHTML = `<div style="font-weight:600;color:var(--clay-800);font-size:14px;margin-bottom:4px">Booking request sent ✓</div>
+    <div style="font-size:12.5px;color:var(--clay-500);line-height:1.6">We are contacting <b>${clinic}</b> for <b>${time} tomorrow</b> and sending your translated details. You'll get a confirmation shortly. For urgent help, call <b>1345</b>.</div>`;
+  const scroll = wrap.querySelector('div[style*="overflow-y"]');
+  (scroll || wrap).appendChild(done);
+  if (scroll) scroll.scrollTop = scroll.scrollHeight;
 }
 function doMapSearch() {
   const q = document.getElementById('map-search-input').value.trim();
@@ -3468,6 +3510,54 @@ function submitHelpRequest() {
 }
 
 </script>
+
+<!-- ═══════════════════════════════════════════════
+     SCREEN: BOOK A VISIT (health-first v1 — the transaction)
+═══════════════════════════════════════════════ -->
+<div id="screen-book" class="screen">
+  <div id="book-wrap" style="width:100%;max-width:520px;margin:0 auto;min-height:100dvh;display:flex;flex-direction:column;background:var(--cream)">
+    <!-- Header -->
+    <div style="display:flex;align-items:center;gap:10px;padding:14px 18px;border-bottom:1px solid var(--hairline)">
+      <button onclick="showScreen('app')" style="background:none;border:none;font-size:22px;color:var(--clay-700);cursor:pointer;line-height:1">←</button>
+      <span class="disp" style="font-size:18px;color:var(--clay-800)">Book a <em style="color:var(--terra-500)">Visit</em></span>
+    </div>
+    <div style="flex:1;overflow-y:auto;padding:16px 18px 120px">
+      <!-- Selected clinic -->
+      <div style="background:linear-gradient(135deg,#fff,#fdeee6);border:1.5px solid rgba(217,78,31,.35);border-radius:16px;padding:14px 16px;margin-bottom:14px">
+        <div class="disp" id="book-clinic-name" style="font-size:16px;color:var(--clay-800)">Ansan Danwon Health Center</div>
+        <div class="kr" id="book-clinic-kr" style="font-size:12px;color:var(--clay-400);margin-top:2px">안산시 단원보건소 · Open now</div>
+        <div style="display:flex;gap:6px;margin-top:10px;flex-wrap:wrap">
+          <span style="font-size:11px;padding:5px 10px;border-radius:999px;background:rgba(107,122,90,.14);color:var(--sage-700);font-weight:600">Free foreign worker clinic</span>
+          <span style="font-size:11px;padding:5px 10px;border-radius:999px;background:var(--cream-2);color:var(--clay-500)">No NHIS needed</span>
+        </div>
+      </div>
+      <!-- Time slots -->
+      <div style="background:#fff;border:1px solid var(--paper);border-radius:16px;padding:14px 16px;margin-bottom:14px">
+        <div class="eyebrow" style="margin-bottom:10px">Choose a time · tomorrow</div>
+        <div id="book-slots" style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="book-slot active" onclick="selectSlot(this)">10:30</button>
+          <button class="book-slot" onclick="selectSlot(this)">11:00</button>
+          <button class="book-slot" onclick="selectSlot(this)">14:30</button>
+          <button class="book-slot" onclick="selectSlot(this)">16:00</button>
+        </div>
+      </div>
+      <!-- Translated intake -->
+      <div style="background:#fff;border:1px solid var(--paper);border-radius:16px;padding:14px 16px">
+        <div class="eyebrow" style="margin-bottom:10px">Sent to clinic — in Korean</div>
+        <div class="kr" id="book-intake" style="background:var(--cream-2);border-radius:10px;padding:12px 14px;font-size:13px;line-height:1.7;color:var(--clay-700)">
+          남성, 34세, 캄보디아 국적 (E-9) <span style="color:var(--clay-400)">· Male, 34, Cambodian (E-9)</span><br>
+          복통 3일째 · 건강보험 가입됨 <span style="color:var(--clay-400)">· Stomach pain 3 days · NHIS enrolled</span><br>
+          한국어 기초 수준 — 통역 도움 필요 <span style="color:var(--clay-400)">· Basic Korean — needs help</span>
+        </div>
+        <div style="font-size:11px;color:var(--clay-400);margin-top:8px">Your info arrives translated — no front-desk confusion.</div>
+      </div>
+    </div>
+    <!-- Confirm -->
+    <div style="position:sticky;bottom:0;padding:14px 18px 22px;background:linear-gradient(transparent,var(--cream) 30%)">
+      <button id="book-confirm" onclick="confirmBooking()" style="width:100%;padding:15px;background:var(--terra-500);color:var(--cream);border:none;border-radius:999px;font-size:15px;font-weight:600;font-family:var(--font-body);cursor:pointer;box-shadow:0 8px 20px -8px rgba(143,46,16,.5)">Confirm booking · <span id="book-confirm-time">10:30</span></button>
+    </div>
+  </div>
+</div>
 
 <!-- ═══════════════════════════════════════════════
      SCREEN 4: KOREAN CV BUILDER
