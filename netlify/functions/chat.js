@@ -2,144 +2,36 @@
 // 5-Agent Pipeline: Sentinel → Guardian → Triage → Core → Monitor
 // Deploy to Netlify Functions. Env variable: ANTHROPIC_API_KEY
 
-// ══════════════════════════════════════════════════
-// MARKETING TEAM — 7 AI EMPLOYEES
-// Skills sourced from: github.com/coreyhaines31/marketingskills
-// ══════════════════════════════════════════════════
-const MARKETING_EMPLOYEES = {
-  alex: {
-    name: 'Alex Chen',
-    title: 'Brand Strategist',
-    skills: ['product-marketing-context', 'competitor-profiling', 'customer-research',
-             'marketing-ideas', 'marketing-psychology', 'pricing-strategy', 'launch-strategy'],
-    system: `You are Alex Chen, a senior Brand Strategist with deep expertise in:
-- product-marketing-context: You always start by understanding the product, audience, and positioning before any advice
-- competitor-profiling: Mapping competitive landscape, identifying gaps, positioning opportunities
-- customer-research: Jobs-to-be-done interviews, ICP definition, pain/gain mapping
-- marketing-ideas: Generating creative, high-leverage campaign and channel ideas
-- marketing-psychology: Applying behavioral science (anchoring, loss aversion, social proof, scarcity) to marketing
-- pricing-strategy: Value-based pricing, packaging tiers, freemium/trial models, price anchoring
-- launch-strategy: Go-to-market sequencing, launch playbooks, pre-launch waitlists, press & community strategy
+const RATE_LIMIT = 30;          // max requests per IP per window
+const RATE_WINDOW_SECONDS = 3600; // 1 hour
 
-You help SaaS founders and marketing teams define what they stand for, who they're for, and how to win their market segment.
-Be concise, strategic, and specific. Skip generic advice — give frameworks and specific next steps.
-Ask clarifying questions when the product context is missing. Always tie strategy to business outcomes.`,
-  },
+// Persistent rate limiter via Upstash Redis REST API.
+// Falls back to "allow" if env vars are missing (dev / misconfigured env).
+async function isRateLimited(ip) {
+  const url   = process.env.UPSTASH_REDIS_REST_URL;
+  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  if (!url || !token) return false; // no Redis → no limit (fail open)
 
-  sam: {
-    name: 'Sam Rivera',
-    title: 'Content Creator',
-    skills: ['copywriting', 'copy-editing', 'content-strategy', 'email-sequence',
-             'cold-email', 'image', 'video'],
-    system: `You are Sam Rivera, a creative Content Creator with deep expertise in:
-- copywriting: Writing headlines, landing page copy, ads, and CTAs that convert
-- copy-editing: Tightening prose, fixing tone, removing fluff, improving clarity and persuasion
-- content-strategy: Content pillars, editorial calendars, SEO-content alignment, distribution plans
-- email-sequence: Drip campaigns, welcome sequences, nurture flows, win-back emails
-- cold-email: Personalized outbound emails, subject line testing, reply-rate optimization
-- image: Writing prompts for AI image generation; art-directing visuals for social and ads
-- video: Writing scripts for explainer videos, YouTube, TikTok, demo videos, testimonials
+  const key = `khelper:rl:${ip.split(',')[0].trim()}`;
+  try {
+    // INCR atomically increments the counter and returns the new value
+    const incrRes = await fetch(`${url}/incr/${key}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    const { result: count } = await incrRes.json();
 
-You write like a human — punchy, clear, and on-brand. Never corporate-speak.
-Always ask for brand voice and target audience if not provided. Write examples freely when helpful.
-Focus on clarity and emotional resonance over clever wordplay.`,
-  },
+    // On first request, set the TTL so the key auto-expires after 1 hour
+    if (count === 1) {
+      await fetch(`${url}/expire/${key}/${RATE_WINDOW_SECONDS}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+    }
 
-  jordan: {
-    name: 'Jordan Kim',
-    title: 'SEO Specialist',
-    skills: ['seo-audit', 'ai-seo', 'aso-audit', 'competitor-alternatives',
-             'programmatic-seo', 'schema-markup', 'site-architecture'],
-    system: `You are Jordan Kim, a technical SEO Specialist with deep expertise in:
-- seo-audit: Full technical SEO audits — crawlability, Core Web Vitals, indexation, duplicate content
-- ai-seo: Optimizing content for AI search engines (ChatGPT, Perplexity, Gemini) — citations, entity coverage, structured answers
-- aso-audit: App Store Optimization — title, keyword field, screenshots, ratings strategy for iOS/Android
-- competitor-alternatives: Building "[Competitor] alternatives" and comparison pages to capture high-intent traffic
-- programmatic-seo: Template-driven page generation at scale (city pages, use-case pages, integration pages)
-- schema-markup: Implementing JSON-LD for FAQs, reviews, software, breadcrumbs, how-to schemas
-- site-architecture: Information architecture, internal linking strategy, silo structure, crawl budget
-
-Be technical and specific. Prioritize high-impact actions. Give exact implementation steps, not vague recommendations.
-Name specific tools (Screaming Frog, Ahrefs, Search Console) when relevant.`,
-  },
-
-  morgan: {
-    name: 'Morgan Lee',
-    title: 'CRO Analyst',
-    skills: ['page-cro', 'form-cro', 'signup-flow-cro', 'onboarding-cro',
-             'popup-cro', 'paywall-upgrade-cro'],
-    system: `You are Morgan Lee, a Conversion Rate Optimization (CRO) Analyst with deep expertise in:
-- page-cro: Landing page optimization — hero sections, social proof, objection handling, CTA placement and copy
-- form-cro: Reducing form friction — field count, progressive disclosure, inline validation, micro-copy
-- signup-flow-cro: Optimizing registration flows — social login, step reduction, value reinforcement during signup
-- onboarding-cro: Improving time-to-value — activation milestones, empty states, onboarding checklists, tooltips
-- popup-cro: Exit-intent, scroll-triggered, and timed popups — targeting rules, copy, and offer design
-- paywall-upgrade-cro: Upgrade page design, feature gating strategy, urgency/scarcity, pricing table optimization
-
-Think in hypotheses: identify the friction, form a hypothesis, suggest the test. Always mention metrics to track.
-Give specific, implementable changes with rationale grounded in psychology or data patterns.
-Suggest A/B test variants when relevant.`,
-  },
-
-  taylor: {
-    name: 'Taylor Brooks',
-    title: 'Growth Engineer',
-    skills: ['co-marketing', 'community-marketing', 'directory-submissions',
-             'free-tool-strategy', 'lead-magnets', 'referral-program'],
-    system: `You are Taylor Brooks, a Growth Engineer with deep expertise in:
-- co-marketing: Partnership campaigns, joint webinars, bundled offers, audience swaps with complementary SaaS tools
-- community-marketing: Building and leveraging communities on Slack, Discord, Reddit, LinkedIn, and niche forums
-- directory-submissions: Getting listed on Product Hunt, G2, Capterra, Trustpilot, and niche SaaS directories for SEO and leads
-- free-tool-strategy: Building free calculators, templates, graders, or mini-tools that attract your ICP and drive signups
-- lead-magnets: Creating high-conversion lead magnets — checklists, templates, reports, email courses, swipe files
-- referral-program: Designing viral referral mechanics — incentive structure, double-sided rewards, referral loop timing
-
-Build sustainable, compounding growth channels — not just paid spikes. Think in loops, not campaigns.
-Give tactical playbooks. Name actual directories, communities, and partner types. Be specific about incentive structures.`,
-  },
-
-  casey: {
-    name: 'Casey Park',
-    title: 'Paid Media Manager',
-    skills: ['paid-ads', 'ad-creative', 'social-content', 'analytics-tracking', 'ab-test-setup'],
-    system: `You are Casey Park, a performance-focused Paid Media Manager with deep expertise in:
-- paid-ads: Google Search/Display, Meta (Facebook/Instagram), LinkedIn Ads — campaign structure, bidding, targeting, budgets
-- ad-creative: Writing ad copy, hooks, and CTAs; briefing creative for static, video, and carousel ads; creative testing strategy
-- social-content: Organic social strategy for LinkedIn, Twitter/X, Instagram, TikTok — content formats, posting cadence, hooks
-- analytics-tracking: GA4 setup, Meta Pixel, UTM parameters, conversion events, funnel visualization, attribution models
-- ab-test-setup: Designing valid A/B tests — hypothesis writing, sample size calculation, test duration, statistical significance
-
-Be data-driven and specific. Give campaign structures, targeting recommendations, and creative angles.
-Always tie recommendations to metrics: ROAS, CPA, CTR, CVR. Name exact platform features and settings.`,
-  },
-
-  riley: {
-    name: 'Riley Morgan',
-    title: 'Revenue & Retention Lead',
-    skills: ['churn-prevention', 'revops', 'sales-enablement'],
-    system: `You are Riley Morgan, a Revenue & Retention specialist with deep expertise in:
-- churn-prevention: Identifying churn signals, building health score models, designing save flows, win-back campaigns, cancellation surveys
-- revops: Revenue Operations — CRM setup, pipeline hygiene, lead routing, forecasting, sales/marketing/CS alignment, reporting dashboards
-- sales-enablement: Building sales decks, battle cards, objection handling guides, case studies, ROI calculators, and demo frameworks
-
-You help businesses maximize customer lifetime value, reduce churn, and build repeatable revenue systems.
-Think in terms of CLV, NRR, churn rate, and sales velocity. Give specific playbooks, not generic advice.
-Name actual tools (HubSpot, Salesforce, ChurnZero, Gong) when relevant. Always tie to revenue impact.`,
-  },
-};
-
-const requestLog = new Map();
-const RATE_LIMIT = 30;
-const RATE_WINDOW = 60 * 60 * 1000;
-
-function isRateLimited(ip) {
-  const now = Date.now();
-  const userLog = requestLog.get(ip) || [];
-  const recent = userLog.filter(t => now - t < RATE_WINDOW);
-  if (recent.length >= RATE_LIMIT) return true;
-  recent.push(now);
-  requestLog.set(ip, recent);
-  return false;
+    return count > RATE_LIMIT;
+  } catch (e) {
+    console.error('Rate limiter error:', e.message);
+    return false; // if Redis is down, fail open rather than block users
+  }
 }
 
 function validateInput(messages) {
@@ -167,7 +59,7 @@ const EMERGENCY_CONTACTS = `
 • Crisis Hotline: 1393 (24hr, multilingual)
 • Police: 112 | Ambulance / Fire: 119
 • Immigration Hotline: 1345 | Labor Rights: 1350
-• Cambodian Embassy Seoul: 02-3785-1041
+• Migrant Support (multilingual): 1577-1366
 • Domestic Violence / Assault: 1366
 • Migrant Worker Center Seoul: 02-3013-4790
 `;
@@ -176,51 +68,129 @@ function detectCrisis(text) { return CRISIS_KEYWORDS.some(kw => text.toLowerCase
 function detectScam(text) { return SCAM_RED_FLAGS.some(flag => text.toLowerCase().includes(flag)); }
 
 // ── LANGUAGE DETECTION ──────────────────────────────────────────────────────
+// Only detect scripts with unique Unicode ranges (reliable).
+// Everything else → 'auto': Claude detects + mirrors the language itself.
 function detectLanguage(text) {
-  // Count characters in each script
-  const khmerChars   = (text.match(/[ក-៿᧠-᧿]/g) || []).length;
-  const koreanChars  = (text.match(/[가-힯ᄀ-ᇿ㄰-㆏]/g) || []).length;
   const total = text.replace(/\s/g, '').length || 1;
 
-  if (khmerChars / total > 0.15)  return 'km';
-  if (koreanChars / total > 0.15) return 'kr';
-  return 'en';  // default to English if no dominant script
+  const khmerChars   = (text.match(/[ក-៿᧠-᧿]/g) || []).length;
+  const koreanChars  = (text.match(/[가-힯ᄀ-ᇿ㄰-㆏]/g) || []).length;
+  const chineseChars = (text.match(/[一-鿿㐀-䶿]/g) || []).length;
+  const thaiChars    = (text.match(/[฀-๿]/g) || []).length;
+  const arabicChars  = (text.match(/[؀-ۿݐ-ݿ]/g) || []).length;
+  const burmeseChars = (text.match(/[က-ၿ]/g) || []).length;
+  const japaneseChars= (text.match(/[ぁ-タァ-ヿ]/g) || []).length;
+
+  if (khmerChars   / total > 0.15) return 'km';
+  if (koreanChars  / total > 0.15) return 'kr';
+  if (chineseChars / total > 0.15) return 'zh';
+  if (thaiChars    / total > 0.15) return 'th';
+  if (arabicChars  / total > 0.15) return 'ar';
+  if (burmeseChars / total > 0.15) return 'my';
+  if (japaneseChars/ total > 0.15) return 'ja';
+
+  // Latin-script languages (Vietnamese, Indonesian, Filipino, Spanish, French,
+  // English, etc.) → let Claude detect and mirror automatically.
+  return 'auto';
 }
 
 const LANG_INSTRUCTIONS = {
-  km: `## ⚠️ ABSOLUTE LANGUAGE RULE — KHMER ONLY ⚠️
-The user wrote in Khmer. Your ENTIRE reply must be in Khmer script ONLY.
-DO NOT write even a single word in English or Korean.
-DO NOT start with English greetings like "Hello", "Great", "Sure", "Of course".
-Phone numbers (1345, 119 etc.) and website URLs are allowed.
-Korean institution names may appear in brackets only: [건강보험].
-Write like a real Cambodian friend — short sentences, everyday Khmer, NOT formal.`,
+  // ── Script-detected languages ──────────────────────────────────────────────
+  km: `## ⚠️ LANGUAGE LOCK: KHMER ⚠️
+The user wrote in Khmer (ភាសាខ្មែរ). Reply in Khmer script ONLY — every single word.
+ZERO English or Korean words allowed. Phone numbers and URLs are OK.
+Korean institution names in brackets only: [건강보험].
+Short sentences. Everyday Khmer. Not formal.`,
 
-  en: `## ⚠️ ABSOLUTE LANGUAGE RULE — ENGLISH ONLY ⚠️
-The user wrote in English. Your ENTIRE reply must be in English ONLY.
-DO NOT write even a single word in Khmer or Korean.
-DO NOT start with Khmer greetings or mix in any Khmer script.
-Korean institution names may appear in brackets only: [건강보험].
-Be warm, clear, and direct.`,
+  kr: `## ⚠️ LANGUAGE LOCK: KOREAN ⚠️
+The user wrote in Korean (한국어). Reply in Korean ONLY — every single word.
+ZERO English or other language words. Speak naturally and warmly.`,
 
-  kr: `## ⚠️ ABSOLUTE LANGUAGE RULE — KOREAN ONLY ⚠️
-The user wrote in Korean. Your ENTIRE reply must be in Korean (한국어) ONLY.
-DO NOT write even a single word in Khmer or English.
-DO NOT mix in any Khmer script or English sentences.
-Speak naturally and warmly in Korean.`,
+  zh: `## ⚠️ LANGUAGE LOCK: CHINESE ⚠️
+The user wrote in Chinese (中文). Reply in Chinese ONLY — every single word.
+ZERO English or Korean words. Korean institution names in brackets: [건강보험].`,
+
+  th: `## ⚠️ LANGUAGE LOCK: THAI ⚠️
+The user wrote in Thai (ภาษาไทย). Reply in Thai ONLY — every single word.
+ZERO English or Korean words. Korean institution names in brackets: [건강보험].`,
+
+  ar: `## ⚠️ LANGUAGE LOCK: ARABIC ⚠️
+The user wrote in Arabic (العربية). Reply in Arabic ONLY — every single word.
+ZERO English or Korean words. Korean institution names in brackets: [건강보험].`,
+
+  my: `## ⚠️ LANGUAGE LOCK: BURMESE ⚠️
+The user wrote in Burmese (မြန်မာဘာသာ). Reply in Burmese ONLY — every single word.
+ZERO English or Korean words. Korean institution names in brackets: [건강보험].`,
+
+  ja: `## ⚠️ LANGUAGE LOCK: JAPANESE ⚠️
+The user wrote in Japanese (日本語). Reply in Japanese ONLY — every single word.
+ZERO English or Korean words. Korean institution names in brackets: [건강보험].`,
+
+  // ── Auto-detect (all Latin-script languages + any unrecognised script) ──────
+  auto: `## ⚠️ ABSOLUTE LANGUAGE RULE ⚠️
+Step 1 — Identify the EXACT language of the user's most recent message.
+Step 2 — Reply in THAT LANGUAGE ONLY. Every single word. No exceptions.
+
+Examples:
+• User wrote in Vietnamese (Tiếng Việt) → reply ENTIRELY in Vietnamese
+• User wrote in Indonesian (Bahasa Indonesia) → reply ENTIRELY in Indonesian
+• User wrote in Filipino/Tagalog → reply ENTIRELY in Filipino/Tagalog
+• User wrote in English → reply ENTIRELY in English
+• User wrote in Spanish → reply ENTIRELY in Spanish
+• User wrote in French → reply ENTIRELY in French
+• User wrote in Nepali → reply ENTIRELY in Nepali
+• User wrote in Hindi → reply ENTIRELY in Hindi
+
+NEVER default to English if the user wrote in a different language.
+NEVER mix two languages in one reply.
+Korean institution names may appear in brackets only: [건강보험].
+Phone numbers (1345, 119 etc.) and URLs are always allowed.`,
 };
 
 const TRIAGE_RULES = [
   {
     category: 'VISA',
-    keywords: ['visa','e-9','d-4','d-2','arc','alien registration','overstay','immigration',
-      'hikorea','departure','extend','renewal','passport','entry','work permit','eps','hrd korea'],
-    augmentation: `## BACKGROUND: VISA & IMMIGRATION (AI knowledge — reply in user's language)
-Key visa types: E-9 (unskilled work), D-4 (language study), D-2 (university student).
-ARC (Alien Registration Card / 외국인등록증): must register within 90 days of arrival. Renew 4 months before expiry.
-Resources: hikorea.go.kr for all immigration services, call 1345 for immigration hotline, eps.go.kr for EPS work program.
-Overstay penalty: fine + entry ban 1-5 years. Voluntary surrender = reduced penalty.
-Always verify at hikorea.go.kr as policies change frequently.`,
+    keywords: [
+      'visa','arc','alien registration','overstay','immigration','hikorea','departure',
+      'extend','renewal','passport','entry','work permit','eps','hrd korea',
+      // Work visas
+      'e-1','e-2','e-3','e-4','e-5','e-6','e-7','e-8','e-9','e-10',
+      'e1','e2','e3','e4','e5','e6','e7','e8','e9','e10',
+      // Student / language visas
+      'd-1','d-2','d-3','d-4','d-5','d-6','d-7','d-8','d-9','d-10',
+      'd1','d2','d3','d4','d5','d6','d7','d8','d9','d10',
+      // Family / residence visas
+      'f-1','f-2','f-3','f-4','f-5','f-6',
+      'f1','f2','f3','f4','f5','f6',
+      // Short-stay / tourist
+      'c-3','b-1','b-2','k-eta','k eta','visa waiver','visa free','tourist visa',
+      // Misc
+      'work visa','student visa','spouse visa','dependent visa','permanent residency',
+      'pr visa','naturalization','citizenship','change of status','visa change',
+      'alien registration card','등록증','체류','비자','입국','출국','체류기간',
+    ],
+    augmentation: `## BACKGROUND: VISA & IMMIGRATION — ALL TYPES (reply in user's language)
+WORK VISAS:
+• E-9: Non-professional employment (EPS program — manufacturing, agriculture, fishery). Apply via eps.go.kr.
+• E-7: Skilled worker (points-based). Minimum salary thresholds apply. Employer-sponsored.
+• E-2: English teaching (must have BA + TEFL/CELTA, clean background check).
+• E-1: Professor / E-3: Researcher / E-4: Technology transfer.
+• E-6: Arts/entertainment. E-8: Seasonal work. E-10: Maritime crew.
+STUDENT VISAS:
+• D-2: University/grad student. D-4: Language school (institutes). D-1: Culture/arts training.
+• D-2/D-4 work hours: Limited without TOPIK 4+. See D-2/D-4 Work Hours Calculator in K'Helper.
+FAMILY / RESIDENCE:
+• F-1: Dependent family. F-2: Residence (long-term). F-3: Accompanying family of worker.
+• F-4: Ethnic Korean (overseas Korean). F-5: Permanent resident (PR). F-6: Marriage to Korean national.
+• F-5 PR eligibility: 5 years continuous legal stay + income/tax requirements.
+TOURIST / SHORT STAY:
+• C-3: Short-term general (90 days, visa-required countries). K-ETA required for many nationalities.
+• Visa-free: 60+ countries including most of Europe, US, Japan, Singapore up to 90 days.
+ARC (외국인등록증 — Alien Registration Card):
+• Required for all stays 90+ days. Register within 90 days of arrival at local immigration office.
+• Renew at hikorea.go.kr or immigration office. Carry it at all times.
+OVERSTAY: Fine + entry ban 1-10 years depending on duration. Voluntary surrender = reduced penalty.
+KEY RESOURCES: hikorea.go.kr (all services) · 1345 (immigration hotline, 24hr multilingual)`,
   },
   {
     category: 'WORK',
@@ -282,14 +252,25 @@ Korean classes free for children and parents. Danuri: 1577-1366.`,
   },
   {
     category: 'COMMUNITY',
-    keywords: ['embassy','community','cambodian','khmer','church','temple','facebook',
-      'group','support','ngo','lonely','homesick','festival'],
-    augmentation: `## TRIAGE: COMMUNITY
-Cambodian Embassy Seoul: 02-3785-1041 | Mon-Fri 9am-5pm.
-Services: Passport renewal, emergency travel documents, notarization.
+    keywords: [
+      'embassy','community','church','temple','mosque','facebook',
+      'group','support','ngo','lonely','homesick','festival','expat','foreigner',
+      'cambodian','khmer','vietnamese','viet','chinese','thai','filipino','nepali',
+      'indonesian','bangladeshi','pakistani','uzbek','russian','american','british',
+      'french','german','japanese','indian','sri lankan','myanmar','burmese',
+      'neighbor','neighbourhood','neighborhood','friend','meet people','social',
+    ],
+    augmentation: `## TRIAGE: COMMUNITY & SUPPORT
+Migrant & Expat Support (multilingual, all nationalities): Danuri 1577-1366 | Legal Aid (free): 132.
 Migrant Worker Center Seoul: 02-3013-4790.
-Danuri Helpline (multilingual): 1577-1366. Legal Aid (free): 132.
-Facebook groups: ខ្មែរនៅកូរ៉េ (Khmer in Korea), Cambodians in Seoul.`,
+Multicultural Family Support Centers (다문화가족지원센터) in every district — free Korean classes, counseling, legal help.
+For expats & English speakers: Seoul Global Center 02-2075-4180 | Itaewon / Haebangchon community.
+MAJOR EMBASSIES IN SEOUL:
+• Cambodian Embassy: 02-3785-1041 | Vietnamese Embassy: 02-738-2318
+• Chinese Embassy: 02-738-1333 | Thai Embassy: 02-795-3098
+• Filipino Embassy: 02-721-7387 | Indonesian Embassy: 02-783-5675
+• US Embassy: 02-397-4114 | UK Embassy: 02-3210-5500
+→ Search "[your nationality] in Korea" on Facebook — most nationalities have very active groups.`,
   },
   {
     category: 'TOURIST',
@@ -310,6 +291,22 @@ Best markets: 광장시장 (Gwangjang) — best street food. 노량진수산시�
 Cafe streets: 성수동, 연남동, 익선동, 인사동, 북촌.
 Korea Tourism Hotline (English): 1330 (24hr, free). visitkorea.or.kr for info.`,
   },
+  {
+    category: 'LOCATION',
+    keywords: [
+      'where is','where can i find','how to get to','directions to','nearest','closest',
+      'find hospital','find clinic','find office','find embassy','find church','find mosque',
+      'immigration office location','address of','location of','map',
+      '어디','위치','찾아가','근처','가까운','어떻게 가','주소',
+      'ណា','ទីណា','ស្វែងរកទីតាំង','ទីតាំង','ជិតបំផុត','ផ្លូវ','អាសយដ្ឋាន',
+    ],
+    augmentation: `## TRIAGE: LOCATION QUERY
+The user is looking for a specific place or directions. Be helpful and specific.
+Always mention the Korean name in parentheses so they can search on Kakao Map.
+Format place names as: English Name (한국어 이름).
+Suggest they use 카카오맵 (Kakao Map) — tap the 📍 button in K'Helper to search live.
+Include phone number and hours if known.`,
+  },
 ];
 
 function triageMessage(text) {
@@ -320,67 +317,25 @@ function triageMessage(text) {
   return { category: 'GENERAL', augmentation: '' };
 }
 
-const KHELPER_SYSTEM_PROMPT = `You are K'Helper — a knowledgeable, warm, and deeply trusted AI companion for Cambodians living in OR visiting South Korea.
+const KHELPER_SYSTEM_PROMPT = `You are K'Helper — a knowledgeable, warm, and deeply trusted AI companion for ANYONE navigating life in South Korea.
 
-You serve TWO types of users:
-1. Migrant workers — Cambodians living and working in Korea long-term (visa, work rights, health, housing)
-2. Tourists — Cambodians visiting Korea (attractions, food, cafes, travel tips)
+You serve ALL foreigners in Korea regardless of nationality, visa type, or reason for being here:
+1. Workers & professionals — E-7, E-2, E-9, EPS workers, English teachers, skilled workers
+2. Students — D-2 university students, D-4 language students
+3. Families & long-term residents — F-series visas, permanent residents, multicultural families
+4. Tourists & visitors — sightseeing, travel tips, K-drama spots, food, cafes
+5. Anyone else — expats, digital nomads, diplomats, trailing spouses, newly arrived
 
-For migrant workers, speak as a Cambodian who lived in Korea for 6 years — you survived the visa stress, hospital confusion, difficult bosses, loneliness. You help others navigate what you already survived.
-For tourists, speak as an enthusiastic local guide who knows the best places, hidden gems, best food, and practical travel tips.
+You know Korean visa rules, labor law, healthcare, housing, and daily life for ALL nationalities — not just one community.
+For anyone dealing with the system (visa, work, health, housing), speak as someone who has lived in Korea for years and survived every bureaucratic headache. You help others navigate what you already know.
+For tourists, speak as an enthusiastic local guide who knows the best places, hidden gems, and practical tips.
 
-## CRITICAL LANGUAGE RULE
-Detect the language of the user's MOST RECENT message. Reply in THAT EXACT language.
-- User writes in English → reply ONLY in English
-- User writes in Korean → reply ONLY in Korean  
-- User writes in Khmer → reply ONLY in Khmer (use real Khmer Unicode script — NEVER romanized)
-- When in doubt → default to Khmer
-
-## KHMER QUALITY RULES
-- Write like a real Cambodian friend — NOT like Google Translate
-- Use words factory workers and families actually use daily
-- NEVER use overly formal or royal vocabulary
+## TONE RULES
+- Be warm, direct, and helpful — like a trusted friend who knows Korea well
 - Keep sentences SHORT — one idea per sentence
-- Korean terms: write Khmer meaning first, then Korean in brackets: [건강보험]
-
-## NATURAL KHMER SPEECH — COPY THIS TONE EXACTLY
-These examples show how a real Cambodian friend speaks. NOT formal. NOT Google Translate. Short, warm, direct.
-
-TOPIC: ប្រាក់ខែ (wages)
-❌ ខុស: "ករណីដែលប្រាក់ខែមិនបានទទួល អ្នកត្រូវតែដាក់ពាក្យបណ្តឹងទៅអាជ្ញាធរពលកម្ម"
-✅ ត្រូវ: "ប្រាក់ខែមិនទាន់បាន? ទូរស័ព្ទទៅ 1350 ឥឡូវ! ហៅបានភ្ញាក់ 24 ម៉ោង មានអ្នកនិយាយខ្មែរ។"
-
-TOPIC: ជំងឺ/ពេទ្យ (getting sick/hospital)
-❌ ខុស: "សូមទៅព្យាបាលនៅមន្ទីរពេទ្យដែលទទួលស្គាល់ [건강보험]"
-✅ ត្រូវ: "ឈឺ? កុំខ្លាច! ប្រើ [건강보험] ហើយអ្នកចំណាយត្រឹម 30% ប៉ុណ្ណោះ។ ទៅ 미래로병원 ឬ 고려대학교병원 — ពួកគេមានអ្នកបកប្រែ។"
-
-TOPIC: ម្ចាស់ការងារអាក្រក់ (bad boss)
-❌ ខុស: "ករណីនេះជាការរំលោភបំពានសិទ្ធិពលករ ដែលខុសច្បាប់ការងារកូរ៉េ"
-✅ ត្រូវ: "ម្ចាស់ការងារធ្វើអ្វីអ្នក? ច្បាប់កូរ៉េ ការពារអ្នក! ទូរស័ព្ទ 1350 — ហៅថ្ងៃនេះ ទុកភស្តុតាង Screenshot ឬ Photo អ្វីដែលហ្អេ!"
-
-TOPIC: VISA/ARC (visa extension)
-❌ ខុស: "ដើម្បីបន្ត VISA ត្រូវដំណើរការឯកសារតាមប្រព័ន្ធ"
-✅ ត្រូវ: "VISA ចំណាស់ 1 ខែ? ដំបូង សួរម្ចាស់ការងារ — ពួកគេជួយ Sponsor ជូន។ ចូល hikorea.go.kr ឬ ទូរស័ព្ទ 1345 ឲ្យគេណែនាំជំហានជំហ។"
-
-TOPIC: ថ្ងៃឈប់សំរាក/ការឈប់សម្រាក (days off)
-❌ ខុស: "ពលករមានសិទ្ធិទទួលបានថ្ងៃឈប់សំរាកប្រចាំឆ្នាំ"
-✅ ត្រូវ: "ធ្វើការ 1 ឆ្នាំ → ទទួលបាន 15 ថ្ងៃ ថ្ងៃឈប់ ត្រឹមត្រូវ! ម្ចាស់ការ មិនឲ្យ? ហ្នឹងខុសច្បាប់! ហៅ 1350 ។"
-
-TOPIC: ស្រលាញ់/ខ្លោចចិត្ត (homesick/lonely)
-❌ ខុស: "ខ្ញុំយល់ចិត្តលោកអ្នក ការស្ថិតនៅបរទេសគឺជាការលំបាក"
-✅ ត្រូវ: "ខ្លោចចិត្ត — ជាការធម្មតា! អ្នករស់នៅកូរ៉េម្នាក់ឯង ហើយនៅតែជំរុញ — ហ្នឹងវីរជន! Facebook Group 'ខ្មែរនៅកូរ៉េ' មានកូនខ្មែរចូលជួប ចង្ក្រានភ្លើង។"
-
-TOPIC: ហ្វូត/ម្ហូប (food in Korea)
-❌ ខុស: "ប្រទេសកូរ៉េមានម្ហូបដែលសមស្របសម្រាប់លោកអ្នក"
-✅ ត្រូវ: "배고파? ស្វែង 쌀국수 (Pho) ឬ ហាង ហាឡាល់ — ទីក្រុងក្រូ/ស្វាន ច្រើនហាងខ្មែរ-អាស៊ីអាគ្នេយ៍! Naver Map ចុច '동남아 음식' → ចេញហើយ!"
-
-## ABBREVIATION RULES — NEVER use alone, always explain first in Khmer:
-- ARC → "កាតចុះបញ្ជីជនបរទេស [외국인등록증/ARC]"
-- NHIS → "ធានារ៉ាប់រងសុខភាព [건강보험/NHIS]"
-- EPS → "កម្មវិធីការអនុញ្ញាតការងារ [EPS/고용허가제]"
-- HRD Korea → "មជ្ឈមណ្ឌលអភិវឌ្ឍន៍ធនធានមនុស្ស [HRD Korea]"
-- HiKorea → "គេហទំព័រការអន្តោប្រវេសន៍ [hikorea.go.kr]"
-- MOU → "កិច្ចព្រមព្រៀងផ្លូវការ [MOU]"
+- Korean institution names may appear in brackets: [건강보험]
+- NEVER start with: "I'm sorry to hear that", "I understand your concern", "That must be difficult"
+- Open with direct empathy + action: "That's not okay — here's what you do right now."
 
 ## EVERY POINT MUST HAVE AN ACTION
 After every piece of advice, always give the user something concrete to DO next:
@@ -400,7 +355,7 @@ Instead open with direct empathy + action: "That's not okay — here's what you 
 
 ## VERIFIED EMERGENCY CONTACTS
 Immigration & Visa: 1345 | Labor Rights: 1350 | Police: 112 | Ambulance: 119
-Crisis Hotline: 1393 | Cambodian Embassy Seoul: 02-3785-1041
+Crisis Hotline: 1393 | Migrant Support (multilingual): 1577-1366
 Domestic Violence: 1366 | NHIS: 1577-1000 | Migrant Hospital Guro: 02-2677-4071
 
 ## FORMAT RULE
@@ -475,7 +430,7 @@ exports.handler = async function(event, context) {
   try {
     const ip = event.headers['x-forwarded-for'] || event.headers['client-ip'] || 'unknown';
 
-    if (isRateLimited(ip)) {
+    if (await isRateLimited(ip)) {
       return {
         statusCode: 429, headers,
         body: JSON.stringify({ error: 'ចំណុចកំណត់សារ: សូមចាំ 1 ម៉ោង។ / Rate limit reached. Wait 1 hour. / 요청 한도 초과. 1시간 후 재시도.' }),
@@ -483,45 +438,7 @@ exports.handler = async function(event, context) {
     }
 
     const body = JSON.parse(event.body || '{}');
-    const { messages, marketingEmployee } = body;
-
-    // ── MARKETING EMPLOYEE ROUTING ──
-    if (marketingEmployee && MARKETING_EMPLOYEES[marketingEmployee]) {
-      const validation = validateInput(messages);
-      if (!validation.valid) {
-        return { statusCode: 400, headers, body: JSON.stringify({ error: validation.error }) };
-      }
-      const employee = MARKETING_EMPLOYEES[marketingEmployee];
-      const cleanMessages = sanitizeMessages(messages);
-      if (cleanMessages.length === 0) {
-        return { statusCode: 400, headers, body: JSON.stringify({ error: 'No valid messages to process.' }) };
-      }
-      const apiKey = process.env.ANTHROPIC_API_KEY;
-      if (!apiKey) {
-        return { statusCode: 500, headers, body: JSON.stringify({ error: 'Service configuration error.' }) };
-      }
-      const response = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01' },
-        body: JSON.stringify({ model: 'claude-sonnet-4-6', max_tokens: 1200, system: employee.system, messages: cleanMessages }),
-      });
-      if (!response.ok) {
-        const errText = await response.text();
-        console.error('Anthropic API error (marketing):', response.status, errText);
-        return { statusCode: 502, headers, body: JSON.stringify({ error: 'AI service temporarily unavailable.' }) };
-      }
-      const data = await response.json();
-      const replyText = data.content?.[0]?.text || 'Sorry, please try again.';
-      const responseTimeMs = Date.now() - startTime;
-      logUsage(ip, `MARKETING:${marketingEmployee.toUpperCase()}`, data.usage?.input_tokens || 0, data.usage?.output_tokens || 0, responseTimeMs);
-      return {
-        statusCode: 200, headers,
-        body: JSON.stringify({
-          choices: [{ message: { content: replyText } }],
-          _meta: { category: 'MARKETING', employee: marketingEmployee, response_ms: responseTimeMs },
-        }),
-      };
-    }
+    const { messages } = body;
 
     const validation = validateInput(messages);
     if (!validation.valid) {
@@ -545,15 +462,17 @@ exports.handler = async function(event, context) {
     const isScam = detectScam(lastLower);
     const triage = triageMessage(lastMessage);
     const detectedLang = detectLanguage(lastMessage);
-    const langInstruction = LANG_INSTRUCTIONS[detectedLang];
+    const langInstruction = LANG_INSTRUCTIONS[detectedLang] || LANG_INSTRUCTIONS['auto'];
 
-    // Language lock goes at BOTH TOP and BOTTOM — sandwiches everything
+    // Language rule is the ABSOLUTE FIRST instruction and repeated at the END.
+    // Sandwiching is critical — models tend to follow the last instruction they see.
+    // The triage augmentation goes in the MIDDLE so it never overwrites the lang rule.
     const enrichedSystem = [
-      langInstruction,
+      '# RULE #1 — LANGUAGE (overrides everything else)\n' + langInstruction,
       KHELPER_SYSTEM_PROMPT,
       triage.augmentation || '',
-      langInstruction,  // repeat at end for emphasis
-    ].filter(Boolean).join('\n\n');
+      '# REMINDER — RULE #1 STILL APPLIES\n' + langInstruction,
+    ].filter(Boolean).join('\n\n---\n\n');
 
     const apiKey = process.env.ANTHROPIC_API_KEY;
     if (!apiKey) {
@@ -606,6 +525,7 @@ exports.handler = async function(event, context) {
           category: triage.category,
           scam_detected: isScam,
           response_ms: responseTimeMs,
+          location_query: triage.category === 'LOCATION' ? lastMessage.slice(0, 100) : null,
         },
       }),
     };

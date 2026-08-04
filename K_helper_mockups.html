@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>K'Helper — Health-First v1 Mockups</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;1,400&family=Geist:wght@300;400;500;600&family=Noto+Sans+Khmer:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --terra: #d94e1f; --terra-dark: #8f2e10; --cream: #fdf6f2; --cream-2: #f7ebe0;
+    --paper: #ebd5c0; --clay: #4a2419; --clay-mid: #7d4c3b; --clay-light: #a87863;
+    --ember: #e8a83a; --sage: #6b7a5a;
+    --serif: "Newsreader", Georgia, serif; --sans: "Geist", system-ui, sans-serif; --kh: "Noto Sans Khmer", sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #f2e8e0; font-family: var(--sans); color: var(--clay); padding: 48px 24px; }
+
+  .intro { max-width: 900px; margin: 0 auto 48px; text-align: center; }
+  .intro h1 { font-family: var(--serif); font-size: 42px; font-weight: 400; letter-spacing: -0.02em; }
+  .intro h1 em { font-style: italic; color: var(--terra); }
+  .intro .sub { font-size: 15px; color: var(--clay-mid); margin-top: 10px; line-height: 1.6; }
+  .intro .tag { display: inline-block; margin-top: 14px; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--clay-light); border: 1px solid var(--paper); border-radius: 999px; padding: 6px 14px; }
+
+  .frames { display: flex; flex-wrap: wrap; gap: 40px; justify-content: center; max-width: 1500px; margin: 0 auto; }
+  .frame-card { width: 300px; }
+  .phone { width: 300px; height: 620px; background: var(--cream); border-radius: 36px; border: 8px solid #2a1810; overflow: hidden; position: relative; box-shadow: 0 24px 48px -20px rgba(74,36,25,.35); }
+  .caption { margin-top: 18px; padding: 0 6px; }
+  .caption .n { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; border-radius: 50%; background: var(--terra); color: #fff; font-size: 12px; font-weight: 600; margin-right: 8px; }
+  .caption h3 { display: inline; font-size: 15px; font-weight: 600; }
+  .caption p { font-size: 13px; color: var(--clay-mid); line-height: 1.55; margin-top: 8px; }
+
+  /* shared phone bits */
+  .statusbar { height: 28px; display: flex; align-items: center; justify-content: center; }
+  .statusbar::after { content: ""; width: 90px; height: 18px; background: #2a1810; border-radius: 999px; }
+  .lantern { display: block; margin: 0 auto; }
+
+  /* Screen 1 — splash */
+  .s1 { text-align: center; padding: 40px 24px; }
+  .s1 .glow { position: relative; display: inline-block; margin-top: 28px; }
+  .s1 .glow::before { content: ""; position: absolute; inset: -30%; background: radial-gradient(ellipse, rgba(232,168,58,.5), rgba(217,78,31,.15) 55%, transparent 75%); }
+  .s1 .wordmark { font-family: var(--serif); font-size: 40px; margin-top: 26px; }
+  .s1 .wordmark em { font-style: italic; color: var(--terra); }
+  .s1 .tagline { font-family: var(--serif); font-style: italic; font-size: 14px; color: var(--clay-mid); margin-top: 6px; }
+  .s1 .gbtn { margin: 26px auto 0; width: 84%; background: #fff; border: 1.5px solid var(--paper); border-radius: 999px; padding: 12px; font-size: 13.5px; font-weight: 500; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 1px 3px rgba(0,0,0,.07); }
+  .s1 .or { font-size: 10px; letter-spacing: .1em; color: var(--clay-light); margin: 14px 0 10px; }
+  .s1 .langs { display: inline-flex; background: var(--cream-2); border: 1.5px solid var(--paper); border-radius: 999px; overflow: hidden; font-size: 12.5px; }
+  .s1 .langs span { padding: 8px 16px; color: var(--clay-mid); }
+  .s1 .langs .on { background: var(--terra); color: #fff; border-radius: 999px; font-weight: 600; }
+
+  /* Screen 2 — home */
+  .apphead { display: flex; align-items: center; gap: 8px; padding: 12px 16px; border-bottom: 1px solid rgba(74,36,25,.08); }
+  .apphead .wm { font-family: var(--serif); font-size: 17px; }
+  .apphead .wm em { font-style: italic; color: var(--terra); }
+  .apphead .burger { margin-left: auto; width: 30px; height: 30px; border-radius: 8px; display: flex; flex-direction: column; gap: 4px; align-items: center; justify-content: center; border: 1px solid var(--paper); }
+  .apphead .burger i { display: block; width: 14px; height: 1.6px; background: var(--clay-mid); }
+  .visa-banner { margin: 14px 14px 0; background: #fff; border: 1px solid var(--paper); border-radius: 16px; padding: 12px 14px; display: flex; align-items: center; gap: 12px; }
+  .visa-banner .info .lbl { font-size: 9px; letter-spacing: .1em; text-transform: uppercase; color: var(--clay-light); }
+  .visa-banner .info .date { font-family: var(--serif); font-size: 16px; margin-top: 2px; }
+  .visa-banner .info .left { font-size: 11px; color: var(--sage); margin-top: 2px; }
+  .topics-lbl { font-size: 9.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--clay-light); margin: 18px 16px 8px; }
+  .topics { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 0 14px; }
+  .tcard { background: #fff; border: 1px solid var(--paper); border-radius: 14px; padding: 12px; }
+  .tcard.hero { grid-column: 1 / -1; background: linear-gradient(135deg, #fff, #fdeee6); border-color: rgba(217,78,31,.35); }
+  .tcard .ic { width: 30px; height: 30px; border-radius: 9px; background: rgba(217,78,31,.09); display: flex; align-items: center; justify-content: center; margin-bottom: 8px; }
+  .tcard h4 { font-size: 13px; font-weight: 600; }
+  .tcard p { font-size: 10.5px; color: var(--clay-light); margin-top: 2px; }
+  .inputbar { position: absolute; bottom: 0; left: 0; right: 0; padding: 12px 14px 22px; background: linear-gradient(transparent, var(--cream) 30%); }
+  .inputbar .pill { background: #fff; border: 1.5px solid var(--paper); border-radius: 999px; padding: 11px 14px; display: flex; align-items: center; font-size: 12.5px; color: var(--clay-light); }
+  .inputbar .send { margin-left: auto; width: 28px; height: 28px; border-radius: 50%; background: var(--terra); display: flex; align-items: center; justify-content: center; }
+
+  /* Screen 3 — chat */
+  .chat { padding: 14px; display: flex; flex-direction: column; gap: 12px; }
+  .u-bub { align-self: flex-end; max-width: 82%; background: var(--terra); color: #fff; border-radius: 16px 16px 4px 16px; padding: 10px 13px; font-size: 12.5px; line-height: 1.5; font-family: var(--kh); }
+  .b-meta { font-size: 8.5px; letter-spacing: .14em; color: var(--clay-light); }
+  .b-card { max-width: 92%; background: #fff; border: 1px solid var(--paper); border-radius: 4px 16px 16px 16px; padding: 12px 14px; font-size: 12px; line-height: 1.6; }
+  .b-card .kh-line { font-family: var(--kh); }
+  .b-card .step { display: flex; gap: 8px; margin-top: 8px; }
+  .b-card .step b { flex-shrink: 0; width: 17px; height: 17px; border-radius: 50%; background: rgba(217,78,31,.1); color: var(--terra); font-size: 10px; display: flex; align-items: center; justify-content: center; }
+  .b-card .warn { margin-top: 10px; background: #fdf3e4; border-left: 3px solid var(--ember); border-radius: 6px; padding: 8px 10px; font-size: 11px; }
+
+  /* Screen 4 — hospitals */
+  .tabs { display: flex; gap: 8px; padding: 12px 14px 0; }
+  .tab { font-size: 11.5px; padding: 7px 13px; border-radius: 999px; border: 1px solid var(--paper); color: var(--clay-mid); }
+  .tab.on { background: var(--terra); border-color: var(--terra); color: #fff; font-weight: 600; }
+  .loc { margin: 12px 14px 0; background: #fff; border: 1px solid var(--paper); border-radius: 14px; padding: 12px 14px; }
+  .loc h4 { font-size: 12.5px; font-weight: 600; }
+  .loc .kr { font-size: 10.5px; color: var(--clay-light); margin-top: 1px; }
+  .loc .row { display: flex; gap: 6px; margin-top: 8px; }
+  .loc .chip { font-size: 9.5px; padding: 4px 9px; border-radius: 999px; background: var(--cream-2); color: var(--clay-mid); }
+  .loc .chip.g { background: rgba(107,122,90,.12); color: var(--sage); font-weight: 600; }
+
+  /* Screen 5 — drawer */
+  .drawer { display: flex; height: 100%; }
+  .drawer .panel { width: 78%; background: #fff; border-right: 1px solid var(--paper); padding: 18px 16px; display: flex; flex-direction: column; }
+  .drawer .dim { flex: 1; background: rgba(42,24,16,.35); }
+  .newchat { background: var(--terra); color: #fff; border-radius: 999px; text-align: center; padding: 11px; font-size: 13px; font-weight: 600; margin-bottom: 18px; }
+  .nav-lbl { font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: var(--clay-light); margin: 10px 0 6px; }
+  .nav-item { display: flex; align-items: center; gap: 10px; padding: 9px 8px; border-radius: 10px; font-size: 13px; }
+  .nav-item.on { background: rgba(217,78,31,.08); color: var(--terra-dark); font-weight: 600; }
+  .nav-item svg { flex-shrink: 0; }
+  .drawer .foot { margin-top: auto; border-top: 1px solid var(--cream-2); padding-top: 12px; font-size: 11px; color: var(--clay-light); }
+  .langs-mini { display: flex; gap: 6px; margin-top: 8px; }
+  .langs-mini span { font-size: 10.5px; padding: 5px 10px; border-radius: 999px; border: 1px solid var(--paper); }
+  .langs-mini .on { background: var(--terra); color: #fff; border-color: var(--terra); font-weight: 600; }
+
+  .note { max-width: 900px; margin: 56px auto 0; background: #fff; border: 1px solid var(--paper); border-radius: 16px; padding: 24px 28px; font-size: 13.5px; line-height: 1.7; color: var(--clay-mid); }
+  .note b { color: var(--clay); }
+</style>
+</head>
+<body>
+
+<div class="intro">
+  <h1>K'<em>helper</em> — Health-First v1</h1>
+  <div class="sub">Focused pitch version: one story — <b>"Get healthcare and insurance help in your language."</b><br>
+  CV Builder and Translator Marketplace hidden (kept for Phase 2). Six screens, one job — including Find &amp; Book Care.</div>
+  <div class="tag">Mockups · July 2026 · khelper.org</div>
+</div>
+
+<div class="frames">
+
+  <!-- 1. SPLASH -->
+  <div class="frame-card">
+    <div class="phone">
+      <div class="statusbar"></div>
+      <div class="s1">
+        <div class="glow">
+          <svg class="lantern" viewBox="0 0 100 140" width="86" height="120">
+            <rect x="30" y="12" width="40" height="10" rx="2" fill="#2a1810"/>
+            <ellipse cx="50" cy="66" rx="36" ry="40" fill="#d94e1f"/>
+            <ellipse cx="50" cy="60" rx="26" ry="32" fill="#e8a83a" opacity=".45"/>
+            <rect x="30" y="104" width="40" height="8" rx="2" fill="#2a1810"/>
+            <path d="M44 112 L50 128 L56 112 Z" fill="#d94e1f"/>
+          </svg>
+        </div>
+        <div class="wordmark">K'<em>helper</em></div>
+        <div class="tagline">For anyone navigating life in Korea.</div>
+        <input style="width:84%;margin:22px auto 0;display:block;background:#fff;border:1.5px solid var(--paper);border-radius:12px;padding:11px 14px;font-size:12.5px;font-family:var(--sans);color:var(--clay)" placeholder="Email">
+        <input style="width:84%;margin:8px auto 0;display:block;background:#fff;border:1.5px solid var(--paper);border-radius:12px;padding:11px 14px;font-size:12.5px;font-family:var(--sans);color:var(--clay)" placeholder="Password" type="password">
+        <div style="width:84%;margin:10px auto 0;background:var(--terra);color:#fff;border-radius:999px;padding:11px;font-size:13px;font-weight:600">Sign in · Create account</div>
+        <div class="or">— OR —</div>
+        <div class="gbtn">
+          <svg width="15" height="15" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.5 0 6.7 1.2 9.2 3.6l6.9-6.9C35.9 2.4 30.5 0 24 0 14.6 0 6.5 5.4 2.6 13.2l8 6.2C12.4 13.7 17.7 9.5 24 9.5z"/><path fill="#4285F4" d="M47 24.6c0-1.6-.2-3.1-.4-4.6H24v9h12.9c-.6 3-2.3 5.5-4.8 7.2l7.7 6C44.4 38 47 31.9 47 24.6z"/><path fill="#FBBC05" d="M10.5 28.6a14.5 14.5 0 0 1 0-9.2l-8-6.2a24 24 0 0 0 0 21.6l8-6.2z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.7-6c-2.2 1.5-5 2.3-8.2 2.3-6.3 0-11.6-4.2-13.5-9.9l-8 6.2C6.5 42.6 14.6 48 24 48z"/></svg>
+          Continue with Google
+        </div>
+        <div style="font-size:10px;color:var(--clay-light);margin-top:14px">Just browsing? Continue as guest:</div>
+        <div class="langs" style="margin-top:8px"><span class="on">English</span><span>ខ្មែរ</span><span>한국어</span></div>
+      </div>
+    </div>
+    <div class="caption">
+      <span class="n">1</span><h3>Splash — one decision</h3>
+      <p>Email and password first — many workers share phones or have no Google account. Google one-tap sits below for speed, guest mode at the bottom for the cautious.</p>
+    </div>
+  </div>
+
+  <!-- 2. HOME -->
+  <div class="frame-card">
+    <div class="phone">
+      <div class="statusbar"></div>
+      <div class="apphead">
+        <svg viewBox="0 0 100 140" width="15" height="21"><rect x="30" y="12" width="40" height="10" rx="2" fill="#2a1810"/><ellipse cx="50" cy="66" rx="36" ry="40" fill="#d94e1f"/><rect x="30" y="104" width="40" height="8" rx="2" fill="#2a1810"/></svg>
+        <span class="wm">K'<em>helper</em></span>
+        <div class="burger"><i></i><i></i><i></i></div>
+      </div>
+      <div class="visa-banner">
+        <svg viewBox="0 0 84 84" width="52" height="52">
+          <circle cx="42" cy="42" r="34" stroke="#ebd5c0" stroke-width="8" fill="none"/>
+          <circle cx="42" cy="42" r="34" stroke="#d94e1f" stroke-width="8" fill="none" stroke-linecap="round" stroke-dasharray="140 74" transform="rotate(-90 42 42)"/>
+          <text x="42" y="47" text-anchor="middle" font-family="Georgia" font-size="14" fill="#4a2419">E-9</text>
+        </svg>
+        <div class="info">
+          <div class="lbl">Visa expiry</div>
+          <div class="date">Mar 2, 2027</div>
+          <div class="left">8 months left · insurance active</div>
+        </div>
+      </div>
+      <div class="topics-lbl">How can we help today?</div>
+      <div class="topics">
+        <div class="tcard hero">
+          <div class="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#d94e1f" stroke-width="2" stroke-linecap="round"><path d="M12 21C7 17 3 13.5 3 9.5A5.5 5.5 0 0 1 12 5.7 5.5 5.5 0 0 1 21 9.5c0 4-4 7.5-9 11.5z"/><path d="M12 8v6M9 11h6"/></svg></div>
+          <h4>Health Insurance (NHIS)</h4>
+          <p>Coverage check · hospital bills · what you're owed</p>
+        </div>
+        <div class="tcard">
+          <div class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#d94e1f" stroke-width="2" stroke-linecap="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18"/></svg></div>
+          <h4>Visa &amp; Documents</h4>
+          <p>Renewal, ARC, deadlines</p>
+        </div>
+        <div class="tcard">
+          <div class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#d94e1f" stroke-width="2" stroke-linecap="round"><path d="M3 21V8l9-5 9 5v13"/><path d="M9 21v-6h6v6"/></svg></div>
+          <h4>Find a Hospital</h4>
+          <p>Near you, with your language</p>
+        </div>
+        <div class="tcard">
+          <div class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#d94e1f" stroke-width="2" stroke-linecap="round"><rect x="2" y="7" width="20" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></div>
+          <h4>Work Rights</h4>
+          <p>Contract, wages, safety</p>
+        </div>
+        <div class="tcard">
+          <div class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#d94e1f" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></div>
+          <h4>Daily Life</h4>
+          <p>Banking, housing, more</p>
+        </div>
+      </div>
+      <div class="inputbar">
+        <div class="pill">Ask anything in your language…
+          <div class="send"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l14-7-5 16-3-7-6-2z"/></svg></div>
+        </div>
+      </div>
+    </div>
+    <div class="caption">
+      <span class="n">2</span><h3>Home — health leads</h3>
+      <p>Health Insurance is the hero card, full width. Visa ring shown once, tied to insurance status. Five topics max — CV Builder and Translator are hidden in v1.</p>
+    </div>
+  </div>
+
+  <!-- 3. CHAT -->
+  <div class="frame-card">
+    <div class="phone">
+      <div class="statusbar"></div>
+      <div class="apphead">
+        <svg viewBox="0 0 100 140" width="15" height="21"><rect x="30" y="12" width="40" height="10" rx="2" fill="#2a1810"/><ellipse cx="50" cy="66" rx="36" ry="40" fill="#d94e1f"/><rect x="30" y="104" width="40" height="8" rx="2" fill="#2a1810"/></svg>
+        <span class="wm">K'<em>helper</em></span>
+        <div class="burger"><i></i><i></i><i></i></div>
+      </div>
+      <div class="chat">
+        <div class="u-bub">ខ្ញុំទៅមន្ទីរពេទ្យ ប៉ុន្តែវិក្កយបត្រថ្លៃណាស់ តើធានារ៉ាប់រងរបស់ខ្ញុំគួរជួយទេ?</div>
+        <div>
+          <div class="b-meta">🏮 K'HELPER</div>
+          <div class="b-card">
+            <div class="kh-line"><b>បាទ/ចាស — ធានារ៉ាប់រង NHIS គួរតែជួយបង់។</b></div>
+            <div class="kh-line" style="margin-top:6px">អ្នកធ្វើការដោយវីសា E-9 មានន័យថា ថៅកែត្រូវតែចុះឈ្មោះអ្នកក្នុង NHIS ពីថ្ងៃដំបូង។</div>
+            <div class="step"><b>1</b><span class="kh-line">យកវិក្កយបត្រទៅ ផ្នែកធានារ៉ាប់រង នៅមន្ទីរពេទ្យ</span></div>
+            <div class="step"><b>2</b><span class="kh-line">សួរ៖ "건강보험 적용해 주세요" (សូមប្រើធានារ៉ាប់រង)</span></div>
+            <div class="step"><b>3</b><span class="kh-line">បើថៅកែមិនបានចុះឈ្មោះអ្នក — នោះខុសច្បាប់ ។ ទូរស័ព្ទ 1345</span></div>
+            <div class="warn">⚠️ រក្សាវិក្កយបត្រទុកជានិច្ច — អ្នកអាចទាមទារប្រាក់វិញបាន</div>
+          </div>
+        </div>
+      </div>
+      <div class="inputbar">
+        <div class="pill">សរសេរនៅទីនេះ…
+          <div class="send"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l14-7-5 16-3-7-6-2z"/></svg></div>
+        </div>
+      </div>
+    </div>
+    <div class="caption">
+      <span class="n">3</span><h3>Chat — the product moment</h3>
+      <p>A Khmer worker asks about a hospital bill; the answer is structured — verdict, numbered steps, the Korean phrase to show staff, and a rights warning. This screen IS the pitch.</p>
+    </div>
+  </div>
+
+  <!-- 4. HOSPITALS -->
+  <div class="frame-card">
+    <div class="phone">
+      <div class="statusbar"></div>
+      <div class="apphead">
+        <svg viewBox="0 0 100 140" width="15" height="21"><rect x="30" y="12" width="40" height="10" rx="2" fill="#2a1810"/><ellipse cx="50" cy="66" rx="36" ry="40" fill="#d94e1f"/><rect x="30" y="104" width="40" height="8" rx="2" fill="#2a1810"/></svg>
+        <span class="wm">Find a Hospital</span>
+        <div class="burger"><i></i><i></i><i></i></div>
+      </div>
+      <div class="tabs">
+        <div class="tab on">Hospitals</div>
+        <div class="tab">Immigration</div>
+        <div class="tab">Labor</div>
+      </div>
+      <div class="loc">
+        <h4>Ansan Danwon Health Center</h4>
+        <div class="kr">안산시 단원보건소 · 1.2 km</div>
+        <div class="row"><span class="chip g">Free foreign worker clinic</span><span class="chip">Sunday open</span></div>
+      </div>
+      <div class="loc">
+        <h4>Korea University Ansan Hospital</h4>
+        <div class="kr">고려대학교 안산병원 · 3.4 km</div>
+        <div class="row"><span class="chip g">Interpreter support</span><span class="chip">NHIS</span><span class="chip">ER 24h</span></div>
+      </div>
+      <div class="loc">
+        <h4>Migrant Health Center Suwon</h4>
+        <div class="kr">수원 외국인노동자 의료센터 · 18 km</div>
+        <div class="row"><span class="chip g">Free / uninsured OK</span><span class="chip">Weekends</span></div>
+      </div>
+      <div class="inputbar">
+        <div class="pill">Search area or hospital…
+          <div class="send"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg></div>
+        </div>
+      </div>
+    </div>
+    <div class="caption">
+      <span class="n">4</span><h3>Hospitals — action, not just answers</h3>
+      <p>Curated places that actually serve foreigners: free migrant clinics, interpreter flags, uninsured-friendly options. Chips answer the real questions: "can I afford it, will they understand me."</p>
+    </div>
+  </div>
+
+  <!-- 5. DRAWER -->
+  <div class="frame-card">
+    <div class="phone">
+      <div class="statusbar"></div>
+      <div class="drawer" style="height: calc(100% - 28px)">
+        <div class="panel">
+          <div class="newchat">＋ New chat</div>
+          <div class="nav-lbl">Topics</div>
+          <div class="nav-item on"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8f2e10" stroke-width="2" stroke-linecap="round"><path d="M12 21C7 17 3 13.5 3 9.5A5.5 5.5 0 0 1 12 5.7 5.5 5.5 0 0 1 21 9.5c0 4-4 7.5-9 11.5z"/></svg>Health Insurance</div>
+          <div class="nav-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#7d4c3b" stroke-width="2" stroke-linecap="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18"/></svg>Visa &amp; Documents</div>
+          <div class="nav-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#7d4c3b" stroke-width="2" stroke-linecap="round"><path d="M3 21V8l9-5 9 5v13"/><path d="M9 21v-6h6v6"/></svg>Find a Hospital</div>
+          <div class="nav-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#7d4c3b" stroke-width="2" stroke-linecap="round"><rect x="2" y="7" width="20" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>Work Rights</div>
+          <div class="nav-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#7d4c3b" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>Daily Life</div>
+          <div class="nav-lbl" style="margin-top:16px">Emergency</div>
+          <div class="nav-item" style="color:#b53d18;font-weight:600"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#b53d18" stroke-width="2" stroke-linecap="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3A19.5 19.5 0 0 1 5.2 13 19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 2 .7 2.9a2 2 0 0 1-.5 2.1L8.1 10a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c1 .3 1.9.5 2.9.7a2 2 0 0 1 1.6 2z"/></svg>Immigration 1345 · ER 119</div>
+          <div class="foot">
+            Sophea · Guest
+            <div class="langs-mini"><span class="on">EN</span><span>ខ្មែរ</span><span>한국어</span></div>
+          </div>
+        </div>
+        <div class="dim"></div>
+      </div>
+    </div>
+    <div class="caption">
+      <span class="n">5</span><h3>Drawer — 5 topics, not 12</h3>
+      <p>Was: 12 nav items + tools + visa card + language grid. Now: five topics, emergency numbers always visible, language in the footer. Hidden features return in Phase 2 without redesign.</p>
+    </div>
+  </div>
+
+  <!-- 6. BOOKING -->
+  <div class="frame-card">
+    <div class="phone">
+      <div class="statusbar"></div>
+      <div class="apphead">
+        <svg viewBox="0 0 100 140" width="15" height="21"><rect x="30" y="12" width="40" height="10" rx="2" fill="#2a1810"/><ellipse cx="50" cy="66" rx="36" ry="40" fill="#d94e1f"/><rect x="30" y="104" width="40" height="8" rx="2" fill="#2a1810"/></svg>
+        <span class="wm">Book a Visit</span>
+        <div class="burger"><i></i><i></i><i></i></div>
+      </div>
+      <div class="loc" style="border-color:rgba(217,78,31,.35);background:linear-gradient(135deg,#fff,#fdeee6)">
+        <h4>Ansan Danwon Health Center</h4>
+        <div class="kr">안산시 단원보건소 · 1.2 km · Open now</div>
+        <div class="row"><span class="chip g">Free foreign worker clinic</span><span class="chip">No NHIS needed</span></div>
+      </div>
+      <div class="loc">
+        <div style="font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--clay-light);margin-bottom:8px">Choose a time — tomorrow</div>
+        <div class="row">
+          <span class="chip" style="background:var(--terra);color:#fff;font-weight:600;padding:7px 13px;font-size:11px">10:30</span>
+          <span class="chip" style="padding:7px 13px;font-size:11px">11:00</span>
+          <span class="chip" style="padding:7px 13px;font-size:11px">14:30</span>
+          <span class="chip" style="padding:7px 13px;font-size:11px">16:00</span>
+        </div>
+      </div>
+      <div class="loc">
+        <div style="font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--clay-light);margin-bottom:8px">Sent to clinic — in Korean</div>
+        <div style="font-size:11px;line-height:1.6;color:var(--clay-mid);background:var(--cream-2);border-radius:10px;padding:10px 12px">
+          남성, 34세, 캄보디아 국적 (E-9)<br>
+          복통 3일째 · 건강보험 가입됨<br>
+          한국어 기초 수준 — 통역 도움 필요
+        </div>
+        <div style="font-size:10px;color:var(--clay-light);margin-top:6px">Your info arrives translated — no front-desk confusion</div>
+      </div>
+      <div class="inputbar">
+        <div class="pill" style="background:var(--terra);color:#fff;justify-content:center;font-weight:600;font-size:13.5px">Confirm booking · 10:30</div>
+      </div>
+    </div>
+    <div class="caption">
+      <span class="n">6</span><h3>Booking — the transaction layer</h3>
+      <p>Directory from free government open data (HIRA). v1 booking is concierge — K'Helper relays to partner clinics via KakaoTalk. The moat: every booking arrives with the patient's intake already translated into Korean. Clinics get foreign customers; patients get care without fear.</p>
+    </div>
+  </div>
+
+</div>
+
+<div class="note">
+  <b>Why this focus:</b> verified research (July 2026) shows healthcare access is the sharpest pain for Korea's 2.84M foreigners — 400–600K uninsured, and under 10% hospital interpreter coverage for Khmer and Bengali speakers. v1 tells one story: <b>"Get healthcare and insurance help in your language."</b> Everything on these five screens serves that sentence. CV Builder and Translator Marketplace are built and hidden — they return as Phase 2 retention features once the wedge lands.
+</div>
+
+</body>
+</html>

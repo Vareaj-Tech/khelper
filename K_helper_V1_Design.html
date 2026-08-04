@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>K'Helper — V1 Health-First Design</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Geist:wght@300;400;500;600;700&family=Noto+Sans+Khmer:wght@400;500;600&family=Noto+Sans+KR:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --terra:#d94e1f; --terra-dark:#8f2e10; --terra-600:#b53d18;
+    --cream:#fdf6f2; --cream2:#f7ebe0; --paper:#ebd5c0;
+    --clay:#4a2419; --clay-mid:#7d4c3b; --clay-light:#a87863;
+    --ember:#e8a83a; --sage:#6b7a5a; --sage-dark:#4b5a3c; --er:#b53d18;
+    --serif:"Newsreader",Georgia,serif; --sans:"Geist",system-ui,sans-serif; --kh:"Noto Sans Khmer",sans-serif; --kr:"Noto Sans KR",sans-serif;
+    --shadow:0 24px 48px -20px rgba(74,36,25,.35);
+    --card-shadow:0 1px 0 rgba(74,36,25,.03), 0 6px 18px -10px rgba(74,36,25,.12);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#efe4da;font-family:var(--sans);color:var(--clay);padding:52px 24px 80px;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1560px;margin:0 auto}
+
+  /* Header */
+  .head{text-align:center;margin-bottom:14px}
+  .head .lant{display:inline-block;margin-bottom:6px}
+  .head h1{font-family:var(--serif);font-size:46px;font-weight:400;letter-spacing:-.02em;line-height:1}
+  .head h1 em{font-style:italic;color:var(--terra)}
+  .head .tag{font-family:var(--serif);font-style:italic;font-size:18px;color:var(--clay-mid);margin-top:10px}
+  .head .chip{display:inline-block;margin-top:16px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--clay-light);border:1px solid var(--paper);border-radius:999px;padding:7px 16px}
+
+  .sec-lbl{max-width:1560px;margin:56px auto 24px;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--clay-light);font-weight:600;border-bottom:1px solid var(--paper);padding-bottom:10px}
+
+  .frames{display:flex;flex-wrap:wrap;gap:44px;justify-content:center}
+  .fcard{width:300px}
+  .phone{width:300px;height:630px;background:var(--cream);border-radius:38px;border:9px solid #241009;overflow:hidden;position:relative;box-shadow:var(--shadow)}
+  .screen{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden}
+  .screen::-webkit-scrollbar{display:none}
+  .notch{height:26px;display:flex;align-items:center;justify-content:center}
+  .notch::after{content:"";width:84px;height:16px;background:#241009;border-radius:999px}
+  .cap{margin-top:16px}
+  .cap .n{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:var(--terra);color:#fff;font-size:12px;font-weight:600;margin-right:8px;vertical-align:middle}
+  .cap h3{display:inline;font-size:14.5px;font-weight:600}
+  .cap p{font-size:12.5px;color:var(--clay-mid);line-height:1.55;margin-top:8px}
+
+  /* icons chip */
+  .ic{width:34px;height:34px;border-radius:10px;background:rgba(217,78,31,.09);display:flex;align-items:center;justify-content:center}
+
+  /* ---- Splash ---- */
+  .sp{text-align:center;padding:22px 24px 30px;min-height:100%;display:flex;flex-direction:column;align-items:center}
+  .glow{position:relative;margin-top:14px}
+  .glow::before{content:"";position:absolute;inset:-45% -60%;background:radial-gradient(ellipse at center,rgba(232,168,58,.55),rgba(217,78,31,.14) 52%,transparent 74%);animation:glow 3.6s ease-in-out infinite}
+  .lant-svg{position:relative;animation:sway 4.6s ease-in-out infinite;transform-origin:50% 0}
+  @keyframes glow{0%,100%{opacity:.75;transform:scale(1)}50%{opacity:1;transform:scale(1.06)}}
+  @keyframes sway{0%,100%{transform:rotate(-2.5deg)}50%{transform:rotate(2.5deg)}}
+  .wm{font-family:var(--serif);font-size:36px;margin-top:14px;line-height:1}
+  .wm em{font-style:italic;color:var(--terra)}
+  .sp .tagline{font-family:var(--serif);font-style:italic;font-size:14.5px;color:var(--clay-mid);margin-top:8px;padding:0 14px}
+  .field{width:100%;background:#fff;border:1.5px solid var(--paper);border-radius:12px;padding:11px 14px;font-size:12.5px;font-family:var(--sans);color:var(--clay);text-align:left}
+  .btn-primary{width:100%;background:var(--terra);color:#fff;border:none;border-radius:999px;padding:12px;font-size:14px;font-weight:600;box-shadow:0 8px 18px -8px rgba(143,46,16,.5)}
+  .or{font-size:10px;letter-spacing:.14em;color:var(--clay-light);margin:14px 0 12px}
+  .gbtn{width:100%;background:#fff;border:1.5px solid var(--paper);border-radius:999px;padding:11px;font-size:13px;font-weight:500;color:#3c4043;display:flex;align-items:center;justify-content:center;gap:9px;box-shadow:0 1px 3px rgba(0,0,0,.07)}
+  .guest{font-size:10.5px;color:var(--clay-light);margin-top:16px}
+  .langpill{display:inline-flex;background:var(--cream2);border:1.5px solid var(--paper);border-radius:999px;overflow:hidden;margin-top:9px;font-size:12.5px}
+  .langpill span{padding:8px 15px;color:var(--clay-mid)}
+  .langpill .on{background:var(--terra);color:#fff;border-radius:999px;font-weight:600}
+
+  /* ---- App header ---- */
+  .apphd{display:flex;align-items:center;gap:8px;padding:13px 16px;border-bottom:1px solid rgba(74,36,25,.08)}
+  .apphd .wm2{font-family:var(--serif);font-size:17px}
+  .apphd .wm2 em{font-style:italic;color:var(--terra)}
+  .burger{margin-left:auto;width:30px;height:30px;border-radius:8px;border:1px solid var(--paper);display:flex;flex-direction:column;gap:4px;align-items:center;justify-content:center}
+  .burger i{width:14px;height:1.6px;background:var(--clay-mid);display:block}
+
+  /* ---- Home ---- */
+  .visa{margin:14px 14px 0;background:#fff;border:1px solid var(--paper);border-radius:16px;padding:12px 14px;display:flex;align-items:center;gap:12px;box-shadow:var(--card-shadow)}
+  .visa .lbl{font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--clay-light)}
+  .visa .date{font-family:var(--serif);font-size:16px;color:var(--clay);margin-top:1px}
+  .visa .left{font-size:11px;color:var(--sage-dark);margin-top:2px}
+  .help-lbl{font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--clay-light);margin:18px 16px 9px}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 14px 96px}
+  .tcard{background:#fff;border:1px solid var(--paper);border-radius:14px;padding:13px;box-shadow:var(--card-shadow)}
+  .tcard.hero{grid-column:1/-1;background:linear-gradient(135deg,#fff,#fdeee6);border-color:rgba(217,78,31,.35)}
+  .tcard .ic{margin-bottom:10px}
+  .tcard.hero .ic{width:38px;height:38px}
+  .tcard h4{font-size:13.5px;font-weight:600;color:var(--clay)}
+  .tcard.hero h4{font-size:15px}
+  .tcard p{font-size:11px;color:var(--clay-light);margin-top:3px;line-height:1.35}
+  .inputbar{position:absolute;bottom:0;left:0;right:0;padding:12px 14px 20px;background:linear-gradient(transparent,var(--cream) 32%)}
+  .ipill{background:#fff;border:1.5px solid var(--paper);border-radius:999px;padding:11px 14px;display:flex;align-items:center;font-size:12.5px;color:var(--clay-light)}
+  .send{margin-left:auto;width:30px;height:30px;border-radius:50%;background:var(--terra);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+
+  /* ---- Chat ---- */
+  .chat{padding:14px;display:flex;flex-direction:column;gap:13px}
+  .ubub{align-self:flex-end;max-width:82%;background:var(--terra);color:#fff;border-radius:16px 16px 4px 16px;padding:10px 13px;font-size:12.5px;line-height:1.5}
+  .bmeta{font-size:8.5px;letter-spacing:.14em;color:var(--clay-light)}
+  .bcard{max-width:94%;background:#fff;border:1px solid var(--paper);border-radius:4px 16px 16px 16px;padding:13px 14px;font-size:12px;line-height:1.6;box-shadow:var(--card-shadow)}
+  .step{display:flex;gap:8px;margin-top:9px}
+  .step b{flex-shrink:0;width:18px;height:18px;border-radius:50%;background:rgba(217,78,31,.1);color:var(--terra);font-size:10px;display:flex;align-items:center;justify-content:center;font-weight:600}
+  .kphrase{background:var(--cream2);border-radius:8px;padding:7px 10px;margin-top:9px;font-size:12px}
+  .kphrase b{font-family:var(--kr);color:var(--clay)}
+  .warn{margin-top:11px;background:#fdf3e4;border-left:3px solid var(--ember);border-radius:6px;padding:8px 10px;font-size:11px;color:#7a5a13}
+
+  /* ---- Hospital ---- */
+  .tabs{display:flex;gap:8px;padding:12px 14px 2px}
+  .tab{font-size:11.5px;padding:7px 14px;border-radius:999px;border:1px solid var(--paper);color:var(--clay-mid);background:#fff}
+  .tab.on{background:var(--terra);border-color:var(--terra);color:#fff;font-weight:600}
+  .loc{margin:12px 14px 0;background:#fff;border:1px solid var(--paper);border-radius:14px;padding:13px 14px;box-shadow:var(--card-shadow)}
+  .loc h4{font-size:12.5px;font-weight:600;color:var(--clay)}
+  .loc .kr{font-family:var(--kr);font-size:10.5px;color:var(--clay-light);margin-top:2px}
+  .chips{display:flex;gap:6px;margin-top:9px;flex-wrap:wrap}
+  .chip{font-size:9.5px;padding:5px 10px;border-radius:999px;background:var(--cream2);color:var(--clay-mid)}
+  .chip.g{background:rgba(107,122,90,.14);color:var(--sage-dark);font-weight:600}
+  .bookbtn{display:block;width:100%;margin-top:10px;padding:9px;background:var(--terra);color:#fff;border:none;border-radius:999px;font-size:12px;font-weight:600}
+
+  /* ---- Booking ---- */
+  .bk-hero{margin:14px 14px 0;background:linear-gradient(135deg,#fff,#fdeee6);border:1.5px solid rgba(217,78,31,.35);border-radius:16px;padding:13px 15px}
+  .bk-box{margin:12px 14px 0;background:#fff;border:1px solid var(--paper);border-radius:16px;padding:13px 15px;box-shadow:var(--card-shadow)}
+  .bk-eyebrow{font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--clay-light);margin-bottom:9px}
+  .slots{display:flex;gap:8px;flex-wrap:wrap}
+  .slot{padding:8px 15px;border-radius:999px;border:1px solid var(--paper);background:#fff;color:var(--clay-mid);font-size:12px}
+  .slot.on{background:var(--terra);border-color:var(--terra);color:#fff;font-weight:600}
+  .intake{background:var(--cream2);border-radius:10px;padding:11px 13px;font-family:var(--kr);font-size:11.5px;line-height:1.75;color:var(--clay)}
+  .intake .en{font-family:var(--sans);color:var(--clay-light)}
+  .confirm{position:absolute;bottom:0;left:0;right:0;padding:14px 16px 20px;background:linear-gradient(transparent,var(--cream) 30%)}
+  .confirm button{width:100%;padding:15px;background:var(--terra);color:#fff;border:none;border-radius:999px;font-size:14.5px;font-weight:600;box-shadow:0 8px 20px -8px rgba(143,46,16,.5)}
+
+  /* ---- Drawer ---- */
+  .drawer{display:flex;height:100%}
+  .panel{width:80%;background:#fff;border-right:1px solid var(--paper);padding:20px 16px;display:flex;flex-direction:column}
+  .dim{flex:1;background:rgba(36,16,9,.4)}
+  .newchat{background:var(--terra);color:#fff;border-radius:999px;text-align:center;padding:11px;font-size:13px;font-weight:600;margin-bottom:18px}
+  .nav-lbl{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--clay-light);margin:10px 0 6px}
+  .nav{display:flex;align-items:center;gap:11px;padding:10px 9px;border-radius:10px;font-size:13px;color:var(--clay-mid)}
+  .nav.on{background:rgba(217,78,31,.08);color:var(--terra-dark);font-weight:600}
+  .nav.er{color:var(--er);font-weight:600}
+  .dfoot{margin-top:auto;border-top:1px solid var(--cream2);padding-top:14px}
+  .dfoot .who{font-size:12px;color:var(--clay);font-weight:600}
+  .dfoot .sub{font-size:10.5px;color:var(--clay-light);margin-top:1px}
+  .mini{display:flex;gap:6px;margin-top:10px}
+  .mini span{font-size:10.5px;padding:5px 11px;border-radius:999px;border:1px solid var(--paper);color:var(--clay-mid)}
+  .mini .on{background:var(--terra);color:#fff;border-color:var(--terra);font-weight:600}
+
+  /* ---- Component library ---- */
+  .lib{max-width:1560px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px}
+  .libcard{background:#fff;border:1px solid var(--paper);border-radius:18px;padding:22px;box-shadow:var(--card-shadow)}
+  .libcard h4{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--clay-light);margin-bottom:16px;font-weight:600}
+  .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+  .state{font-size:10px;color:var(--clay-light);width:100%;margin-top:2px}
+  .b{border:none;border-radius:999px;padding:11px 20px;font-size:13.5px;font-weight:600;font-family:var(--sans)}
+  .b.pri{background:var(--terra);color:#fff}
+  .b.pri.hov{background:var(--terra-dark)}
+  .b.pri.dis{background:var(--paper);color:#fff}
+  .b.sec{background:#fff;border:1.5px solid var(--paper);color:var(--clay-mid)}
+  .b.ghost{background:none;color:var(--terra);padding:11px 8px}
+  .demo-chip{font-size:11px;padding:6px 12px;border-radius:999px}
+  .demo-chip.n{background:var(--cream2);color:var(--clay-mid)}
+  .demo-chip.g{background:rgba(107,122,90,.14);color:var(--sage-dark);font-weight:600}
+  .demo-chip.t{background:var(--terra);color:#fff;font-weight:600}
+  .demo-ub{background:var(--terra);color:#fff;border-radius:16px 16px 4px 16px;padding:10px 13px;font-size:12.5px;max-width:80%}
+  .demo-bb{background:#fff;border:1px solid var(--paper);border-radius:4px 16px 16px 16px;padding:10px 13px;font-size:12.5px;max-width:88%}
+  .demo-in{display:flex;align-items:center;background:#fff;border:1.5px solid var(--paper);border-radius:999px;padding:10px 14px;font-size:12.5px;color:var(--clay-light)}
+  .demo-in .s{margin-left:auto;width:28px;height:28px;border-radius:50%;background:var(--terra);flex-shrink:0}
+  .swatch{display:flex;align-items:center;gap:10px;font-size:12px;margin-bottom:9px}
+  .sw{width:30px;height:30px;border-radius:8px;border:1px solid rgba(0,0,0,.06);flex-shrink:0}
+  .mono{font-family:ui-monospace,monospace;font-size:11px;color:var(--clay-light)}
+  .tokgrid{max-width:1560px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  @media(max-width:760px){.tokgrid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head">
+    <div class="lant">
+      <svg viewBox="0 0 100 140" width="58" height="80"><rect x="30" y="12" width="40" height="10" rx="2" fill="#241009"/><ellipse cx="50" cy="66" rx="36" ry="40" fill="#d94e1f"/><ellipse cx="50" cy="60" rx="24" ry="30" fill="#e8a83a" opacity=".45"/><rect x="30" y="104" width="40" height="8" rx="2" fill="#241009"/><path d="M44 112 L50 128 L56 112 Z" fill="#d94e1f"/></svg>
+    </div>
+    <h1>K'<em>helper</em> — V1</h1>
+    <div class="tag">Get seen by a doctor — in your language.</div>
+    <div class="chip">Health-first · migrant care + booking · 6 screens</div>
+  </div>
+</div>
+
+<div class="sec-lbl">The 6 screens</div>
+<div class="frames">
+
+  <!-- 1 SPLASH -->
+  <div class="fcard"><div class="phone"><div class="screen"><div class="notch"></div>
+    <div class="sp">
+      <div class="glow"><svg class="lant-svg" viewBox="0 0 100 140" width="80" height="112"><rect x="30" y="12" width="40" height="10" rx="2" fill="#241009"/><ellipse cx="50" cy="66" rx="36" ry="40" fill="#d94e1f"/><ellipse cx="50" cy="60" rx="26" ry="32" fill="#e8a83a" opacity=".45"/><rect x="30" y="104" width="40" height="8" rx="2" fill="#241009"/><path d="M44 112 L50 128 L56 112 Z" fill="#d94e1f"/></svg></div>
+      <div class="wm">K'<em>helper</em></div>
+      <div class="tagline">Get seen by a doctor — in your language.</div>
+      <div style="width:84%;margin-top:22px;display:flex;flex-direction:column;gap:8px">
+        <div class="field">Email</div>
+        <div class="field" style="color:var(--clay-light)">••••••••</div>
+        <button class="btn-primary">Sign in · Create account</button>
+      </div>
+      <div class="or">— OR —</div>
+      <div style="width:84%"><div class="gbtn"><svg width="15" height="15" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.5 0 6.7 1.2 9.2 3.6l6.9-6.9C35.9 2.4 30.5 0 24 0 14.6 0 6.5 5.4 2.6 13.2l8 6.2C12.4 13.7 17.7 9.5 24 9.5z"/><path fill="#4285F4" d="M47 24.6c0-1.6-.2-3.1-.4-4.6H24v9h12.9c-.6 3-2.3 5.5-4.8 7.2l7.7 6C44.4 38 47 31.9 47 24.6z"/><path fill="#FBBC05" d="M10.5 28.6a14.5 14.5 0 0 1 0-9.2l-8-6.2a24 24 0 0 0 0 21.6l8-6.2z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.7-6c-2.2 1.5-5 2.3-8.2 2.3-6.3 0-11.6-4.2-13.5-9.9l-8 6.2C6.5 42.6 14.6 48 24 48z"/></svg>Continue with Google</div></div>
+      <div class="guest">Just browsing? Continue as guest:</div>
+      <div class="langpill"><span class="on">English</span><span style="font-family:var(--kh)">ខ្មែរ</span><span style="font-family:var(--kr)">한국어</span></div>
+    </div>
+  </div></div>
+  <div class="cap"><span class="n">1</span><h3>Splash — one calm decision</h3><p>Email + password first (many workers share phones or have no Google). Google below for speed, guest language buttons at the bottom. The lantern is the only animation in the app.</p></div></div>
+
+  <!-- 2 HOME -->
+  <div class="fcard"><div class="phone"><div class="screen"><div class="notch"></div>
+    <div class="apphd"><svg viewBox="0 0 100 140" width="15" height="21"><rect x="30" y="12" width="40" height="10" rx="2" fill="#241009"/><ellipse cx="50" cy="66" rx="36" ry="40" fill="#d94e1f"/><rect x="30" y="104" width="40" height="8" rx="2" fill="#241009"/></svg><span class="wm2">K'<em>helper</em></span><div class="burger"><i></i><i></i><i></i></div></div>
+    <div class="visa">
+      <svg viewBox="0 0 84 84" width="50" height="50"><circle cx="42" cy="42" r="34" stroke="#ebd5c0" stroke-width="8" fill="none"/><circle cx="42" cy="42" r="34" stroke="#d94e1f" stroke-width="8" fill="none" stroke-linecap="round" stroke-dasharray="140 74" transform="rotate(-90 42 42)"/><text x="42" y="47" text-anchor="middle" font-family="Newsreader,serif" font-size="14" fill="#4a2419">E-9</text></svg>
+      <div><div class="lbl">Visa expiry</div><div class="date">Mar 2, 2027</div><div class="left">8 months left · insurance active</div></div>
+    </div>
+    <div class="help-lbl">How can we help today?</div>
+    <div class="grid">
+      <div class="tcard hero"><span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#d94e1f" stroke-width="2" stroke-linecap="round"><path d="M12 21C7 17 3 13.5 3 9.5A5.5 5.5 0 0 1 12 5.7 5.5 5.5 0 0 1 21 9.5c0 4-4 7.5-9 11.5z"/><path d="M12 8v6M9 11h6"/></svg></span><h4>Health Insurance (NHIS)</h4><p>Coverage check · hospital bills · what you're owed</p></div>
+      <div class="tcard"><span class="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#d94e1f" stroke-width="2" stroke-linecap="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18"/></svg></span><h4>Visa &amp; Documents</h4><p>Renewal, ARC, deadlines</p></div>
+      <div class="tcard"><span class="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#d94e1f" stroke-width="2" stroke-linecap="round"><path d="M3 21V8l9-5 9 5v13"/><path d="M9 21v-6h6v6"/></svg></span><h4>Find a Hospital</h4><p>Near you, your language</p></div>
+      <div class="tcard"><span class="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#d94e1f" stroke-width="2" stroke-linecap="round"><rect x="2" y="7" width="20" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></span><h4>Work Rights</h4><p>Contract, wages, safety</p></div>
+      <div class="tcard"><span class="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#d94e1f" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></span><h4>Daily Life</h4><p>Banking, housing, more</p></div>
+    </div>
+    <div class="inputbar"><div class="ipill">Ask anything in your language…<div class="send"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l14-7-5 16-3-7-6-2z"/></svg></div></div></div>
+  </div></div>
+  <div class="cap"><span class="n">2</span><h3>Home — health leads</h3><p>Health Insurance is the full-width hero. Visa ring up top ties to insurance status. Four quieter cards; chat pinned at the bottom. Anything not on this screen isn't in V1.</p></div></div>
+
+  <!-- 3 CHAT -->
+  <div class="fcard"><div class="phone"><div class="screen"><div class="notch"></div>
+    <div class="apphd"><svg viewBox="0 0 100 140" width="15" height="21"><rect x="30" y="12" width="40" height="10" rx="2" fill="#241009"/><ellipse cx="50" cy="66" rx="36" ry="40" fill="#d94e1f"/><rect x="30" y="104" width="40" height="8" rx="2" fill="#241009"/></svg><span class="wm2">K'<em>helper</em></span><div class="burger"><i></i><i></i><i></i></div></div>
+    <div class="chat">
+      <div class="ubub" style="font-family:var(--kh)">ខ្ញុំទៅមន្ទីរពេទ្យ តែវិក្កយបត្រថ្លៃណាស់។ តើធានារ៉ាប់រងគួរជួយទេ?</div>
+      <div>
+        <div class="bmeta">🏮 K'HELPER</div>
+        <div class="bcard">
+          <div style="font-family:var(--kh)"><b>បាទ — NHIS គួរតែជួយបង់ភាគច្រើន។</b></div>
+          <div style="font-family:var(--kh);margin-top:5px">អ្នកធ្វើការវីសា E-9 — ថៅកែត្រូវចុះឈ្មោះអ្នកក្នុង NHIS ពីថ្ងៃដំបូង។</div>
+          <div class="step"><b>1</b><span style="font-family:var(--kh)">យកវិក្កយបត្រទៅផ្នែកធានារ៉ាប់រង</span></div>
+          <div class="step"><b>2</b><span style="font-family:var(--kh)">បង្ហាញ​ពួកគេ:</span></div>
+          <div class="kphrase"><b>건강보험 적용해 주세요</b> <span style="color:var(--clay-light)">· "please apply my insurance"</span></div>
+          <div class="step"><b>3</b><span style="font-family:var(--kh)">បើថៅកែមិនបានចុះឈ្មោះ — ខុសច្បាប់។ ទូរស័ព្ទ 1345</span></div>
+          <div class="warn" style="font-family:var(--kh)">⚠️ រក្សាវិក្កយបត្រ — អ្នកអាចទាមទារប្រាក់វិញ</div>
+        </div>
+      </div>
+    </div>
+    <div class="inputbar"><div class="ipill" style="font-family:var(--kh)">សរសេរនៅទីនេះ…<div class="send"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l14-7-5 16-3-7-6-2z"/></svg></div></div></div>
+  </div></div>
+  <div class="cap"><span class="n">3</span><h3>Chat — the emotional core</h3><p>A real worry, answered with structure: verdict, numbered steps, the exact Korean phrase to show staff, and a rights warning. Everything in the user's own language; the Korean phrase always stays Korean.</p></div></div>
+
+  <!-- 4 HOSPITAL -->
+  <div class="fcard"><div class="phone"><div class="screen"><div class="notch"></div>
+    <div class="apphd"><svg viewBox="0 0 100 140" width="15" height="21"><rect x="30" y="12" width="40" height="10" rx="2" fill="#241009"/><ellipse cx="50" cy="66" rx="36" ry="40" fill="#d94e1f"/><rect x="30" y="104" width="40" height="8" rx="2" fill="#241009"/></svg><span class="wm2">Find a Hospital</span><div class="burger"><i></i><i></i><i></i></div></div>
+    <div class="tabs"><span class="tab on">Hospitals</span><span class="tab">Immigration</span><span class="tab">Labor</span></div>
+    <div class="loc"><h4>Ansan Danwon Health Center</h4><div class="kr">안산시 단원보건소 · 1.2 km</div><div class="chips"><span class="chip g">Free foreign worker clinic</span><span class="chip">Sunday open</span></div><button class="bookbtn">📅 Book a visit →</button></div>
+    <div class="loc"><h4>Korea Univ. Ansan Hospital</h4><div class="kr">고려대학교 안산병원 · 3.4 km</div><div class="chips"><span class="chip g">Interpreter support</span><span class="chip">NHIS</span><span class="chip">ER 24h</span></div><button class="bookbtn">📅 Book a visit →</button></div>
+    <div class="loc"><h4>Migrant Health Center Suwon</h4><div class="kr">수원 외국인노동자 의료센터 · 18 km</div><div class="chips"><span class="chip g">Uninsured OK</span><span class="chip">Weekends</span></div><button class="bookbtn">📅 Book a visit →</button></div>
+  </div></div>
+  <div class="cap"><span class="n">4</span><h3>Find a Hospital — curated for migrants</h3><p>Not a generic map. Trust chips answer the two real fears: "can I afford it?" and "will they understand me?" Free clinics, interpreter flags, uninsured-friendly options.</p></div></div>
+
+  <!-- 5 BOOKING -->
+  <div class="fcard"><div class="phone"><div class="screen"><div class="notch"></div>
+    <div class="apphd"><svg viewBox="0 0 100 140" width="15" height="21"><rect x="30" y="12" width="40" height="10" rx="2" fill="#241009"/><ellipse cx="50" cy="66" rx="36" ry="40" fill="#d94e1f"/><rect x="30" y="104" width="40" height="8" rx="2" fill="#241009"/></svg><span class="wm2">Book a <em style="font-family:var(--serif);font-style:italic;color:var(--terra)">Visit</em></span><div class="burger"><i></i><i></i><i></i></div></div>
+    <div class="bk-hero"><h4 style="font-family:var(--serif);font-size:16px;color:var(--clay)">Ansan Danwon Health Center</h4><div class="kr" style="font-family:var(--kr);font-size:11px;color:var(--clay-light);margin-top:2px">안산시 단원보건소 · Open now</div><div class="chips"><span class="chip g">Free foreign worker clinic</span><span class="chip">No NHIS needed</span></div></div>
+    <div class="bk-box"><div class="bk-eyebrow">Choose a time · tomorrow</div><div class="slots"><span class="slot on">10:30</span><span class="slot">11:00</span><span class="slot">14:30</span><span class="slot">16:00</span></div></div>
+    <div class="bk-box"><div class="bk-eyebrow">Sent to clinic — in Korean</div><div class="intake">남성, 34세, 캄보디아 국적 (E-9) <span class="en">· Male, 34, Cambodian (E-9)</span><br>복통 3일째 · 건강보험 가입됨 <span class="en">· Stomach pain 3 days · NHIS enrolled</span><br>한국어 기초 수준 — 통역 도움 필요 <span class="en">· Basic Korean — needs help</span></div><div style="font-size:10.5px;color:var(--clay-light);margin-top:8px">Your info arrives translated — no front-desk confusion.</div></div>
+    <div style="height:90px"></div>
+    <div class="confirm"><button>Confirm booking · 10:30</button></div>
+  </div></div>
+  <div class="cap"><span class="n">5</span><h3>Book a Visit — the wedge</h3><p>The transaction, given the most weight and confidence in the app. The "Sent to clinic — in Korean" box is the whole business in one glance: the clinic gets a patient with zero language friction.</p></div></div>
+
+  <!-- 6 DRAWER -->
+  <div class="fcard"><div class="phone"><div class="screen"><div class="notch"></div>
+    <div class="drawer" style="height:calc(100% - 26px)">
+      <div class="panel">
+        <div class="newchat">＋ New chat</div>
+        <div class="nav-lbl">Topics</div>
+        <div class="nav on"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8f2e10" stroke-width="2" stroke-linecap="round"><path d="M12 21C7 17 3 13.5 3 9.5A5.5 5.5 0 0 1 12 5.7 5.5 5.5 0 0 1 21 9.5c0 4-4 7.5-9 11.5z"/></svg>Health Insurance</div>
+        <div class="nav"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#7d4c3b" stroke-width="2" stroke-linecap="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18"/></svg>Visa &amp; Documents</div>
+        <div class="nav"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#7d4c3b" stroke-width="2" stroke-linecap="round"><path d="M3 21V8l9-5 9 5v13"/><path d="M9 21v-6h6v6"/></svg>Find a Hospital</div>
+        <div class="nav"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#7d4c3b" stroke-width="2" stroke-linecap="round"><rect x="2" y="7" width="20" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>Work Rights</div>
+        <div class="nav"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#7d4c3b" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>Daily Life</div>
+        <div class="nav-lbl" style="margin-top:16px">Emergency</div>
+        <div class="nav er"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#b53d18" stroke-width="2" stroke-linecap="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3A19.5 19.5 0 0 1 5.2 13 19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 2 .7 2.9a2 2 0 0 1-.5 2.1L8.1 10a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c1 .3 1.9.5 2.9.7a2 2 0 0 1 1.6 2z"/></svg>Immigration 1345 · ER 119</div>
+        <div class="dfoot"><div class="who">Sophea</div><div class="sub">Guest · tap to sign in</div><div class="mini"><span class="on">EN</span><span style="font-family:var(--kh)">ខ្មែរ</span><span style="font-family:var(--kr)">한국어</span></div></div>
+      </div>
+      <div class="dim"></div>
+    </div>
+  </div></div>
+  <div class="cap"><span class="n">6</span><h3>Menu — help that's easy to find</h3><p>Only what a stressed, unwell person needs: five topics, one always-visible emergency line, profile, and language. Restraint is the feature — anything else stays out of V1.</p></div></div>
+
+</div>
+
+<!-- COMPONENT LIBRARY -->
+<div class="sec-lbl">Component set · states</div>
+<div class="lib">
+  <div class="libcard"><h4>Buttons</h4>
+    <div class="row"><button class="b pri">Confirm booking</button><span class="state">Primary · default</span></div>
+    <div class="row"><button class="b pri hov">Confirm booking</button><span class="state">Primary · pressed / hover</span></div>
+    <div class="row"><button class="b pri dis">Confirm booking</button><span class="state">Primary · disabled</span></div>
+    <div class="row"><button class="b sec">Skip for now</button><span class="state">Secondary · outline</span></div>
+    <div class="row"><button class="b ghost">Create account</button><span class="state">Ghost · text link</span></div>
+  </div>
+  <div class="libcard"><h4>Chips</h4>
+    <div class="row"><span class="demo-chip g">Free foreign worker clinic</span><span class="demo-chip g">Interpreter support</span><span class="demo-chip g">Uninsured OK</span><span class="state">Trust · sage</span></div>
+    <div class="row"><span class="demo-chip n">NHIS</span><span class="demo-chip n">Sunday open</span><span class="demo-chip n">ER 24h</span><span class="state">Info · neutral</span></div>
+    <div class="row"><span class="demo-chip t">10:30</span><span class="demo-chip n">11:00</span><span class="state">Time slot · selected / default</span></div>
+  </div>
+  <div class="libcard"><h4>Chat bubbles</h4>
+    <div class="row" style="justify-content:flex-end"><span class="demo-ub">I went to the hospital…</span></div>
+    <div class="row"><span class="demo-bb"><b>Yes — NHIS should cover most of this.</b></span></div>
+    <div class="state">User = terracotta, tail bottom-right. Assistant = white card, tail top-left.</div>
+  </div>
+  <div class="libcard"><h4>Cards</h4>
+    <div class="row" style="flex-direction:column;align-items:stretch">
+      <div class="tcard hero" style="box-shadow:none"><span class="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#d94e1f" stroke-width="2" stroke-linecap="round"><path d="M12 21C7 17 3 13.5 3 9.5A5.5 5.5 0 0 1 12 5.7 5.5 5.5 0 0 1 21 9.5c0 4-4 7.5-9 11.5z"/></svg></span><h4>Hero card</h4><p>Gradient + terracotta border</p></div>
+      <div class="tcard" style="margin-top:10px;box-shadow:none"><span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#d94e1f" stroke-width="2" stroke-linecap="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18"/></svg></span><h4>Standard card</h4><p>White, hairline border</p></div>
+    </div>
+  </div>
+  <div class="libcard"><h4>Input bar</h4>
+    <div class="row" style="flex-direction:column;align-items:stretch">
+      <div class="demo-in">Ask anything in your language…<div class="s"></div></div>
+      <div class="state">Sticky bottom · pill · circular terracotta send</div>
+    </div>
+  </div>
+  <div class="libcard"><h4>Warning &amp; phrase strips</h4>
+    <div style="background:#fdf3e4;border-left:3px solid var(--ember);border-radius:6px;padding:9px 11px;font-size:12px;color:#7a5a13;margin-bottom:10px">⚠️ Keep every receipt — you can claim money back</div>
+    <div style="background:var(--cream2);border-radius:8px;padding:8px 11px;font-size:12.5px"><b style="font-family:var(--kr)">건강보험 적용해 주세요</b> <span style="color:var(--clay-light)">· show this to staff</span></div>
+  </div>
+</div>
+
+<!-- TOKENS -->
+<div class="sec-lbl">Design tokens</div>
+<div class="tokgrid">
+  <div class="libcard"><h4>Color</h4>
+    <div class="swatch"><span class="sw" style="background:#d94e1f"></span>Terracotta — primary <span class="mono" style="margin-left:auto">#d94e1f</span></div>
+    <div class="swatch"><span class="sw" style="background:#8f2e10"></span>Terracotta dark — pressed <span class="mono" style="margin-left:auto">#8f2e10</span></div>
+    <div class="swatch"><span class="sw" style="background:#fdf6f2"></span>Cream — background <span class="mono" style="margin-left:auto">#fdf6f2</span></div>
+    <div class="swatch"><span class="sw" style="background:#f7ebe0"></span>Cream 2 — chip / surface <span class="mono" style="margin-left:auto">#f7ebe0</span></div>
+    <div class="swatch"><span class="sw" style="background:#ebd5c0"></span>Paper — hairline borders <span class="mono" style="margin-left:auto">#ebd5c0</span></div>
+    <div class="swatch"><span class="sw" style="background:#4a2419"></span>Clay — primary text <span class="mono" style="margin-left:auto">#4a2419</span></div>
+    <div class="swatch"><span class="sw" style="background:#e8a83a"></span>Ember — warning accent <span class="mono" style="margin-left:auto">#e8a83a</span></div>
+    <div class="swatch"><span class="sw" style="background:#6b7a5a"></span>Sage — trust / positive <span class="mono" style="margin-left:auto">#6b7a5a</span></div>
+    <div class="swatch"><span class="sw" style="background:#b53d18"></span>Emergency red <span class="mono" style="margin-left:auto">#b53d18</span></div>
+  </div>
+  <div class="libcard"><h4>Type &amp; shape</h4>
+    <div style="font-family:var(--serif);font-size:30px">K'<em style="color:var(--terra);font-style:italic">helper</em> <span class="mono">Newsreader — wordmark / headlines / dates</span></div>
+    <div style="margin-top:14px;font-size:15px;font-weight:500">The quick clear label <span class="mono">Geist — all UI / body</span></div>
+    <div style="margin-top:10px;font-family:var(--kh);font-size:15px">ភាសាខ្មែរ <span class="mono">Noto Sans Khmer — loaded only for KH</span></div>
+    <div style="margin-top:8px;font-family:var(--kr);font-size:15px">건강보험 적용해 주세요 <span class="mono">Noto Sans KR — loaded only for KO</span></div>
+    <div style="margin-top:18px;border-top:1px solid var(--paper);padding-top:14px;font-size:12.5px;color:var(--clay-mid);line-height:1.9">
+      <b style="color:var(--clay)">Radius</b> — cards 14–16px · buttons &amp; chips 999px (full pill)<br>
+      <b style="color:var(--clay)">Borders</b> — one hairline weight (1–1.5px), Paper token<br>
+      <b style="color:var(--clay)">Shadow</b> — one soft level only<br>
+      <b style="color:var(--clay)">Touch targets</b> — min 44px on every tappable element<br>
+      <b style="color:var(--clay)">Icons</b> — thin-line SVG (2px), terracotta, never emoji<br>
+      <b style="color:var(--clay)">Motion</b> — 150–200ms ease; lantern glow/sway on splash only
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
